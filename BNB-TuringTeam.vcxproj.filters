@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CGameCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BnbApp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="HelpScene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainScene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Sys.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoGameScene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayMusic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaySound.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Bubble.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProps.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerOne.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerTwo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BnbApp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="HelpScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MainScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoGameScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayMusic.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaySound.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Bubble.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProps.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerOne.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerTwo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BNB-TuringTeam.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\gameBack.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\单人游戏.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\单人游戏选中.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\返回.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\返回选中.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\双人游戏.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\双人游戏选中.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\退出.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\退出选中.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\游戏帮助.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\游戏帮助选中.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\游戏退出.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\游戏退出选中.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\help.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\mainBack.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\road.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\icon.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Popo.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\TownBlockRed.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\TownBlockYellow.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\TownBox.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\TownHouseBlue.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\TownHouseRed.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\TownTree.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\TownHouseYellow.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\BigPopo.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Explosion.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\FastTurtle.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\FastUFO.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Gift1.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Gift2.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Gift3.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Gift4.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Gift5.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Gift6.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\GiftOwl.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\GiftTurtle.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\GiftUFO.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Owl.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Player.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Role1.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Role1Ani.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Role1Die.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Role1Ride.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Role1Start.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Role2.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Role2Ani.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Role2Die.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Role2Ride.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Role2Start.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\TownWindmill.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\TownWindmillAni.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\word.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\Number.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\ShadowBlock.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\ShadowGift.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\ShadowPopo.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\ShadowRole.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
