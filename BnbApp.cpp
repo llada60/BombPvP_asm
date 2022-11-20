@@ -1,4 +1,5 @@
 #include "BnbApp.h"
+#include <stdio.h>
 
 IMPLEMENT(CBnbApp)
 
@@ -11,6 +12,7 @@ IMPLEMENT(CBnbApp)
 	helpScene = NULL;
 	twoGameScene = NULL;
 	playMusic = NULL;
+
 }
 
 CBnbApp::~CBnbApp()
@@ -189,10 +191,31 @@ void CBnbApp::OnLButtonUp(POINT point)
 
 	if (m_seclectScene == TWO_GAME_SCENE && twoGameScene->m_isSelect)
 	{
-		if ( MessageBox( NULL, TEXT("游戏仍在进行，确认退出游戏？"), \
-			TEXT("退出"), MB_OKCANCEL | MB_ICONQUESTION ) == IDOK )
+		if ( MessageBox( NULL, TEXT("确认返回主菜单？"), \
+			TEXT("返回主菜单"), MB_OKCANCEL | MB_ICONQUESTION ) == IDOK )
 		{
-			PostQuitMessage(0);
+			if (this->m_seclectScene == TWO_GAME_SCENE)
+			{
+				// 切换回主场景
+				if (mainScene == NULL)
+				{
+					mainScene = new CMainScene;
+					mainScene->MainSceneInit(m_hIns);
+				}
+				m_seclectScene = MAIN_SCENE;
+
+				// 释放游戏场景对象
+				delete twoGameScene;
+				twoGameScene = NULL;
+
+				this->OnGameDraw();
+
+				// 播放相应背景音乐
+				if (!this->isKey_stopMusic)
+				{
+					this->PlayBackMusic();
+				}
+			}
 		}
 	}
 
