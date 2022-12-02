@@ -5,7 +5,7 @@ CPlayerOne::CPlayerOne()
 
 CPlayerOne::~CPlayerOne()
 {
-} 
+}
 
 void CPlayerOne::PlayerInit(HINSTANCE hIns)
 {
@@ -21,19 +21,19 @@ void CPlayerOne::PlayerInit(HINSTANCE hIns)
 		mov dword ptr[eax + 38h], 0
 		mov dword ptr[eax + 3Ch], 1
 	}
-//	m_player_x = 15;     // 图片宽480 高64 -->  每个人物宽48
-//	m_player_y = 15;
-//	m_Start_nShowID = 0;
-//	m_DieShowID = 11;
-//	m_speed_timer = _DEF_PLAYER_SPEED_TIMER;
-//	m_bubbleNum = 1;
-//	m_bubblePower = 1;
-//	m_player_status = BEGIN;
-//	m_direction = DOWN;
-	m_hBmpPlayerStart = LoadBitmap(hIns,MAKEINTRESOURCE(IDB_PLAYER_ONE_START));
-	m_hBmpPlayerShadow = LoadBitmap(hIns,MAKEINTRESOURCE(IDB_SHADOW_ROLE));
-	m_hBmpPlayerMove = LoadBitmap(hIns,MAKEINTRESOURCE(IDB_PLAYER_ONE_MOVE));
-	m_hBmpPlayerDie = LoadBitmap(hIns,MAKEINTRESOURCE(IDB_PLAYER_ONE_DIE));
+	//	m_player_x = 15;     // 图片宽480 高64 -->  每个人物宽48
+	//	m_player_y = 15;
+	//	m_Start_nShowID = 0;
+	//	m_DieShowID = 11;
+	//	m_speed_timer = _DEF_PLAYER_SPEED_TIMER;
+	//	m_bubbleNum = 1;
+	//	m_bubblePower = 1;
+	//	m_player_status = BEGIN;
+	//	m_direction = DOWN;
+	m_hBmpPlayerStart = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_PLAYER_ONE_START));
+	m_hBmpPlayerShadow = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_SHADOW_ROLE));
+	m_hBmpPlayerMove = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_PLAYER_ONE_MOVE));
+	m_hBmpPlayerDie = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_PLAYER_ONE_DIE));
 
 }
 
@@ -41,52 +41,348 @@ void CPlayerOne::PlayerShow(HDC hdc)
 {
 	HDC hTempDC = CreateCompatibleDC(hdc);
 
-	// 人物阴影
-	SelectObject(hTempDC,m_hBmpPlayerShadow); 
-	TransparentBlt(hdc,m_player_x+8,m_player_y+48,32,15,hTempDC,0,0,32,15,RGB(255,0,255));
 
-	switch (m_player_status)
+	_asm
 	{
-	// 开场动画
-	case BEGIN:
-		SelectObject(hTempDC,m_hBmpPlayerStart);
-		TransparentBlt(hdc,m_player_x,m_player_y,48,64,hTempDC,m_Start_nShowID*48,0,48,64,RGB(255,0,255));
-		break;
+		// 人物阴影
+		//SelectObject(hTempDC,m_hBmpPlayerShadow);
+		mov eax, dword ptr[this]
+		push dword ptr[eax + 10h]
+		push dword ptr[hTempDC]
+		call SelectObject
 
-	// 移动动画
-	case MOVE:
-		switch (m_direction)
-		{
-		case UP:
-			SelectObject(hTempDC,m_hBmpPlayerMove);
-			TransparentBlt(hdc,m_player_x,m_player_y,48,64,hTempDC,m_Move_ShowId*48,UP*64,48,64,RGB(255,0,255));
-			break;
-		case DOWN:
-			SelectObject(hTempDC,m_hBmpPlayerMove);
-			TransparentBlt(hdc,m_player_x,m_player_y,48,64,hTempDC,m_Move_ShowId*48,DOWN*64,48,64,RGB(255,0,255));
-			break;
-		case LEFT:
-			SelectObject(hTempDC,m_hBmpPlayerMove);
-			TransparentBlt(hdc,m_player_x,m_player_y,48,64,hTempDC,m_Move_ShowId*48,LEFT*64,48,64,RGB(255,0,255));
-			break;
-		case RIGHT:
-			SelectObject(hTempDC,m_hBmpPlayerMove);
-			TransparentBlt(hdc,m_player_x,m_player_y,48,64,hTempDC,m_Move_ShowId*48,RIGHT*64,48,64,RGB(255,0,255));
-			break;
-		}
-		break;
+		//TransparentBlt(hdc,m_player_x+8,m_player_y+48,32,15,hTempDC,0,0,32,15,RGB(255,0,255));
+		push        0FF00FFh
+		push        0Fh
+		push        20h
+		push        0
+		push        0
+		push        dword ptr[hTempDC]
+		push        0Fh
+		push        20h
+		mov         ecx, dword ptr[this]
+		mov         edx, dword ptr[ecx + 1Ch]
+		add         edx, 30h
+		push        edx
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 18h]
+		add         ecx, 8
+		push        ecx
+		push        dword ptr[hdc]
+		call        TransparentBlt
 
-	// 死亡动画
-	case DIE:
-			SelectObject(hTempDC,m_hBmpPlayerDie);
-			TransparentBlt(hdc,m_player_x,m_player_y-36,48,100,hTempDC,(11-m_DieShowID)*48,0,48,100,RGB(255,0,255));
-		break;
+		//if (m_player_status == BEGIN)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 38h], 0
+		jne         L1
+
+		//SelectObject(hTempDC, m_hBmpPlayerStart)
+		mov         eax, dword ptr[this]
+		push        dword ptr[eax + 4]
+		push		dword ptr[hTempDC]
+		call		SelectObject
+
+		//TransparentBlt(hdc, m_player_x, m_player_y, 48, 64, hTempDC, m_Start_nShowID * 48, 0, 48, 64, RGB(255, 0, 255))
+		push        0FF00FFh
+		push        40h
+		push        30h
+		push        0
+		mov         eax, dword ptr[this]
+		imul        ecx, dword ptr[eax + 14h], 30h
+		push        ecx
+		push        dword ptr[hTempDC]
+		push        40h
+		push        30h
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 1Ch]
+		push        ecx
+		mov         edx, dword ptr[this]
+		mov         eax, dword ptr[edx + 18h]
+		push        eax
+		push        dword ptr[hdc]
+		call        TransparentBlt
+		jmp			end0
+
+		//else if (m_player_status == MOVE)
+		L1 :
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 38h], 1
+		jne         L2
+
+		//if (m_direction == UP)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3Ch], 0
+		jne         M1
+
+		//SelectObject(hTempDC, m_hBmpPlayerMove)
+		mov         eax, dword ptr[this]
+		push        dword ptr[eax + 8]
+		mov         edx, dword ptr[hTempDC]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc, m_player_x, m_player_y, 48, 64, hTempDC, m_Move_ShowId * 48, UP * 64, 48, 64, RGB(255, 0, 255))
+		mov         esi, esp
+		push        0FF00FFh
+		push        40h
+		push        30h
+		push        0
+		mov         eax, dword ptr[this]
+		imul        ecx, dword ptr[eax + 20h], 30h
+		push        ecx
+		mov         edx, dword ptr[hTempDC]
+		push        edx
+		push        40h
+		push        30h
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 1Ch]
+		push        ecx
+		mov         edx, dword ptr[this]
+		mov         eax, dword ptr[edx + 18h]
+		push        eax
+		mov         ecx, dword ptr[hdc]
+		push        ecx
+		call        TransparentBlt
+		jmp         end0
+
+		M1 :
+		//else if (m_direction == DOWN)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3Ch], 1
+		jne         M2
+
+		//SelectObject(hTempDC, m_hBmpPlayerMove)
+		mov         esi, esp
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 8]
+		push        ecx
+		mov         edx, dword ptr[hTempDC]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc, m_player_x, m_player_y, 48, 64, hTempDC, m_Move_ShowId * 48, DOWN * 64, 48, 64, RGB(255, 0, 255))
+		mov         esi, esp
+		push        0FF00FFh
+		push        40h
+		push        30h
+		push        40h
+		mov         eax, dword ptr[this]
+		imul        ecx, dword ptr[eax + 20h], 30h
+		push        ecx
+		mov         edx, dword ptr[hTempDC]
+		push        edx
+		push        40h
+		push        30h
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 1Ch]
+		push        ecx
+		mov         edx, dword ptr[this]
+		mov         eax, dword ptr[edx + 18h]
+		push        eax
+		mov         ecx, dword ptr[hdc]
+		push        ecx
+		call        TransparentBlt
+		jmp         end0
+
+		M2 :
+		//else if (m_direction == LEFT)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3Ch], 2
+		jne         M3
+
+		//SelectObject(hTempDC, m_hBmpPlayerMove)
+		mov         esi, esp
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 8]
+		push        ecx
+		mov         edx, dword ptr[hTempDC]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc, m_player_x, m_player_y, 48, 64, hTempDC, m_Move_ShowId * 48, LEFT * 64, 48, 64, RGB(255, 0, 255))
+		push        0FF00FFh
+		push        40h
+		push        30h
+		push        80h
+		mov         eax, dword ptr[this]
+		imul        ecx, dword ptr[eax + 20h], 30h
+		push        ecx
+		mov         edx, dword ptr[hTempDC]
+		push        edx
+		push        40h
+		push        30h
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 1Ch]
+		push        ecx
+		mov         edx, dword ptr[this]
+		mov         eax, dword ptr[edx + 18h]
+		push        eax
+		mov         ecx, dword ptr[hdc]
+		push        ecx
+		call        TransparentBlt
+		jmp         end0
+
+		M3 :
+		//else if (m_direction == RIGHT)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3Ch], 3
+		jne         end0
+
+		//SelectObject(hTempDC, m_hBmpPlayerMove)
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 8]
+		push        ecx
+		mov         edx, dword ptr[hTempDC]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc, m_player_x, m_player_y, 48, 64, hTempDC, m_Move_ShowId * 48, RIGHT * 64, 48, 64, RGB(255, 0, 255))
+		push        0FF00FFh
+		push        40h
+		push        30h
+		push        0C0h
+		mov         eax, dword ptr[this]
+		imul        ecx, dword ptr[eax + 20h], 30h
+		push        ecx
+		mov         edx, dword ptr[hTempDC]
+		push        edx
+		push        40h
+		push        30h
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 1Ch]
+		push        ecx
+		mov         edx, dword ptr[this]
+		mov         eax, dword ptr[edx + 18h]
+		push        eax
+		mov         ecx, dword ptr[hdc]
+		push        ecx
+		call        TransparentBlt
+		jmp         end0
+
+		L2 :
+		//else if (m_player_status == DIE)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 38h], 2
+		jne         end0
+
+		//SelectObject(hTempDC, m_hBmpPlayerDie)
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 0Ch]
+		push        ecx
+		mov         edx, dword ptr[hTempDC]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc, m_player_x, m_player_y - 36, 48, 100, hTempDC, (11 - m_DieShowID) * 48, 0, 48, 100, RGB(255, 0, 255))
+		push        0FF00FFh
+		push        64h
+		push        30h
+		push        0
+		mov         eax, dword ptr[this]
+		mov         ecx, 0Bh
+		sub         ecx, dword ptr[eax + 28h]
+		imul        edx, ecx, 30h
+		push        edx
+		mov         eax, dword ptr[hTempDC]
+		push        eax
+		push        64h
+		push        30h
+		mov         ecx, dword ptr[this]
+		mov         edx, dword ptr[ecx + 1Ch]
+		sub         edx, 24h
+		push        edx
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 18h]
+		push        ecx
+		mov         edx, dword ptr[hdc]
+		push        edx
+		call        TransparentBlt
+
+		end0 :
+		//DeleteObject(hTempDC)
+		mov         eax, dword ptr[hTempDC]
+		push        eax
+		call        DeleteObject
 	}
 
-	DeleteObject(hTempDC);
+	/*if (m_player_status == BEGIN)
+	{
+		SelectObject(hTempDC, m_hBmpPlayerStart);
+		TransparentBlt(hdc, m_player_x, m_player_y, 48, 64, hTempDC, m_Start_nShowID * 48, 0, 48, 64, RGB(255, 0, 255));
+	}
+	else if (m_player_status == MOVE)
+	{
+		if (m_direction == UP)
+		{
+			SelectObject(hTempDC, m_hBmpPlayerMove);
+			TransparentBlt(hdc, m_player_x, m_player_y, 48, 64, hTempDC, m_Move_ShowId * 48, UP * 64, 48, 64, RGB(255, 0, 255));
+		}
+		else if (m_direction == DOWN)
+		{
+			SelectObject(hTempDC, m_hBmpPlayerMove);
+			TransparentBlt(hdc, m_player_x, m_player_y, 48, 64, hTempDC, m_Move_ShowId * 48, DOWN * 64, 48, 64, RGB(255, 0, 255));
+		}
+		else if (m_direction == LEFT)
+		{
+			SelectObject(hTempDC, m_hBmpPlayerMove);
+			TransparentBlt(hdc, m_player_x, m_player_y, 48, 64, hTempDC, m_Move_ShowId * 48, LEFT * 64, 48, 64, RGB(255, 0, 255));
+		}
+		else if (m_direction == RIGHT)
+		{
+			SelectObject(hTempDC, m_hBmpPlayerMove);
+			TransparentBlt(hdc, m_player_x, m_player_y, 48, 64, hTempDC, m_Move_ShowId * 48, RIGHT * 64, 48, 64, RGB(255, 0, 255));
+		}
+	}
+	else if (m_player_status == DIE)
+	{
+		SelectObject(hTempDC, m_hBmpPlayerDie);
+		TransparentBlt(hdc, m_player_x, m_player_y - 36, 48, 100, hTempDC, (11 - m_DieShowID) * 48, 0, 48, 100, RGB(255, 0, 255));
+	}
+
+	DeleteObject(hTempDC);*/
+
+	/*	switch (m_player_status)
+		{
+		// 开场动画
+		case BEGIN:
+			SelectObject(hTempDC,m_hBmpPlayerStart);
+			TransparentBlt(hdc,m_player_x,m_player_y,48,64,hTempDC,m_Start_nShowID*48,0,48,64,RGB(255,0,255));
+			break;
+
+		// 移动动画
+		case MOVE:
+			switch (m_direction)
+			{
+			case UP:
+				SelectObject(hTempDC,m_hBmpPlayerMove);
+				TransparentBlt(hdc,m_player_x,m_player_y,48,64,hTempDC,m_Move_ShowId*48,UP*64,48,64,RGB(255,0,255));
+				break;
+			case DOWN:
+				SelectObject(hTempDC,m_hBmpPlayerMove);
+				TransparentBlt(hdc,m_player_x,m_player_y,48,64,hTempDC,m_Move_ShowId*48,DOWN*64,48,64,RGB(255,0,255));
+				break;
+			case LEFT:
+				SelectObject(hTempDC,m_hBmpPlayerMove);
+				TransparentBlt(hdc,m_player_x,m_player_y,48,64,hTempDC,m_Move_ShowId*48,LEFT*64,48,64,RGB(255,0,255));
+				break;
+			case RIGHT:
+				SelectObject(hTempDC,m_hBmpPlayerMove);
+				TransparentBlt(hdc,m_player_x,m_player_y,48,64,hTempDC,m_Move_ShowId*48,RIGHT*64,48,64,RGB(255,0,255));
+				break;
+			}
+			break;
+
+		// 死亡动画
+		case DIE:
+				SelectObject(hTempDC,m_hBmpPlayerDie);
+				TransparentBlt(hdc,m_player_x,m_player_y-36,48,100,hTempDC,(11-m_DieShowID)*48,0,48,100,RGB(255,0,255));
+			break;
+		}
+
+		DeleteObject(hTempDC);*/
 }
 
-void CPlayerOne::PlayerMove(int FX,CGameMap &gameMap,CGameProps &gameprop,CPlaySound &playSound)
+void CPlayerOne::PlayerMove(int FX, CGameMap& gameMap, CGameProps& gameprop, CPlaySound& playSound)
 {
 	/*// 根据人物位图下中坐标判断是否有障碍物
 	// 将坐标转换成对应地图数组坐标
@@ -100,8 +396,8 @@ void CPlayerOne::PlayerMove(int FX,CGameMap &gameMap,CGameProps &gameprop,CPlayS
 
 	// 根据人物位图下中坐标判断是否有障碍物
 	// 将坐标转换成对应地图数组坐标
-	int temp_x ;
-	int temp_y ;
+	int temp_x;
+	int temp_y;
 	// 定义人物位图位置 与障碍物位置比较 看人物是否可以移动
 	int nPicture_x;
 	int nPicture_y;
@@ -110,6 +406,9 @@ void CPlayerOne::PlayerMove(int FX,CGameMap &gameMap,CGameProps &gameprop,CPlayS
 
 
 	_asm {
+		// 根据人物位图下中坐标判断是否有障碍物
+		// 将坐标转换成对应地图数组坐标
+		//temp_x = (m_player_x - 20 + 24) / 40;
 		mov         eax, dword ptr[this]
 		mov         eax, dword ptr[eax + 18h]
 		add         eax, 4
@@ -118,6 +417,8 @@ void CPlayerOne::PlayerMove(int FX,CGameMap &gameMap,CGameProps &gameprop,CPlayS
 		idiv        ecx
 		mov         dword ptr[temp_x], eax
 
+
+		//temp_y = (m_player_y + 64 - 41) / 40;
 		mov         eax, dword ptr[this]
 		mov         eax, dword ptr[eax + 1Ch]
 		add         eax, 17h
@@ -126,11 +427,15 @@ void CPlayerOne::PlayerMove(int FX,CGameMap &gameMap,CGameProps &gameprop,CPlayS
 		idiv        ecx
 		mov         dword ptr[temp_y], eax
 
+		//初始化为0
 		mov         dword ptr[nPicture_x], 0
 		mov         dword ptr[nPicture_y], 0
 		mov         dword ptr[nBlock_x], 0
 		mov         dword ptr[nBlock_y], 0
 
+
+		// 移动
+		//if (FX == 'A')
 		cmp         dword ptr[FX], 41h
 		jne         LA2
 
@@ -163,164 +468,167 @@ void CPlayerOne::PlayerMove(int FX,CGameMap &gameMap,CGameProps &gameprop,CPlayS
 
 		LA1 :
 		mov         esi, esp
-		mov         eax, dword ptr[gameprop]
-		push        eax
-		mov         ecx, dword ptr[this]
-		mov         edx, dword ptr[ecx]
-		mov         ecx, dword ptr[this]
-		mov         eax, dword ptr[edx + 14h]
-		call        eax
+			mov         eax, dword ptr[gameprop]
+			push        eax
+			mov         ecx, dword ptr[this]
+			mov         edx, dword ptr[ecx]
+			mov         ecx, dword ptr[this]
+			mov         eax, dword ptr[edx + 14h]
+			call        eax
 
-		mov         eax, dword ptr[this]
-		mov         ecx, dword ptr[eax + 18h]
-		sub         ecx, 5
-		mov         edx, dword ptr[this]
-		mov         dword ptr[edx + 18h], ecx
+			mov         eax, dword ptr[this]
+			mov         ecx, dword ptr[eax + 18h]
+			sub         ecx, 5
+			mov         edx, dword ptr[this]
+			mov         dword ptr[edx + 18h], ecx
 
-		LA2 :
+			//if (FX == 'D')
+			LA2 :
 		cmp         dword ptr[FX], 44h
-		jne			LD2
-		mov         eax, dword ptr[this]
-		mov         dword ptr[eax + 3Ch], 3
+			jne			LD2
+			mov         eax, dword ptr[this]
+			mov         dword ptr[eax + 3Ch], 3
 
-		mov         eax,dword ptr [this]
-		mov         ecx,dword ptr [eax+18h]
-		add         ecx,30h
-		mov         dword ptr [nPicture_x],ecx
+			mov         eax, dword ptr[this]
+			mov         ecx, dword ptr[eax + 18h]
+			add         ecx, 30h
+			mov         dword ptr[nPicture_x], ecx
 
-		mov         eax,dword ptr [temp_x]
-		add         eax,1
-		imul        ecx,eax,28h
-		add         ecx,14h
-		mov         dword ptr [nBlock_x],ecx
+			mov         eax, dword ptr[temp_x]
+			add         eax, 1
+			imul        ecx, eax, 28h
+			add         ecx, 14h
+			mov         dword ptr[nBlock_x], ecx
 
-		mov         eax,dword ptr [this]
-		mov         ecx,dword ptr [eax+18h]
-		add         ecx,3
-		cmp         ecx,23Ch
-		jge         LD2
-		imul        eax,dword ptr [temp_y],3Ch
-		add         eax,dword ptr [gameMap]
-		mov         ecx,dword ptr [temp_x]
-		cmp         dword ptr [eax+ecx*4+4],0
-		je          LD1
-		mov         eax,dword ptr [nPicture_x]
-		cmp         eax,dword ptr [nBlock_x]
-		jge         LD2
-		LD1:
-		mov         esi,esp
-		mov         eax,dword ptr [gameprop]
-		push        eax
-		mov         ecx,dword ptr [this]
-		mov         edx,dword ptr [ecx]
-		mov         ecx,dword ptr [this]
-		mov         eax,dword ptr [edx+14h]
-		call        eax
+			mov         eax, dword ptr[this]
+			mov         ecx, dword ptr[eax + 18h]
+			add         ecx, 3
+			cmp         ecx, 23Ch
+			jge         LD2
+			imul        eax, dword ptr[temp_y], 3Ch
+			add         eax, dword ptr[gameMap]
+			mov         ecx, dword ptr[temp_x]
+			cmp         dword ptr[eax + ecx * 4 + 4], 0
+			je          LD1
+			mov         eax, dword ptr[nPicture_x]
+			cmp         eax, dword ptr[nBlock_x]
+			jge         LD2
+			LD1 :
+		mov         esi, esp
+			mov         eax, dword ptr[gameprop]
+			push        eax
+			mov         ecx, dword ptr[this]
+			mov         edx, dword ptr[ecx]
+			mov         ecx, dword ptr[this]
+			mov         eax, dword ptr[edx + 14h]
+			call        eax
 
-		mov         eax,dword ptr [this]
-		mov         ecx,dword ptr [eax+18h]
-		add         ecx,5
-		mov         edx,dword ptr [this]
-		mov         dword ptr [edx+18h],ecx
+			mov         eax, dword ptr[this]
+			mov         ecx, dword ptr[eax + 18h]
+			add         ecx, 5
+			mov         edx, dword ptr[this]
+			mov         dword ptr[edx + 18h], ecx
 
-		LD2 :
+			//if (FX == 'W')
+			LD2 :
 		cmp         dword ptr[FX], 57h
-		jne			LW2
+			jne			LW2
 
-		mov         eax, dword ptr[this]
-		mov         dword ptr[eax + 3Ch], 0
+			mov         eax, dword ptr[this]
+			mov         dword ptr[eax + 3Ch], 0
 
-		mov         eax, dword ptr[this]
-		mov         ecx, dword ptr[eax + 1Ch]
-		add         ecx, 20h
-		mov         dword ptr[nPicture_y], ecx
+			mov         eax, dword ptr[this]
+			mov         ecx, dword ptr[eax + 1Ch]
+			add         ecx, 20h
+			mov         dword ptr[nPicture_y], ecx
 
-		mov         eax, dword ptr[temp_y]
-		sub         eax, 1
-		imul        ecx, eax, 28h
-		add         ecx, 50h
-		mov         dword ptr[nBlock_y], ecx
+			mov         eax, dword ptr[temp_y]
+			sub         eax, 1
+			imul        ecx, eax, 28h
+			add         ecx, 50h
+			mov         dword ptr[nBlock_y], ecx
 
-		mov         eax, dword ptr[this]
-		mov         ecx, dword ptr[eax + 1Ch]
-		add         ecx, 3
-		cmp         ecx, 0Fh
-		jle         LW2
-		mov         eax, dword ptr[temp_y]
-		sub         eax, 1
-		imul        ecx, eax, 3Ch
-		add         ecx, dword ptr[gameMap]
-		mov         edx, dword ptr[temp_x]
-		cmp         dword ptr[ecx + edx * 4], 0
-		je          LW1
-		mov         eax, dword ptr[nPicture_y]
-		cmp         eax, dword ptr[nBlock_y]
-		jle         LW2
-		LW1:
+			mov         eax, dword ptr[this]
+			mov         ecx, dword ptr[eax + 1Ch]
+			add         ecx, 3
+			cmp         ecx, 0Fh
+			jle         LW2
+			mov         eax, dword ptr[temp_y]
+			sub         eax, 1
+			imul        ecx, eax, 3Ch
+			add         ecx, dword ptr[gameMap]
+			mov         edx, dword ptr[temp_x]
+			cmp         dword ptr[ecx + edx * 4], 0
+			je          LW1
+			mov         eax, dword ptr[nPicture_y]
+			cmp         eax, dword ptr[nBlock_y]
+			jle         LW2
+			LW1 :
 		mov         esi, esp
-		mov         eax, dword ptr[gameprop]
-		push        eax
-		mov         ecx, dword ptr[this]
-		mov         edx, dword ptr[ecx]
-		mov         ecx, dword ptr[this]
-		mov         eax, dword ptr[edx + 14h]
-		call        eax
+			mov         eax, dword ptr[gameprop]
+			push        eax
+			mov         ecx, dword ptr[this]
+			mov         edx, dword ptr[ecx]
+			mov         ecx, dword ptr[this]
+			mov         eax, dword ptr[edx + 14h]
+			call        eax
 
-		mov         eax, dword ptr[this]
-		mov         ecx, dword ptr[eax + 1Ch]
-		sub         ecx, 5
-		mov         edx, dword ptr[this]
-		mov         dword ptr[edx + 1Ch], ecx
+			mov         eax, dword ptr[this]
+			mov         ecx, dword ptr[eax + 1Ch]
+			sub         ecx, 5
+			mov         edx, dword ptr[this]
+			mov         dword ptr[edx + 1Ch], ecx
 
-		LW2:
+			//if (FX == 'S')
+			LW2 :
 		cmp         dword ptr[FX], 53h
-		jne         LS2
+			jne         LS2
 
-		mov         eax, dword ptr[this]
-		mov         dword ptr[eax + 3Ch], 1
+			mov         eax, dword ptr[this]
+			mov         dword ptr[eax + 3Ch], 1
 
-		mov         eax, dword ptr[this]
-		mov         ecx, dword ptr[eax + 1Ch]
-		add         ecx, 44h
-		mov         dword ptr[nPicture_y], ecx
+			mov         eax, dword ptr[this]
+			mov         ecx, dword ptr[eax + 1Ch]
+			add         ecx, 44h
+			mov         dword ptr[nPicture_y], ecx
 
-		mov         eax, dword ptr[temp_y]
-		add         eax, 1
-		imul        ecx, eax, 28h
-		add         ecx, 28h
-		mov         dword ptr[nBlock_y], ecx
+			mov         eax, dword ptr[temp_y]
+			add         eax, 1
+			imul        ecx, eax, 28h
+			add         ecx, 28h
+			mov         dword ptr[nBlock_y], ecx
 
-		mov         eax, dword ptr[this]
-		mov         ecx, dword ptr[eax + 1Ch]
-		add         ecx, 3
-		cmp         ecx, 1F1h
-		jge         LS2
-		mov         eax, dword ptr[temp_y]
-		add         eax, 1
-		imul        ecx, eax, 3Ch
-		add         ecx, dword ptr[gameMap]
-		mov         edx, dword ptr[temp_x]
-		cmp         dword ptr[ecx + edx * 4], 0
-		je          LS1
-		mov         eax, dword ptr[nPicture_y]
-		cmp         eax, dword ptr[nBlock_y]
-		jge         LS2
-		LS1:
+			mov         eax, dword ptr[this]
+			mov         ecx, dword ptr[eax + 1Ch]
+			add         ecx, 3
+			cmp         ecx, 1F1h
+			jge         LS2
+			mov         eax, dword ptr[temp_y]
+			add         eax, 1
+			imul        ecx, eax, 3Ch
+			add         ecx, dword ptr[gameMap]
+			mov         edx, dword ptr[temp_x]
+			cmp         dword ptr[ecx + edx * 4], 0
+			je          LS1
+			mov         eax, dword ptr[nPicture_y]
+			cmp         eax, dword ptr[nBlock_y]
+			jge         LS2
+			LS1 :
 		mov         esi, esp
-		mov         eax, dword ptr[gameprop]
-		push        eax
-		mov         ecx, dword ptr[this]
-		mov         edx, dword ptr[ecx]
-		mov         ecx, dword ptr[this]
-		mov         eax, dword ptr[edx + 14h]
-		call        eax
+			mov         eax, dword ptr[gameprop]
+			push        eax
+			mov         ecx, dword ptr[this]
+			mov         edx, dword ptr[ecx]
+			mov         ecx, dword ptr[this]
+			mov         eax, dword ptr[edx + 14h]
+			call        eax
 
-		mov         eax, dword ptr[this]
-		mov         ecx, dword ptr[eax + 1Ch]
-		add         ecx, 5
-		mov         edx, dword ptr[this]
-		mov         dword ptr[edx + 1Ch], ecx
-		LS2:
+			mov         eax, dword ptr[this]
+			mov         ecx, dword ptr[eax + 1Ch]
+			add         ecx, 5
+			mov         edx, dword ptr[this]
+			mov         dword ptr[edx + 1Ch], ecx
+			LS2 :
 	}
 
 
@@ -331,7 +639,7 @@ void CPlayerOne::PlayerMove(int FX,CGameMap &gameMap,CGameProps &gameprop,CPlayS
 		m_direction = LEFT;
 		nPicture_x = m_player_x;                   // 人物位图最左侧位置
 		nBlock_x = (temp_x - 1) * 40 + 20 + 40;    // 障碍物右侧位置
-		if (this->m_player_x +3 > 15 && 
+		if (this->m_player_x +3 > 15 &&
 			!(gameMap.map_type[temp_y][temp_x - 1] != No && nPicture_x  <= nBlock_x))
 		{
 			if (this->WhetherProp(gameprop))
@@ -347,7 +655,7 @@ void CPlayerOne::PlayerMove(int FX,CGameMap &gameMap,CGameProps &gameprop,CPlayS
 		m_direction = RIGHT;
 		nPicture_x = m_player_x + 48;           // 人物位图最右侧位置
 		nBlock_x = (temp_x + 1) * 40 + 20;      // 障碍物左侧位置
-		if (this->m_player_x +3 < 20 + 600 - 48 && 
+		if (this->m_player_x +3 < 20 + 600 - 48 &&
 			!(gameMap.map_type[temp_y][temp_x + 1] != No && nPicture_x  >= nBlock_x))
 		{
 			if (this->WhetherProp(gameprop))
@@ -363,7 +671,7 @@ void CPlayerOne::PlayerMove(int FX,CGameMap &gameMap,CGameProps &gameprop,CPlayS
 		m_direction = UP;
 		nPicture_y = m_player_y + 32;                // 人物位图最上方位置
 		nBlock_y = (temp_y - 1) * 40 + 40 + 40;      // 障碍物下方位置
-		if (this->m_player_y +3> 15 && 
+		if (this->m_player_y +3> 15 &&
 			!(gameMap.map_type[temp_y - 1][temp_x] != No && nPicture_y  <= nBlock_y))
 		{
 			if (this->WhetherProp(gameprop))
@@ -379,7 +687,7 @@ void CPlayerOne::PlayerMove(int FX,CGameMap &gameMap,CGameProps &gameprop,CPlayS
 		m_direction = DOWN;
 		nPicture_y = m_player_y + 68;           // 人物位图最下方位置
 		nBlock_y = (temp_y + 1) * 40 + 40;      // 障碍物上方位置
-		if (this->m_player_y +3 < 41 + 520 - 64 && 
+		if (this->m_player_y +3 < 41 + 520 - 64 &&
 			!(gameMap.map_type[temp_y + 1][temp_x] != No && nPicture_y  >= nBlock_y))
 		{
 			if (this->WhetherProp(gameprop))
@@ -391,20 +699,24 @@ void CPlayerOne::PlayerMove(int FX,CGameMap &gameMap,CGameProps &gameprop,CPlayS
 	}*/
 }
 
-void CPlayerOne::CreateBubble(HINSTANCE hIns,CGameMap &gameMap,list<CBubble*> &lstBubble,CPlaySound &playSound,int x,int y)
+void CPlayerOne::CreateBubble(HINSTANCE hIns, CGameMap& gameMap, list<CBubble*>& lstBubble, CPlaySound& playSound, int x, int y)
 {
 	//-------坐标转换-------------------//
 	int temp_x;
 	int temp_y;
-/*	_asm {
+	CBubble* bubble = new CBubble;
+	_asm {
+		//x += 15;
 		mov         eax, dword ptr[x]
 		add         eax, 0Fh
 		mov         dword ptr[x], eax
 
+		//y = y + 64 - 15;
 		mov         eax, dword ptr[y]
 		add         eax, 31h
 		mov         dword ptr[y], eax
 
+		//if (x >= 20 && x <= 620 && y >= 41 && y <= 561)
 		cmp         dword ptr[x], 14h
 		jl          end0
 		cmp         dword ptr[x], 26Ch
@@ -414,59 +726,51 @@ void CPlayerOne::CreateBubble(HINSTANCE hIns,CGameMap &gameMap,list<CBubble*> &l
 		cmp         dword ptr[y], 231h
 		jg          end0
 
+		// 将坐标转换成对应地图数组坐标
+		//int temp_x = (x - 20) / 40;
 		mov         eax, dword ptr[x]
 		sub         eax, 14h
 		cdq
 		mov         ecx, 28h
-		idiv        eax, ecx
+		idiv        ecx
 		mov         dword ptr[temp_x], eax
 
+		//int temp_y = (y - 41) / 40;
 		mov         eax, dword ptr[y]
 		sub         eax, 29h
 		cdq
 		mov         ecx, 28h
-		idiv        eax, ecx
+		idiv        ecx
 		mov         dword ptr[temp_y], eax
 
+		// 判断该位置是否有障碍物 没有障碍物 允许放泡泡
+		//if (gameMap.map_type[temp_y][temp_x] == No)
 		imul        eax, dword ptr[temp_y], 3Ch
 		add         eax, dword ptr[gameMap]
 		mov         ecx, dword ptr[temp_x]
 		cmp         dword ptr[eax + ecx * 4], 0
 		jne         end0
 
+		// 将该位置赋值
+		//gameMap.map_type[temp_y][temp_x] = Popo;
 		imul        eax, dword ptr[temp_y], 3Ch
 		add         eax, dword ptr[gameMap]
 		mov         ecx, dword ptr[temp_x]
 		mov         dword ptr[eax + ecx * 4], 9
 
+		// 确定泡泡位置
+		//temp_x = temp_x * 40 + 20;
 		imul        eax, dword ptr[temp_x], 28h
 		add         eax, 14h
 		mov         dword ptr[temp_x], eax
 
+		//temp_y = temp_y * 40 + 41 - 1;
 		imul        eax, dword ptr[temp_y], 28h
 		add         eax, 28h
 		mov         dword ptr[temp_y], eax
 
-		push        38h
-		call        operator new (0831249h)
-		add         esp, 4
-		mov         dword ptr[ebp - 110h], eax
-		mov         dword ptr[ebp - 4], 0
-		cmp         dword ptr[ebp - 110h], 0
-		je          L1
-		mov         ecx, dword ptr[ebp - 110h]
-		call        CBubble::CBubble
-		mov         dword ptr[ebp - 118h], eax
-		jmp         __$EncStackInitStart + 106h(083AB61h)
-		L1:
-		mov         dword ptr[ebp - 118h], 0
-		L2:
-		mov         eax, dword ptr[ebp - 118h]
-		mov         dword ptr[ebp - 104h], eax
-		mov         dword ptr[ebp - 4], 0FFFFFFFFh
-		mov         ecx, dword ptr[ebp - 104h]
-		mov         dword ptr[ebp - 38h], ecx
-
+		// 创建泡泡
+		//bubble->BubbleInit(hIns,temp_x,temp_y,m_bubblePower);
 		mov         eax, dword ptr[this]
 		mov         ecx, dword ptr[eax + 34h]
 		push        ecx
@@ -476,52 +780,48 @@ void CPlayerOne::CreateBubble(HINSTANCE hIns,CGameMap &gameMap,list<CBubble*> &l
 		push        eax
 		mov         ecx, dword ptr[hIns]
 		push        ecx
-		mov         ecx, dword ptr[ebp - 38h]
-		call        CBubble::BubbleInit(08311BDh)
+		mov         ecx, dword ptr[bubble]
+		call        CBubble::BubbleInit
 
-		mov         eax, dword ptr[ebp - 38h]
+		//bubble->m_bubble_owner = OWNER_PLAYERONE;
+		mov         eax, dword ptr[bubble]
 		mov         dword ptr[eax + 28h], 1
-
-		lea         eax, [ebp - 38h]
-		push        eax
-		mov         ecx, dword ptr[lstBubble]
-		call        std::list<CBubble*, std::allocator<CBubble*> >::push_back(083197Eh)
-
-		push        offset string "sounds/put.wav" (084BF80h)
-		mov         ecx, dword ptr[playSound]
-		call        CPlaySound::Play(0831294h)
-
-	end0:
-	}*/
-	x += 15;
-	y = y + 64 - 15;
-
-	if (x >= 20 && x <= 620 && y >= 41 && y <= 561)
-	{
-		// 将坐标转换成对应地图数组坐标
-		int temp_x = (x - 20) / 40; 
-		int temp_y = (y - 41) / 40;
-		// 判断该位置是否有障碍物 没有障碍物 允许放泡泡
-		if (gameMap.map_type[temp_y][temp_x] == No)
-		{
-			// 将该位置赋值
-			gameMap.map_type[temp_y][temp_x] = Popo;
-			// 确定泡泡位置
-			temp_x = temp_x * 40 + 20;
-			temp_y = temp_y * 40 + 41 - 1;
-			// 创建泡泡
-			CBubble* bubble = new CBubble;
-			bubble->BubbleInit(hIns,temp_x,temp_y,m_bubblePower);
-			bubble->m_bubble_owner = OWNER_PLAYERONE;
-			lstBubble.push_back(bubble);
-
-			// 放置泡泡音效
-			playSound.Play(PUT_BUEBLE_SOUND);
-		}
+		end0:
 	}
+	lstBubble.push_back(bubble);
+
+	// 放置泡泡音效
+	playSound.Play(PUT_BUEBLE_SOUND);
+	/*	x += 15;
+		y = y + 64 - 15;
+
+
+		if (x >= 20 && x <= 620 && y >= 41 && y <= 561)
+		{
+			// 将坐标转换成对应地图数组坐标
+			int temp_x = (x - 20) / 40;
+			int temp_y = (y - 41) / 40;
+			// 判断该位置是否有障碍物 没有障碍物 允许放泡泡
+			if (gameMap.map_type[temp_y][temp_x] == No)
+			{
+				// 将该位置赋值
+				gameMap.map_type[temp_y][temp_x] = Popo;
+				// 确定泡泡位置
+				temp_x = temp_x * 40 + 20;
+				temp_y = temp_y * 40 + 41 - 1;
+				// 创建泡泡
+
+				bubble->BubbleInit(hIns,temp_x,temp_y,m_bubblePower);
+				bubble->m_bubble_owner = OWNER_PLAYERONE;
+				lstBubble.push_back(bubble);
+
+				// 放置泡泡音效
+				playSound.Play(PUT_BUEBLE_SOUND);
+			}
+		}*/
 }
 
-bool CPlayerOne::WhetherProp(CGameProps &gameprop)
+bool CPlayerOne::WhetherProp(CGameProps& gameprop)
 {
 	int x_temp, y_temp;
 	bool flag;
