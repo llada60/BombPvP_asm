@@ -1,4 +1,4 @@
-﻿#include "PlayerOne.h"
+#include "PlayerOne.h"
 CPlayerOne::CPlayerOne()
 {
 }
@@ -826,6 +826,7 @@ bool CPlayerOne::WhetherProp(CGameProps& gameprop)
 	int x_temp, y_temp;
 	bool flag;
 	_asm {
+		// 将坐标转换成对应地图数组坐标
 		// int x_temp = (m_player_x - 20 + 24) / 40;
 		mov         eax, dword ptr[this]
 		mov         eax, dword ptr[eax + 18h]
@@ -842,7 +843,8 @@ bool CPlayerOne::WhetherProp(CGameProps& gameprop)
 		mov         ecx, 28h
 		idiv        ecx
 		mov         dword ptr[y_temp], eax
-		// bool flag = false; // 判断是否吃到道具
+		// 判断是否吃到道具
+		// bool flag = false; 
 		mov         byte ptr[flag], 0
 		// switch (gameprop.m_bj[y_temp][x_temp])
 		imul        eax, dword ptr[y_temp], 34h
@@ -850,175 +852,124 @@ bool CPlayerOne::WhetherProp(CGameProps& gameprop)
 		lea         edx, [ecx + eax + 18h]
 		mov         eax, dword ptr[x_temp]
 		mov         ecx, dword ptr[edx + eax * 4]
-		mov         dword ptr[ebp - 0F4h], ecx
-		mov         edx, dword ptr[ebp - 0F4h]
-		sub         edx, 0Ah
-		mov         dword ptr[ebp - 0F4h], edx
-		cmp         dword ptr[ebp - 0F4h], 5
-		ja          Done
-		mov         eax, dword ptr[ebp - 0F4h]
-		//s		jmp         dword ptr[eax * 4 + 23B744h]
-		cmp			eax, 0
+		sub			ecx, 0Ah
+		// 跳转到各个分支
+		cmp			ecx, 0
 		je			Noprop
-		cmp			eax, 1
+		cmp			ecx, 1
 		je			Energybubble
-		cmp			eax, 2
+		cmp			ecx, 2
 		je			Energywater
-		cmp			eax, 3
+		cmp			ecx, 3
 		je			Rollerskate
-		cmp			eax, 4
+		cmp			ecx, 4
 		je			Redhead
-		cmp			eax, 5
+		cmp			ecx, 5
 		je			Powerball
-		Noprop :
-		// 	case noprop:
-		// flag = false;
+		jmp			Done
+Noprop :
+// 没有道具 case noprop:
+// flag = false;
 		mov         byte ptr[flag], 0
-			jmp         Done// break;
-			Energybubble :
-		//	case energybubble:
-		//{
-		//	gameprop.m_bj[y_temp][x_temp] = noprop;
+		jmp         Done
+Energybubble :
+//	水泡，吃一个可以多放一个水泡 case energybubble:
+//	gameprop.m_bj[y_temp][x_temp] = noprop;
 		imul        eax, dword ptr[y_temp], 34h
-			mov         ecx, dword ptr[gameprop]
-			lea         edx, [ecx + eax + 18h]
-			mov         eax, dword ptr[x_temp]
-			mov         dword ptr[edx + eax * 4], 0Ah
-			//			if (m_bubbleNum < _DEF_BUBBLE_NUM_MAX)
-			mov         eax, dword ptr[this]
-			cmp         dword ptr[eax + 30h], 5
-			jge         CPlayerOne::WhetherProp + 0CCh
-			//{
-			//	m_bubbleNum++;
-			mov         eax, dword ptr[this]
-			mov         ecx, dword ptr[eax + 30h]
-			add         ecx, 1
-			mov         edx, dword ptr[this]
-			mov         dword ptr[edx + 30h], ecx
-			//}
-			//flag = true;
-			mov         byte ptr[flag], 1
-			//}
-			//break;
-			jmp         Done
-			Energywater :
-		//case energywater:
-		///	{
-		//		gameprop.m_bj[y_temp][x_temp] = noprop;
+		mov         ecx, dword ptr[gameprop]
+		lea         edx, [ecx + eax + 18h]
+		mov         eax, dword ptr[x_temp]
+		mov         dword ptr[edx + eax * 4], 0Ah
+		//	if (m_bubbleNum < _DEF_BUBBLE_NUM_MAX)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 30h], _DEF_BUBBLE_NUM_MAX
+		jge         GreaterEnergybubble
+		// 改变放置泡泡个数
+		//	m_bubbleNum++;
+		mov         ecx, dword ptr[eax + 30h]
+		add         ecx, 1
+		mov         dword ptr[eax + 30h], ecx
+GreaterEnergybubble:
+		//flag = true;
+		mov         byte ptr[flag], 1
+		jmp         Done
+Energywater :
+// 能量水，吃了水泡的威力增加一倍 case energywater:
+// gameprop.m_bj[y_temp][x_temp] = noprop;
 		imul        eax, dword ptr[y_temp], 34h
-			mov         ecx, dword ptr[gameprop]
-			lea         edx, [ecx + eax + 18h]
-			mov         eax, dword ptr[x_temp]
-			mov         dword ptr[edx + eax * 4], 0Ah
-			// �ı����ݵ�����
-			//if (m_bubblePower < _DEF_BUBBLE_POWER_MAX)
-			mov         eax, dword ptr[this]
-			cmp         dword ptr[eax + 34h], 4
-			jge         CPlayerOne::WhetherProp + 102h
-			//{
-			//	m_bubblePower++;
-			mov         eax, dword ptr[this]
-			mov         ecx, dword ptr[eax + 34h]
-			add         ecx, 1
-			mov         edx, dword ptr[this]
-			mov         dword ptr[edx + 34h], ecx
-			//}
-			//flag = true;
-			mov         byte ptr[flag], 1
-			//}
-			//break;
-			jmp         Done
-			Rollerskate :
-		//case rollerskate:
-			//{
-				//gameprop.m_bj[y_temp][x_temp] = noprop;
+		mov         ecx, dword ptr[gameprop]
+		lea         edx, [ecx + eax + 18h]
+		mov         eax, dword ptr[x_temp]
+		mov         dword ptr[edx + eax * 4], 0Ah
+		// 改变泡泡的威力
+		//if (m_bubblePower < _DEF_BUBBLE_POWER_MAX)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 34h], _DEF_BUBBLE_POWER_MAX
+		jge         GreaterEnergywater
+		//	m_bubblePower++;
+		mov         ecx, dword ptr[eax + 34h]
+		add         ecx, 1
+		mov         dword ptr[eax + 34h], ecx
+GreaterEnergywater :
+		//flag = true;
+		mov         byte ptr[flag], 1
+		jmp         Done
+Rollerskate :
+// 旱冰鞋，增加人物移动速度 case rollerskate:
+//gameprop.m_bj[y_temp][x_temp] = noprop;
 		imul        eax, dword ptr[y_temp], 34h
-			mov         ecx, dword ptr[gameprop]
-			lea         edx, [ecx + eax + 18h]
-			mov         eax, dword ptr[x_temp]
-			mov         dword ptr[edx + eax * 4], 0Ah
-			// �ı��ƶ��ٶ�
-			//if (m_speed_timer > 10)
-			mov         eax, dword ptr[this]
-			cmp         dword ptr[eax + 2Ch], 0Ah
-			jle         CPlayerOne::WhetherProp + 135h
-			//{
-				//m_speed_timer -= 10;
-			mov         eax, dword ptr[this]
-			mov         ecx, dword ptr[eax + 2Ch]
-			sub         ecx, 0Ah
-			mov         edx, dword ptr[this]
-			mov         dword ptr[edx + 2Ch], ecx
-			//}
-			//flag = true;
-			mov         byte ptr[flag], 1
-			//}
-			//break;
-			jmp         Done
-			Redhead :
-		//case redhead:
-		//{
-			//gameprop.m_bj[y_temp][x_temp] = noprop;
+		mov         ecx, dword ptr[gameprop]
+		lea         edx, [ecx + eax + 18h]
+		mov         eax, dword ptr[x_temp]
+		mov         dword ptr[edx + eax * 4], 0Ah
+		// 改变移动速度
+		//if (m_speed_timer > 10)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 2Ch], 0Ah
+		jle			LessRollerskate
+		//m_speed_timer -= 10;
+		mov         ecx, dword ptr[eax + 2Ch]
+		sub         ecx, 0Ah
+		mov         dword ptr[eax + 2Ch], ecx
+LessRollerskate :
+		//flag = true;
+		mov         byte ptr[flag], 1
+		jmp         Done
+Redhead :
+// 红魔头，速度达到最大值 case redhead:
+// gameprop.m_bj[y_temp][x_temp] = noprop;
 		imul        eax, dword ptr[y_temp], 34h
-			mov         ecx, dword ptr[gameprop]
-			lea         edx, [ecx + eax + 18h]
-			mov         eax, dword ptr[x_temp]
-			mov         dword ptr[edx + eax * 4], 0Ah
-			//m_speed_timer = 10;
-			mov         eax, dword ptr[this]
-			mov         dword ptr[eax + 2Ch], 0Ah
-			//}
-			//break;
-			jmp         Done
-			Powerball :
-		//case powerball:
-		//{
-		//gameprop.m_bj[y_temp][x_temp] = noprop;
+		mov         ecx, dword ptr[gameprop]
+		lea         edx, [ecx + eax + 18h]
+		mov         eax, dword ptr[x_temp]
+		mov         dword ptr[edx + eax * 4], 0Ah
+		//m_speed_timer = 10;
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 2Ch], 0Ah
+		jmp         Done
+Powerball :
+// 大力丸，水泡威力达到最大值 case powerball:
+// gameprop.m_bj[y_temp][x_temp] = noprop;
 		imul        eax, dword ptr[y_temp], 34h
-			mov         ecx, dword ptr[gameprop]
-			lea         edx, [ecx + eax + 18h]
-			mov         eax, dword ptr[x_temp]
-			mov         dword ptr[edx + eax * 4], 0Ah
-			// ��������Ϊ���ֵ
-			//m_bubblePower = _DEF_BUBBLE_POWER_MAX;
-			mov         eax, dword ptr[this]
-			mov         dword ptr[eax + 34h], 4
-			//flag = true;
-			mov         byte ptr[flag], 1
-			//}
-			//break;
-		//}
-		Done:
+		mov         ecx, dword ptr[gameprop]
+		lea         edx, [ecx + eax + 18h]
+		mov         eax, dword ptr[x_temp]
+		mov         dword ptr[edx + eax * 4], 0Ah
+		// 泡泡威力为最大值
+		//m_bubblePower = _DEF_BUBBLE_POWER_MAX;
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 34h], _DEF_BUBBLE_POWER_MAX
+		//flag = true;
+		mov         byte ptr[flag], 1
+Done:
 		//if (flag)
 		movzx       eax, byte ptr[flag]
-			test        eax, eax
-			je          True
-			//{
-				//return true;
-			mov         al, 1
-			jmp         False
-			//}
-			//return false;
-			True :
+		test        eax, eax
+		je          True
+		mov         al, 1
+		jmp         False
+True :
 		xor al, al
-			//}
-			False :
-		pop         edi
-			pop         esi
-			pop         ebx
-			add         esp, 0F4h
-			cmp         ebp, esp
-			//call        __RTC_CheckEsp 
-			mov         esp, ebp
-			pop         ebp
-			ret         4
-			nop
-			mov         dh, 23h
-			add         byte ptr[edi], bh
-			mov         dh, 23h
-			add         byte ptr[ebp - 4Ah], dh
-			and eax, dword ptr[eax]
-			test        al, 0B6h
-			and eax, dword ptr[eax]
+False :
 	}
 }
