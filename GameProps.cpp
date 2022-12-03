@@ -2,81 +2,35 @@
 
 CGameProps::CGameProps()
 {
-
-	m_bitmap_energybubble = NULL;
-	m_bitmap_energywater = NULL;
-	m_bitmap_rollerskate = NULL;
-	m_bitmap_redhead = NULL;
-	m_bitmap_powerball = NULL;
-	m_nShowID = 0;
-	/*for (int i = 0; i < MAP_HEIGHT; i++)
+	__asm
+	{
+		mov esi, dword ptr[this]
+		mov dword ptr[esi],0		; m_bitmap_energybubble = NULL;
+		mov dword ptr[esi + 4], 0	; m_bitmap_energywater = NULL;
+		mov dword ptr[esi + 8], 0	; m_bitmap_rollerskate = NULL;
+		mov dword ptr[esi + 0ch], 0	; m_bitmap_redhead = NULL;
+		mov dword ptr[esi + 10h], 0	; m_bitmap_powerball = NULL;
+		mov dword ptr[esi + 14h], 0	; m_nShowID = 0;
+		
+	}
+	for (int i = 0; i < MAP_HEIGHT; i++)
 	{
 		for (int j = 0; j < MAP_WIDTH; j++)
 		{
 			m_bj[i][j] = noprop;
 		}
-	}*/
-	// 初始化整张地图
-	int m_bj_d = (int)m_bj;
-	__asm
-	{
-		mov esi, m_bj_d
-		xor edx, edx
-		mov ebx, MAP_HEIGHT
-		mov eax, MAP_WIDTH
-		mul ebx
-		loopmbj :
-		mov dword ptr[esi], noprop
-			add esi, 4
-			dec eax
-			cmp eax, 0
-			jg loopmbj
 	}
-	/*for (int i = 0; i < EBNUMBER; i++)
-	{
-		energybubblewpos[i] = 0;
-		energybubblehpos[i] = 0;
-	}
-	for (int i = 0; i < EWNUMBER; i++)
-	{
-		energywaterwpos[i] = 0;
-		energywaterhpos[i] = 0;
-	}
-
-	for (int i = 0; i < RSNUMBER; i++)
-	{
-		rollerskatewpos[i] = 0;
-		rollerskatehpos[i] = 0;
-	}
-	for (int i = 0; i < RHNUMBER; i++)
-	{
-		edheadwpos[i] = 0;
-		edheadhpos[i] = 0;
-	}
-
-	for (int i = 0; i < PBNUMBER; i++)
-	{
-		powerballwpos[i] = 0;
-		powerballhpos[i] = 0;
-	}*/
 	//初始化道具
-	int ebwp = (int)energybubblewpos;
-	int ebhp = (int)energybubblehpos;
-	int ewwp = (int)energywaterwpos;
-	int ewhp = (int)energywaterhpos;
-	int rswp = (int)rollerskatewpos;
-	int rshp = (int)rollerskatehpos;
-	int ehwp = (int)edheadwpos;
-	int ehhp = (int)edheadhpos;
-	int pbwp = (int)powerballwpos;
-	int pbhp = (int)powerballhpos;
 	__asm
 	{
-		mov esi, ebwp
-		mov edi, ebhp
+		mov eax,dword ptr[this]
+		add eax,324h
+		mov esi, eax
+		add eax,0ch
+		mov edi, eax
 		mov ebx, EBNUMBER
 		loopeb :
-			mov dword ptr[esi], 0
+		mov dword ptr[esi], 0
 			mov dword ptr[edi], 0
 			add esi, 4
 			add edi, 4
@@ -84,11 +38,13 @@ CGameProps::CGameProps()
 			cmp ebx, 0
 			jg loopeb
 
-			mov esi, ewwp
-			mov edi, ewhp
+			add eax,0ch
+			mov esi, eax
+			add eax,0ch
+			mov edi, eax
 			mov ebx, EWNUMBER
-		loopew :
-			mov dword ptr[esi], 0
+			loopew :
+		mov dword ptr[esi], 0
 			mov dword ptr[edi], 0
 			add esi, 4
 			add edi, 4
@@ -96,11 +52,13 @@ CGameProps::CGameProps()
 			cmp ebx, 0
 			jg loopew
 
-			mov esi, rswp
-			mov edi, rshp
+			add eax, 0ch
+			mov esi, eax
+			add eax, 0ch
+			mov edi, eax
 			mov ebx, RSNUMBER
-		looprs :
-			mov dword ptr[esi], 0
+			looprs :
+		mov dword ptr[esi], 0
 			mov dword ptr[edi], 0
 			add esi, 4
 			add edi, 4
@@ -108,11 +66,13 @@ CGameProps::CGameProps()
 			cmp ebx, 0
 			jg looprs
 
-			mov esi, ehwp
-			mov edi, ehhp
+			add eax, 0ch
+			mov esi, eax
+			add eax, 0ch
+			mov edi, eax
 			mov ebx, RHNUMBER
-		loopeh :
-			mov dword ptr[esi], 0
+			loopeh :
+		mov dword ptr[esi], 0
 			mov dword ptr[edi], 0
 			add esi, 4
 			add edi, 4
@@ -120,11 +80,13 @@ CGameProps::CGameProps()
 			cmp ebx, 0
 			jg loopeh
 
-			mov esi, pbwp
-			mov edi, pbhp
+			add eax, 0ch
+			mov esi, eax
+			add eax, 0ch
+			mov edi, eax
 			mov ebx, PBNUMBER
-		looppb :
-			mov dword ptr[esi], 0
+			looppb :
+		mov dword ptr[esi], 0
 			mov dword ptr[edi], 0
 			add esi, 4
 			add edi, 4
@@ -160,32 +122,137 @@ void CGameProps::PropInit(HINSTANCE hIns, CGameMap& map)
 	m_bitmap_powerball = ::LoadBitmap(hIns, MAKEINTRESOURCE(IDB_MAX_POWER));
 	m_nShowID = 2;
 	// 随机初始化道具位置
-	int m_bj_a = (int)m_bj;
 	int i = 0;
-	while (i < EBNUMBER)
+	
+	int m_bj_a = (int)m_bj;
+	//while (i < EBNUMBER)
+	//{
+	//	energybubblewpos[i] = rand() % MAP_WIDTH;
+	//	energybubblehpos[i] = rand() % MAP_HEIGHT;
+	//	int ebwp = energybubblewpos[i];
+	//	int ebhp = energybubblehpos[i];
+	//	if ((map.map_type[energybubblehpos[i]][energybubblewpos[i]] == R_B_ || map.map_type[energybubblehpos[i]][energybubblewpos[i]] == Y_B_) && m_bj[energybubblehpos[i]][energybubblewpos[i]] == noprop)
+	//	{
+	//		__asm
+	//		{
+	//			/*m_bj[energybubblehpos[i]][energybubblewpos[i]] = energybubble;
+	//			i++;*/
+	//			mov esi, m_bj_a
+	//			xor edx, edx
+	//			mov eax, ebhp
+	//			mov ecx, MAP_HEIGHT
+	//			mul ecx
+	//			add eax, ebwp
+	//			mov dword ptr[esi + 4 * eax], energybubble
+	//			add dword ptr[i], 1
+	//		}
+	//	}
+	//}
+	__asm
 	{
-		energybubblewpos[i] = rand() % MAP_WIDTH;
-		energybubblehpos[i] = rand() % MAP_HEIGHT;
-		int ebwp = energybubblewpos[i];
-		int ebhp = energybubblehpos[i];
-		if ((map.map_type[energybubblehpos[i]][energybubblewpos[i]] == R_B_ || map.map_type[energybubblehpos[i]][energybubblewpos[i]] == Y_B_) && m_bj[energybubblehpos[i]][energybubblewpos[i]] == noprop)
-		{
-			__asm
-			{
-				/*m_bj[energybubblehpos[i]][energybubblewpos[i]] = energybubble;
-				i++;*/
-				mov esi, m_bj_a
-				xor edx, edx
-				mov eax, ebhp
-				mov ecx, MAP_HEIGHT
-				mul ecx
-				add eax, ebwp
-				mov dword ptr[esi + 4 * eax], energybubble
-				add dword ptr[i], 1
-			}
-		}
+		; ebnumber bomb 循环
+		circle_eb :
+		cmp dword ptr[i], EBNUMBER
+			jge finish
+			; energybubblewpos[i] = rand() % MAP_WIDTH;
+		push eax
+			xor edx, edx
+			call rand
+			CDQ
+			mov ebx, MAP_WIDTH
+			idiv ebx
+			pop eax
+			mov eax, dword ptr[i]
+			mov ecx, dword ptr[this]
+			mov dword ptr[ecx + eax * 4 + 324h], edx
+			push edx; ebwp
+			; energybubblehpos[i] = rand() % MAP_HEIGHT;
+		push eax
+			xor eax, eax
+			call rand
+			CDQ
+			mov ebx, MAP_HEIGHT
+			idiv ebx
+			pop eax
+			mov eax, dword ptr[i]
+			mov ecx, dword ptr[this]
+			mov dword ptr[ecx + eax * 4 + 338h], edx
+			push edx; ebhp
+			; if比较
+			pop ecx; ebhp
+			imul edx, ecx, 3Ch
+			add edx, dword ptr[map]
+			pop eax; ebwp
+			cmp dword ptr[edx + eax * 4], R_B_
+			je andcompare
+			cmp dword ptr[edx + eax * 4], Y_B_
+			jne out1
+			andcompare :
+		imul edx, ecx, 34h
+			add edx, dword ptr[this]
+			add edx, 18h
+			cmp dword ptr[edx + eax * 4], noprop
+			jne out1
+			mov dword ptr[edx + eax * 4], energybubble
+			add dword ptr[i], 1
+			out1:
+		jmp circle_eb
+			finish :
+		xor eax, eax
 	}
 	int j = 0;
+	/*__asm
+	{
+		; ewnumber bomb 循环
+		circle_ew :
+		cmp dword ptr[j], EWNUMBER
+			jge finish2
+			; energywaterwpos[j] = rand() % MAP_WIDTH;
+		push eax
+			xor edx, edx
+			call rand
+			CDQ
+			mov ebx, MAP_WIDTH
+			idiv ebx
+			pop eax
+			mov eax, dword ptr[j]
+			mov ecx, dword ptr[this]
+			mov dword ptr[ecx + eax * 4 + 34ch], edx
+			push edx; ebwp
+			; energywaterhpos[j] = rand() % MAP_HEIGHT;
+		push eax
+			xor eax, eax
+			call rand
+			CDQ
+			mov ebx, MAP_HEIGHT
+			idiv ebx
+			pop eax
+			mov eax, dword ptr[j]
+			mov ecx, dword ptr[this]
+			mov dword ptr[ecx + eax * 4 + 360h], edx
+			push edx; ebhp
+			; if比较
+			pop ecx; ebhp
+			imul edx, ecx, 3Ch
+			add edx, dword ptr[map]
+			pop eax; ebwp
+			cmp dword ptr[edx + eax * 4], R_B_
+			je andcompare2
+			cmp dword ptr[edx + eax * 4], Y_B_
+			jne out2
+			andcompare2 :
+		imul edx, ecx, 34h
+			add edx, dword ptr[this]
+			add edx, 18h
+			cmp dword ptr[edx + eax * 4], noprop
+			jne out1
+			mov dword ptr[edx + eax * 4], energywater
+			add dword ptr[j], 1
+			out2:
+		jmp circle_ew
+			finish2 :
+		xor eax, eax
+	}*/
 	while (j < EWNUMBER)
 	{
 		energywaterwpos[j] = rand() % MAP_WIDTH;
