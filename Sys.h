@@ -6,8 +6,8 @@ using namespace std;
 
 // ±≥æ∞“Ù¿÷
 #define MAIN_BACK_MUSIC    "sounds/main_back.wav"
-#define ONEGAME_BACK_MUSIC "sounds/back_mydream.wav"
-#define TWOGAME_BACK_MUSIC "sounds/back_cool.wav"
+//#define ONEGAME_BACK_MUSIC "sounds/back_mydream.wav"
+#define TWOGAME_BACK_MUSIC "sounds/back_mydream.wav"
 
 // ”Œœ∑“Ù–ß
 #define START_GAME_SOUND   "sounds/start.wav"
