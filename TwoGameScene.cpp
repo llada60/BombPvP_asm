@@ -371,7 +371,125 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 		}
 	}
 	// 人物移动动画定时器
-	if (nTimerID == PLAYER_MOVE_SHOW_TIMER_ID)
+	_asm
+	{
+		//if (nTimerID == PLAYER_MOVE_SHOW_TIMER_ID)
+		cmp         dword ptr[nTimerID], 8
+		jne         P1
+
+		//if (playerOne.m_bMoveFlag == true)
+		mov         eax, dword ptr[this]
+		movzx       ecx, byte ptr[eax + 3B4h]
+		cmp         ecx, 1
+		jne         P11
+
+		//if (playerOne.m_Move_ShowId >= 5) playerOne.m_Move_ShowId = 0
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3B0h], 5
+		jl          P111
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 3B0h], 0
+		jmp         P11
+
+		P111:
+		//else playerOne.m_Move_ShowId++
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 3B0h]
+		add         ecx, 1
+		mov         edx, dword ptr[this]
+		mov         dword ptr[edx + 3B0h], ecx
+
+		P11:
+		//if (playerTwo.m_bMoveFlag == true)
+		mov         eax, dword ptr[this]
+		movzx       ecx, byte ptr[eax + 3F4h]
+		cmp         ecx, 1
+		jne         P1
+
+		//if (playerTwo.m_Move_ShowId >= 5) playerTwo.m_Move_ShowId = 0
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3F0h], 5
+		jl          P112
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 3F0h], 0
+		jmp         P1
+		
+		P112:
+		//else playerTwo.m_Move_ShowId++
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 3F0h]
+		add         ecx, 1
+		mov         edx, dword ptr[this]
+		mov         dword ptr[edx + 3F0h], ecx
+
+		P1:
+		// 道具变化定时器
+		//if(nTimerID == PROPERTY_CHANGR_TIMER_ID)
+		cmp         dword ptr [nTimerID],9
+		jne         P2
+		
+		//this->ChangePropShowID();
+		mov         ecx,dword ptr [this]
+		call        CTwoGameScene::ChangePropShowID
+		
+		// 玩家死亡
+		//if(nTimerID == PLAYERSTART_DIE_ID)
+		P2:
+		cmp         dword ptr [nTimerID],0Bh
+		jne         end0
+	
+		//if(playerOne.m_player_status == DIE)
+		mov         eax,dword ptr [this]
+		cmp         dword ptr [eax+3C8h],2
+		jne         P21
+		
+		//if(playerOne.m_DieShowID == 1)
+		mov         eax,dword ptr [this]
+		cmp         dword ptr [eax+3B8h],1
+		jne         P22
+			
+		//GameOver();
+		mov         ecx,dword ptr [this]
+		call        CTwoGameScene::GameOver 
+		//else
+		jmp         P21
+			
+		//playerOne.m_DieShowID--;
+		P22:
+		mov         eax,dword ptr [this]
+		mov         ecx,dword ptr [eax+3B8h]
+		sub         ecx,1
+		mov         edx,dword ptr [this]
+		mov         dword ptr [edx+3B8h],ecx
+			
+		
+		//if(playerTwo.m_player_status == DIE)
+		P21:
+		mov         eax,dword ptr [this]
+		cmp         dword ptr [eax+408h],2
+		jne         end0
+		
+		//if(playerTwo.m_DieShowID == 1)
+		mov         eax,dword ptr [this]
+		cmp         dword ptr [eax+3F8h],1
+		jne         P23
+			
+		//GameOver();
+		mov         ecx,dword ptr [this]
+		call        CTwoGameScene::GameOver 
+		//else
+		jmp         end0
+		//playerTwo.m_DieShowID--;
+		P23:
+		mov         eax,dword ptr [this]
+		mov         ecx,dword ptr [eax+3F8h]
+		sub         ecx,1
+		mov         edx,dword ptr [this]
+		mov         dword ptr [edx+3F8h],ecx
+
+		end0:
+		}
+	/*if (nTimerID == PLAYER_MOVE_SHOW_TIMER_ID)
 	{		
 		if (playerOne.m_bMoveFlag == true)
 		{
@@ -412,7 +530,7 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 				playerTwo.m_DieShowID--;
 			}
 		}
-	}
+	}*/
 }
 
 void CTwoGameScene::OnLButtonDown(HINSTANCE hIns,POINT point)
@@ -604,6 +722,47 @@ void CTwoGameScene::ChangeBoomShowID()
 void CTwoGameScene::AllBubbleShow(HDC hdc)
 {
 	list<CBubble*>::iterator ite_Bubble = m_lstBubble.begin();
+	/*_asm
+	{
+		lea         eax, [ite_Bubble]
+		push        eax
+		mov         ecx, dword ptr[this]
+		add         ecx, 7ACh
+		//call        std::list<CBubble*, std::allocator<CBubble*> >::begin(0DF126Ch)
+		mov         dword ptr[ebp - 4], 0
+
+		Whl:
+		lea         eax, [ebp - 108h]
+		push        eax
+		mov         ecx, dword ptr[this]
+		add         ecx, 7ACh
+		//call        std::list<CBubble*, std::allocator<CBubble*> >::end(0DF1384h)
+		mov         dword ptr[ebp - 110h], eax
+		mov         ecx, dword ptr[ebp - 110h]
+		push        ecx
+		lea         ecx, [ite_Bubble]
+		//call        std::_List_const_iterator<std::_List_val<std::_List_simple_types<CBubble*> > >::operator!= (0DF123Fh)
+		mov         byte ptr[ebp - 0F1h], al
+		lea         ecx, [ebp - 108h]
+		//call        std::_List_iterator<std::_List_val<std::_List_simple_types<CBubble*> > >::~_List_iterator<std::_List_val<std::_List_simple_types<CBubble*> > >(0DF194Ch)
+		movzx       edx, byte ptr[ebp - 0F1h]
+		test        edx, edx
+		je          end0
+
+		mov         eax, dword ptr[hdc]
+		push        eax
+		lea         ecx, [ite_Bubble]
+		//call        std::_List_iterator<std::_List_val<std::_List_simple_types<CBubble*> > >::operator* (0DF11EFh)
+		mov         ecx, dword ptr[eax]
+		call        CBubble::BubbleShow
+
+		lea         ecx, [ite_Bubble]
+		//call        std::_List_iterator<std::_List_val<std::_List_simple_types<CBubble*> > >::operator++ (0DF18E3h)
+
+		jmp         Whl
+		end0:
+	}*/
+	
 	while(ite_Bubble != m_lstBubble.end())
 	{
 		(*ite_Bubble)->BubbleShow(hdc);
@@ -622,25 +781,259 @@ void CTwoGameScene::AllBoomShow(HDC hdc)
 void CTwoGameScene::ShowTime(HDC hdc)
 {
 	// 时间格式00:00
-	int time_one = 0; 
-	int time_two = m_gameTime / 60;
-	int time_three = (m_gameTime - time_two * 60) / 10;
-	int time_four = (m_gameTime - time_two * 60) % 10;
-
+	int time_one; 
+	int time_two;
+	int time_three;
+	int time_four;
 	HDC hdcMem = CreateCompatibleDC(hdc);
+
+	_asm
+	{
+		
+		mov         dword ptr[time_one], 0
+
+		mov         eax, dword ptr[this]
+		mov         eax, dword ptr[eax + 7A4h]
+		cdq
+		mov         ecx, 3Ch
+		idiv        ecx
+		mov         dword ptr[time_two], eax
+		imul        eax, dword ptr[time_two], 3Ch
+
+		mov         ecx, dword ptr[this]
+		mov         edx, dword ptr[ecx + 7A4h]
+		sub         edx, eax
+		mov         eax, edx
+		cdq
+		mov         ecx, 0Ah
+		idiv        ecx
+		mov         dword ptr[time_three], eax
+
+		imul        eax,dword ptr [time_two],3Ch
+		mov         ecx,dword ptr [this]
+		mov         edx,dword ptr [ecx+7A4h]
+		sub         edx,eax
+		mov         eax,edx
+		cdq
+		mov         ecx,0Ah
+		idiv        ecx
+		mov         dword ptr [time_four],edx
+
+		//SelectObject(hdcMem,m_bitmap_timeNum)
+		mov         eax,dword ptr [this]
+		mov         ecx,dword ptr [eax+790h]
+		push        ecx
+		mov         edx,dword ptr [hdcMem]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc,708,43,12,10,hdcMem,12*time_one,0,12,10,RGB(255,0,255))
+		push        0FF00FFh
+		push        0Ah
+		push        0Ch
+		push        0
+		imul        eax,dword ptr [time_one],0Ch
+		push        eax
+		mov         ecx,dword ptr [hdcMem]
+		push        ecx
+		push        0Ah
+		push        0Ch
+		push        2Bh
+		push        2C4h
+		mov         edx,dword ptr [hdc]
+		push        edx
+		call        TransparentBlt
+
+		//TransparentBlt(hdc,722,43,12,10,hdcMem,12*time_two,0,12,10,RGB(255,0,255))
+		push        0FF00FFh
+		push        0Ah
+		push        0Ch
+		push        0
+		imul        eax,dword ptr [time_two],0Ch
+		push        eax
+		mov         ecx,dword ptr [hdcMem]
+		push        ecx
+		push        0Ah
+		push        0Ch
+		push        2Bh
+		push        2D2h
+		mov         edx,dword ptr [hdc]
+		push        edx
+		call        TransparentBlt
+
+		//TransparentBlt(hdc,741,43,12,10,hdcMem,12*time_three,0,12,10,RGB(255,0,255))
+
+		push        0FF00FFh
+		push        0Ah
+		push        0Ch
+		push        0
+		imul        eax,dword ptr [time_three],0Ch
+		push        eax
+		mov         ecx,dword ptr [hdcMem]
+		push        ecx
+		push        0Ah
+		push        0Ch
+		push        2Bh
+		push        2E5h
+		mov         edx,dword ptr [hdc]
+		push        edx
+		call        TransparentBlt
+
+		//TransparentBlt(hdc,756,43,12,10,hdcMem,12*time_four,0,12,10,RGB(255,0,255))
+		push        0FF00FFh
+		push        0Ah
+		push        0Ch
+		push        0
+		imul        eax,dword ptr [time_four],0Ch
+		push        eax
+		mov         ecx,dword ptr [hdcMem]
+		push        ecx
+		push        0Ah
+		push        0Ch
+		push        2Bh
+		push        2F4h
+		mov         edx,dword ptr [hdc]
+		push        edx
+		call        TransparentBlt
+
+		//DeleteObject(hdcMem)
+		mov         esi,esp
+		mov         eax,dword ptr [hdcMem]
+		push        eax
+		call        DeleteObject
+	}
+	/*
+	time_one = 0;
+	time_two = m_gameTime / 60;
+	time_three = (m_gameTime - time_two * 60) / 10;
+	time_four = (m_gameTime - time_two * 60) % 10;
 	SelectObject(hdcMem,m_bitmap_timeNum);
 	TransparentBlt(hdc,708,43,12,10,hdcMem,12*time_one,0,12,10,RGB(255,0,255));
 	TransparentBlt(hdc,722,43,12,10,hdcMem,12*time_two,0,12,10,RGB(255,0,255));
 	TransparentBlt(hdc,741,43,12,10,hdcMem,12*time_three,0,12,10,RGB(255,0,255));
 	TransparentBlt(hdc,756,43,12,10,hdcMem,12*time_four,0,12,10,RGB(255,0,255));
-	DeleteObject(hdcMem);
+	DeleteObject(hdcMem);*/
 }
 
 void CTwoGameScene::ShowGameStatus(HDC hdc)
 {
 	HDC hdcMem = CreateCompatibleDC(hdc);
-
 	static int word_y = 0;
+
+	_asm{
+		//if (m_gameStatus == DRAW) word_y = 160;
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 7C4h], 4
+		jne         L1
+
+		mov         dword ptr[word_y], 0A0h
+		jmp         end0
+
+		L1:
+		//else if (m_gameStatus == PLAYER_ONE_WIN)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 7C4h], 2
+		jne         L2
+
+		mov         dword ptr[word_y], 50h
+
+		//SelectObject(hdcMem,m_bitmap_win_word)
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 798h]
+		push        ecx
+		mov         edx, dword ptr[hdcMem]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc,260,40,110,25,hdcMem,0,0,110,25,RGB(255,0,255))
+		push        0FF00FFh
+		push        19h
+		push        6Eh
+		push        0
+		push        0
+		mov         eax, dword ptr[hdcMem]
+		push        eax
+		push        19h
+		push        6Eh
+		push        28h
+		push        104h
+		mov         ecx, dword ptr[hdc]
+		push        ecx
+		call        TransparentBlt
+
+		jmp         end0
+
+		L2:
+		//else if (m_gameStatus == PLAYER_TWO_WIN)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 7C4h], 3
+		jne         L3
+
+		mov         dword ptr[word_y], 50h
+
+		//SelectObject(hdcMem,m_bitmap_win_word)
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 798h]
+		push        ecx
+		mov         edx, dword ptr[hdcMem]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc,260,40,110,25,hdcMem,0,25,110,25,RGB(255,0,255))
+		push        0FF00FFh
+		push        19h
+		push        6Eh
+		push        19h
+		push        0
+		mov         eax, dword ptr[hdcMem]
+		push        eax
+		push        19h
+		push        6Eh
+		push        28h
+		push        104h
+		mov         ecx, dword ptr[hdc]
+		push        ecx
+		call        TransparentBlt
+
+		jmp         end0
+
+		L3:
+		mov         dword ptr[word_y], 0
+
+		end0:
+		//SelectObject(hdcMem,m_bitmap_statusInfo)
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 794h]
+		push        ecx
+		mov         edx, dword ptr[hdcMem]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc,200,m_statusInfo_y,240,80,hdcMem,0,word_y,240,80,RGB(255,0,255))
+		push        0FF00FFh
+		push        50h
+		push        0F0h
+		mov         eax, dword ptr[word_y]
+		push        eax
+		push        0
+		mov         ecx, dword ptr[hdcMem]
+		push        ecx
+		push        50h
+		push        0F0h
+		mov         edx, dword ptr[this]
+		mov         eax, dword ptr[edx + 7A8h]
+		push        eax
+		push        0C8h
+		mov         ecx, dword ptr[hdc]
+		push        ecx
+		call        TransparentBlt
+
+		//DeleteObject(hdcMem)
+		mov         eax, dword ptr[hdcMem]
+		push        eax
+		call        DeleteObject
+	}
+	/*
 	// 平局!!!
 	if (m_gameStatus == DRAW) word_y = 160; 
 	// 第一玩家 胜利！！
@@ -663,12 +1056,78 @@ void CTwoGameScene::ShowGameStatus(HDC hdc)
 	// 选择文字信息
 	SelectObject(hdcMem,m_bitmap_statusInfo);
 	TransparentBlt(hdc,200,m_statusInfo_y,240,80,hdcMem,0,word_y,240,80,RGB(255,0,255));
-	DeleteObject(hdcMem);
+	DeleteObject(hdcMem);*/
 }
 
 void CTwoGameScene::ChangePlayerStartShowID()
 {
 	static int bflag = 0; // 人物开场闪烁控制位
+	_asm
+	{
+		//if (playerOne.m_Start_nShowID == 9 && playerTwo.m_Start_nShowID == 9)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3A4h], 9
+		jne         L1
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3E4h], 9
+		jne         L1
+
+		//playerOne.m_Start_nShowID = 8
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 3A4h], 8
+
+		//playerTwo.m_Start_nShowID = 8
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 3E4h], 8
+
+		//if (bflag == 4)
+		cmp         dword ptr[bflag], 4
+		jne         L11
+
+		//KillTimer(m_twoGameWnd,PLAYERSTART_TIMER_ID)
+		push        5
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 79Ch]
+		push        ecx
+		call        KillTimer
+
+		//bflag = 0
+		mov         dword ptr [bflag],0
+
+		//playerOne.m_player_status = MOVE
+		mov         eax,dword ptr [this]
+		mov         dword ptr [eax+3C8h],1
+
+		//playerTwo.m_player_status = MOVE
+		mov         eax,dword ptr [this]
+		mov         dword ptr [eax+408h],1
+
+		L11:
+		//bflag++
+		mov         eax,dword ptr [bflag]
+		add         eax,1
+		mov         dword ptr [bflag],eax
+
+		jmp         end0
+
+		L1:
+		//playerOne.m_Start_nShowID++
+		mov         eax,dword ptr [this]
+		mov         ecx,dword ptr [eax+3A4h]
+		add         ecx,1
+		mov         edx,dword ptr [this]
+		mov         dword ptr [edx+3A4h],ecx
+
+		//playerTwo.m_Start_nShowID++
+		mov         eax,dword ptr [this]
+		mov         ecx,dword ptr [eax+3E4h]
+		add         ecx,1
+		mov         edx,dword ptr [this]
+		mov         dword ptr [edx+3E4h],ecx
+
+		end0:
+	}
+	/*
 	if (playerOne.m_Start_nShowID == 9 && playerTwo.m_Start_nShowID == 9)
 	{
 
@@ -688,12 +1147,35 @@ void CTwoGameScene::ChangePlayerStartShowID()
 	{
 		playerOne.m_Start_nShowID++;
 		playerTwo.m_Start_nShowID++;
-	}
+	}*/
 }
 
 //改变道具的ShowID
 void CTwoGameScene::ChangePropShowID()
 {
+	_asm
+	{
+		//if(prop.m_nShowID==0)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 424h], 0
+		jne		  L1
+
+		//prop.m_nShowID=2
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 424h], 2
+
+		jmp         end0
+
+		L1:
+		//prop.m_nShowID--
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 424h]
+		sub         ecx, 1
+		mov         edx, dword ptr[this]
+		mov         dword ptr[edx + 424h], ecx
+		end0:
+	}
+	/*
 	if(prop.m_nShowID==0)
 	{
 		prop.m_nShowID=2;
@@ -701,10 +1183,83 @@ void CTwoGameScene::ChangePropShowID()
 	else
 	{
 		prop.m_nShowID--;
-	}
+	}*/
 }
 void CTwoGameScene::GameOver()
 {
+	_asm
+	{
+		// 玩家一胜利
+		//if (playerOne.m_player_status == DIE)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3C8h], 2
+		jne         L1
+
+		//m_gameStatus = PLAYER_TWO_WIN
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 7C4h], 3
+
+
+
+		jmp         end0
+
+		L1:
+		// 玩家二胜利
+		//else if (playerTwo.m_player_status == DIE)
+		mov         eax,dword ptr [this]  
+		cmp         dword ptr [eax+408h],2  
+		jne         L2
+
+		//m_gameStatus = PLAYER_ONE_WIN
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 7C4h], 2
+
+
+
+		jmp         end0
+
+		L2:
+		// 平局
+		//else if (playerOne.m_player_status == DIE && playerTwo.m_player_status == DIE)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3C8h], 2
+		jne         end0
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 408h], 2
+		jne         end0
+
+		//m_gameStatus = DRAW
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 7C4h], 4
+
+
+		end0:
+		//m_statusInfo_y = 60
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 7A8h], 3Ch
+
+		//for(int i = TIMER_BEGIN;i <= TIMER_END;i++)
+		mov         dword ptr[ebp - 14h], 1
+		jmp         F2
+		F1:
+		mov         eax, dword ptr[ebp - 14h]
+		add         eax, 1
+		mov         dword ptr[ebp - 14h], eax
+		F2:
+		cmp         dword ptr[ebp - 14h], 0Bh
+		jg          end1
+
+		//KillTimer(m_twoGameWnd ,i)
+		mov         eax, dword ptr[ebp - 14h]
+		push        eax
+		mov         ecx, dword ptr[this]
+		mov         edx, dword ptr[ecx + 79Ch]
+		push        edx
+		call        KillTimer
+		jmp         F1
+		end1:
+	}
+	/*
 	// 玩家一胜利
 	if (playerOne.m_player_status == DIE)
 	{
@@ -728,5 +1283,5 @@ void CTwoGameScene::GameOver()
 	for(int i = TIMER_BEGIN;i <= TIMER_END;i++)
 	{
 		KillTimer(m_twoGameWnd ,i);
-	}
+	}*/
 }
