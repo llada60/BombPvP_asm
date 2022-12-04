@@ -5,13 +5,13 @@ CGameProps::CGameProps()
 	__asm
 	{
 		mov esi, dword ptr[this]
-		mov dword ptr[esi],0		; m_bitmap_energybubble = NULL;
-		mov dword ptr[esi + 4], 0	; m_bitmap_energywater = NULL;
-		mov dword ptr[esi + 8], 0	; m_bitmap_rollerskate = NULL;
-		mov dword ptr[esi + 0ch], 0	; m_bitmap_redhead = NULL;
-		mov dword ptr[esi + 10h], 0	; m_bitmap_powerball = NULL;
-		mov dword ptr[esi + 14h], 0	; m_nShowID = 0;
-		
+		mov dword ptr[esi], 0; m_bitmap_energybubble = NULL;
+		mov dword ptr[esi + 4], 0; m_bitmap_energywater = NULL;
+		mov dword ptr[esi + 8], 0; m_bitmap_rollerskate = NULL;
+		mov dword ptr[esi + 0ch], 0; m_bitmap_redhead = NULL;
+		mov dword ptr[esi + 10h], 0; m_bitmap_powerball = NULL;
+		mov dword ptr[esi + 14h], 0; m_nShowID = 0;
+
 	}
 	for (int i = 0; i < MAP_HEIGHT; i++)
 	{
@@ -23,10 +23,10 @@ CGameProps::CGameProps()
 	//初始化道具
 	__asm
 	{
-		mov eax,dword ptr[this]
-		add eax,324h
+		mov eax, dword ptr[this]
+		add eax, 324h
 		mov esi, eax
-		add eax,0ch
+		add eax, 0ch
 		mov edi, eax
 		mov ebx, EBNUMBER
 		loopeb :
@@ -38,9 +38,9 @@ CGameProps::CGameProps()
 			cmp ebx, 0
 			jg loopeb
 
-			add eax,0ch
+			add eax, 0ch
 			mov esi, eax
-			add eax,0ch
+			add eax, 0ch
 			mov edi, eax
 			mov ebx, EWNUMBER
 			loopew :
@@ -123,7 +123,7 @@ void CGameProps::PropInit(HINSTANCE hIns, CGameMap& map)
 	m_nShowID = 2;
 	// 随机初始化道具位置
 	int i = 0;
-	
+
 	int m_bj_a = (int)m_bj;
 	//while (i < EBNUMBER)
 	//{

@@ -43,6 +43,6 @@ using namespace std;
 // 道具数量
 #define EBNUMBER   5    // 水泡赠加水泡数量
 #define EWNUMBER   5    // 能量水赠加爆炸范围
-#define RSNUMBER   5    // 旱冰鞋增加速度
-#define RHNUMBER   1    // 红魔头速度增到最大
-#define PBNUMBER   1    // 大力丸爆炸范围最大
+#define RSNUMBER   5   // 旱冰鞋增加速度
+#define RHNUMBER   1   // 红魔头速度增到最大
+#define PBNUMBER   1   // 大力丸爆炸范围最大
