@@ -2,20 +2,23 @@
 
 CTwoGameScene::CTwoGameScene()
 {
-	m_bitmap_gameBack = NULL;
-	m_bitmap_road = NULL;
-	m_bitmap_quit = NULL;
-	m_bitmap_quit_select = NULL;
-	m_bitmap_timeNum = NULL;
-	m_bitmap_statusInfo = NULL;
-	m_bitmap_win_word = NULL;
-	m_isSelect = false;
-	m_gameTime = 0;
-	m_statusInfo_y = 0;
-
-	m_twoGameWnd = NULL;
-	m_twoGameHIns = NULL;
-	m_gameStatus = NO_SHOW;
+	__asm
+	{
+		mov eax, dword ptr[this]
+		mov dword ptr[eax + 7c0h], 0
+		mov dword ptr[eax + 7c4h], 0
+		mov dword ptr[eax + 7c8h], 0
+		mov dword ptr[eax + 7cch], 0
+		mov dword ptr[eax + 7d0h], 0
+		mov dword ptr[eax + 7d4h], 0
+		mov dword ptr[eax + 7d8h], 0
+		mov dword ptr[eax + 7bch], 0
+		mov dword ptr[eax + 7e4h], 0
+		mov dword ptr[eax + 7e8h], 0
+		mov dword ptr[eax + 7dch], 0
+		mov dword ptr[eax + 7e0h], 0
+		mov dword ptr[eax + 804h], 0
+	}
 }
 
 CTwoGameScene::~CTwoGameScene()
@@ -28,13 +31,18 @@ CTwoGameScene::~CTwoGameScene()
 	DeleteObject(m_bitmap_statusInfo);
 	DeleteObject(m_bitmap_win_word);
 
-	m_bitmap_gameBack = NULL;
-	m_bitmap_road = NULL;
-	m_bitmap_quit = NULL;
-	m_bitmap_quit_select = NULL;
-	m_bitmap_timeNum = NULL;
-	m_bitmap_statusInfo = NULL;
-	m_bitmap_win_word = NULL;
+	__asm
+	{
+		mov eax, dword ptr[this]
+		mov dword ptr[eax + 7c0h], 0
+		mov dword ptr[eax + 7c0h], 0
+		mov dword ptr[eax + 7c4h], 0
+		mov dword ptr[eax + 7c8h], 0
+		mov dword ptr[eax + 7cch], 0
+		mov dword ptr[eax + 7d0h], 0
+		mov dword ptr[eax + 7d4h], 0
+		mov dword ptr[eax + 7d8h], 0
+	}
 }
 
 void CTwoGameScene::TwoGameSceneInit(HINSTANCE hIns, HWND hWnd)
@@ -49,57 +57,239 @@ void CTwoGameScene::TwoGameSceneInit(HINSTANCE hIns, HWND hWnd)
 	m_bitmap_statusInfo = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_GAMEOVER_WORD));
 	m_bitmap_win_word = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_PLAYER_NUM_WORD));
 
-	m_gameTime = 300;      // 倒计时计数器 300s
-	m_statusInfo_y = 70;   // 文字默认位置 y = 70
-	m_gameStatus = START;  // 游戏开始 显示游戏开始文字
-
-	// 初始化地图
-	gameMap.MapInit(hIns);
-
-	//初始化道具
-	prop.PropInit(hIns, gameMap);
-
-	// 初始化游戏人物
-	playerOne.PlayerInit(hIns);
-	playerTwo.PlayerInit(hIns);
-
-	// 启动定时器
-	SetTimer(m_twoGameWnd, STOPSOUND_TIMER_ID, 10, NULL);
-	SetTimer(m_twoGameWnd, BUBBLE_CHANGE_TIMER_ID, 200, NULL);
-	SetTimer(m_twoGameWnd, GAME_TIME_TIMER_ID, 1000, NULL);
-	SetTimer(m_twoGameWnd, STATUS_INFO_TIMER_ID, 80, NULL);
-	SetTimer(m_twoGameWnd, PLAYERSTART_TIMER_ID, 50, NULL);
-	SetTimer(m_twoGameWnd, WIND_TIMER_ID, 500, NULL);
-	SetTimer(m_twoGameWnd, PLAYER_MOVE_TIMER_ID, 10, NULL);
-	SetTimer(m_twoGameWnd, PLAYER_MOVE_SHOW_TIMER_ID, 150, NULL);
-	SetTimer(m_twoGameWnd, PROPERTY_CHANGR_TIMER_ID, 200, NULL);
-	SetTimer(m_twoGameWnd, PROPERTY_BOOM_TIMER_ID, 1000 / 30, NULL);
-	SetTimer(m_twoGameWnd, PLAYERSTART_DIE_ID, 1000 / 10, NULL);
+	__asm
+	{
+		mov eax, dword ptr[this]
+		mov dword ptr[eax + 7e4h], 12ch; m_gameTime倒计时计数器 300s
+		mov dword ptr[eax + 7e8h], 46h; m_statusInfo_y文字默认位置 y = 70
+		mov dword ptr[eax + 804h], START; m_gameStatus游戏开始 显示游戏开始文字
+		; 初始化地图
+		mov eax, dword ptr[hIns]
+		push eax
+		mov ecx, dword ptr[this]
+		call CGameMap::MapInit
+		; 初始化道具
+		mov ecx, dword ptr[this]
+		push ecx
+		mov eax, dword ptr[hIns]
+		push eax
+		add ecx, 410h
+		call CGameProps::PropInit
+		; 初始化游戏人物
+		; player1
+		mov eax, dword ptr[hIns]
+		push eax
+		mov ecx, dword ptr[this]
+		add ecx, 390h
+		mov edx, dword ptr[this]
+		mov eax, dword ptr[edx + 390h]
+		mov edx, dword ptr[eax + 4]
+		call edx
+		; player2
+		mov esi, esp
+		mov eax, dword ptr[hIns]
+		push eax
+		mov ecx, dword ptr[this]
+		add ecx, 3d0h
+		mov edx, dword ptr[this]
+		mov eax, dword ptr[edx + 3d0h]
+		mov edx, dword ptr[eax + 4]
+		call edx
+		; 启动定时器
+		; SetTimer(m_twoGameWnd, STOPSOUND_TIMER_ID, 10, NULL);
+		mov esi, esp
+			push 0
+			push 10
+			push STOPSOUND_TIMER_ID
+			mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7dch]
+			push ecx
+			call SetTimer
+			; SetTimer(m_twoGameWnd, BUBBLE_CHANGE_TIMER_ID, 200, NULL);
+		mov esi, esp
+			push 0
+			push 200
+			push BUBBLE_CHANGE_TIMER_ID
+			mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7dch]
+			push ecx
+			call SetTimer
+			; SetTimer(m_twoGameWnd, GAME_TIME_TIMER_ID, 1000, NULL);
+		mov esi, esp
+			push 0
+			push 1000
+			push GAME_TIME_TIMER_ID
+			mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7dch]
+			push ecx
+			call SetTimer
+			; SetTimer(m_twoGameWnd, STATUS_INFO_TIMER_ID, 80, NULL);
+		mov esi, esp
+			push 0
+			push 80
+			push STATUS_INFO_TIMER_ID
+			mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7dch]
+			push ecx
+			call SetTimer
+			; SetTimer(m_twoGameWnd, PLAYERSTART_TIMER_ID, 50, NULL);
+		mov esi, esp
+			push 0
+			push 50
+			push PLAYERSTART_TIMER_ID
+			mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7dch]
+			push ecx
+			call SetTimer
+			; SetTimer(m_twoGameWnd, WIND_TIMER_ID, 500, NULL);
+		mov esi, esp
+			push 0
+			push 500
+			push WIND_TIMER_ID
+			mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7dch]
+			push ecx
+			call SetTimer
+			; SetTimer(m_twoGameWnd, PLAYER_MOVE_TIMER_ID, 10, NULL);
+		mov esi, esp
+			push 0
+			push 10
+			push PLAYER_MOVE_TIMER_ID
+			mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7dch]
+			push ecx
+			call SetTimer
+			; SetTimer(m_twoGameWnd, PLAYER_MOVE_SHOW_TIMER_ID, 150, NULL);
+		mov esi, esp
+			push 0
+			push 150
+			push PLAYER_MOVE_SHOW_TIMER_ID
+			mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7dch]
+			push ecx
+			call SetTimer
+			; SetTimer(m_twoGameWnd, PROPERTY_CHANGR_TIMER_ID, 200, NULL);
+		mov esi, esp
+			push 0
+			push 200
+			push PROPERTY_CHANGR_TIMER_ID
+			mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7dch]
+			push ecx
+			call SetTimer
+			; SetTimer(m_twoGameWnd, PROPERTY_BOOM_TIMER_ID, 1000 / 30, NULL);
+		mov esi, esp
+			push 0
+			push 1000 / 30
+			push PROPERTY_BOOM_TIMER_ID
+			mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7dch]
+			push ecx
+			call SetTimer
+			; SetTimer(m_twoGameWnd, PLAYERSTART_DIE_ID, 1000 / 10, NULL);
+		mov esi, esp
+			push 0
+			push 1000 / 10
+			push PLAYERSTART_DIE_ID
+			mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7dch]
+			push ecx
+			call SetTimer
+	}
 	// 游戏开始音效
 	playSound.Play(START_GAME_SOUND);
 }
 
 void CTwoGameScene::TwoGameSceneShow(HDC hdc)
 {
-	HDC hdcMem = CreateCompatibleDC(hdc);
-	SelectObject(hdcMem, m_bitmap_gameBack);
-	BitBlt(hdc, 0, 0, 800, 600, hdcMem, 0, 0, SRCCOPY);
-	SelectObject(hdcMem, m_bitmap_road);
-	BitBlt(hdc, 20, 41, 600, 520, hdcMem, 0, 0, SRCCOPY);
-
-	// 退出按钮
-	if (m_isSelect)
+	HDC hdcMem;
+	__asm
 	{
-		SelectObject(hdcMem, m_bitmap_quit_select);
-	}
-	else
-	{
-		SelectObject(hdcMem, m_bitmap_quit);
-	}
+		mov eax, dword ptr[hdc]
+		push eax
+		call CreateCompatibleDC
+		mov dword ptr[hdcMem], eax
 
-	BitBlt(hdc, 650, 556, 130, 30, hdcMem, 0, 0, SRCCOPY);
-	DeleteDC(hdcMem);
+		mov eax, dword ptr[this]
+		mov ecx, dword ptr[eax + 7c0h]
+		push ecx
+		mov edx, dword ptr[hdcMem]
+		push edx
+		call SelectObject
 
+		push 0CC0020h
+		push 0
+		push 0
+		mov eax, dword ptr[hdcMem]
+		push eax
+		push 600
+		push 800
+		push 0
+		push 0
+		mov ecx, dword ptr[hdc]
+		push ecx
+		call BitBlt
+
+		mov eax, dword ptr[this]
+		mov ecx, dword ptr[eax + 7c4h]
+		push ecx
+		mov edx, dword ptr[hdcMem]
+		push edx
+		call SelectObject
+
+		push 0CC0020h
+		push 0
+		push 0
+		mov eax, dword ptr[hdcMem]
+		push eax
+		push 520
+		push 600
+		push 41
+		push 20
+		mov ecx, dword ptr[hdc]
+		push ecx
+		call BitBlt
+
+		; 退出按钮
+		mov eax, dword ptr[this]
+		movzx ecx, byte ptr[eax + 7bch]
+		test ecx, ecx
+		je bitmap_quit
+		mov eax, dword ptr[this]
+		mov ecx, dword ptr[eax + 7cch]
+		push ecx
+		mov edx, dword ptr[hdcMem]
+		push edx
+		call SelectObject
+		jmp bitblt_call
+		bitmap_quit :
+		mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7c8h]
+			push ecx
+			mov edx, dword ptr[hdcMem]
+			push edx
+			call SelectObject
+			bitblt_call :
+		push 0CC0020h
+			push 0
+			push 0
+			mov eax, dword ptr[hdcMem]
+			push eax
+			push 30
+			push 130
+			push 556
+			push 650
+			mov eax, dword ptr[hdc]
+			push eax
+			call BitBlt
+
+			mov eax, dword ptr[hdcMem]
+			push eax
+			call DeleteDC
+			mov eax, dword ptr[hdc]
+
+
+	}
 	// 泡泡显示
 	this->AllBubbleShow(hdc);
 	// 爆炸泡泡显示
