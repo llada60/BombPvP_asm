@@ -60,22 +60,22 @@ void CTwoGameScene::TwoGameSceneInit(HINSTANCE hIns, HWND hWnd)
 	__asm
 	{
 		mov eax, dword ptr[this]
-		mov dword ptr[eax + 7e4h], 12ch; m_gameTimeµπº∆ ±º∆ ˝∆˜ 300s
-		mov dword ptr[eax + 7e8h], 46h; m_statusInfo_yŒƒ◊÷ƒ¨»œŒª÷√ y = 70
-		mov dword ptr[eax + 804h], START; m_gameStatus”Œœ∑ø™ º œ‘ æ”Œœ∑ø™ ºŒƒ◊÷
-		; ≥ı ºªØµÿÕº
+		mov dword ptr[eax + 7e4h], 12ch; m_gameTimeÂÄíËÆ°Êó∂ËÆ°Êï∞Âô® 300s
+		mov dword ptr[eax + 7e8h], 46h; m_statusInfo_yÊñáÂ≠óÈªòËÆ§‰ΩçÁΩÆ y = 70
+		mov dword ptr[eax + 804h], START; m_gameStatusÊ∏∏ÊàèÂºÄÂßã ÊòæÁ§∫Ê∏∏ÊàèÂºÄÂßãÊñáÂ≠ó
+		; ÂàùÂßãÂåñÂú∞Âõæ
 		mov eax, dword ptr[hIns]
 		push eax
 		mov ecx, dword ptr[this]
 		call CGameMap::MapInit
-		; ≥ı ºªØµ¿æﬂ
+		; ÂàùÂßãÂåñÈÅìÂÖ∑
 		mov ecx, dword ptr[this]
 		push ecx
 		mov eax, dword ptr[hIns]
 		push eax
 		add ecx, 410h
 		call CGameProps::PropInit
-		; ≥ı ºªØ”Œœ∑»ÀŒÔ
+		; ÂàùÂßãÂåñÊ∏∏Êàè‰∫∫Áâ©
 		; player1
 		mov eax, dword ptr[hIns]
 		push eax
@@ -95,7 +95,7 @@ void CTwoGameScene::TwoGameSceneInit(HINSTANCE hIns, HWND hWnd)
 		mov eax, dword ptr[edx + 3d0h]
 		mov edx, dword ptr[eax + 4]
 		call edx
-		; ∆Ù∂Ø∂® ±∆˜
+		; ÂêØÂä®ÂÆöÊó∂Âô®
 		; SetTimer(m_twoGameWnd, STOPSOUND_TIMER_ID, 10, NULL);
 		mov esi, esp
 			push 0
@@ -196,7 +196,7 @@ void CTwoGameScene::TwoGameSceneInit(HINSTANCE hIns, HWND hWnd)
 			push ecx
 			call SetTimer
 	}
-	// ”Œœ∑ø™ º“Ù–ß
+	// Ê∏∏ÊàèÂºÄÂßãÈü≥Êïà
 	playSound.Play(START_GAME_SOUND);
 }
 
@@ -250,7 +250,7 @@ void CTwoGameScene::TwoGameSceneShow(HDC hdc)
 		push ecx
 		call BitBlt
 
-		; ÕÀ≥ˆ∞¥≈•
+		; ÈÄÄÂá∫ÊåâÈíÆ
 		mov eax, dword ptr[this]
 		movzx ecx, byte ptr[eax + 7bch]
 		test ecx, ecx
@@ -290,26 +290,26 @@ void CTwoGameScene::TwoGameSceneShow(HDC hdc)
 
 
 	}
-	// ≈›≈›œ‘ æ
+	// Ê≥°Ê≥°ÊòæÁ§∫
 	this->AllBubbleShow(hdc);
-	// ±¨’®≈›≈›œ‘ æ
+	// ÁàÜÁÇ∏Ê≥°Ê≥°ÊòæÁ§∫
 	this->AllBoomShow(hdc);
 
-	//µ¿æﬂœ‘ æ
+	//ÈÅìÂÖ∑ÊòæÁ§∫
 	prop.PropPositionShow(hdc);
 
-	// µÿÕºœ‘ æ
+	// Âú∞ÂõæÊòæÁ§∫
 	gameMap.MapShow(hdc);
 
-	// µπº∆ ±
+	// ÂÄíËÆ°Êó∂
 	this->ShowTime(hdc);
 
-	//»ÀŒÔ≥ˆ≥°œ‘ æ
+	//‰∫∫Áâ©Âá∫Âú∫ÊòæÁ§∫
 	playerOne.PlayerShow(hdc);
 	playerTwo.PlayerShow(hdc);
 
 	gameMap.MapUpShow(hdc);
-	// ’˝≥£”Œœ∑π˝≥Ã÷–≤ªµ˜”√∏√∫Ø ˝£¨÷ª“™”Œœ∑ø™ ºΩ· ¯ ±∆Ù∂Ø∂® ±∆˜≤ª∂œµ˜”√
+	// Ê≠£Â∏∏Ê∏∏ÊàèËøáÁ®ã‰∏≠‰∏çË∞ÉÁî®ËØ•ÂáΩÊï∞ÔºåÂè™Ë¶ÅÊ∏∏ÊàèÂºÄÂßãÁªìÊùüÊó∂ÂêØÂä®ÂÆöÊó∂Âô®‰∏çÊñ≠Ë∞ÉÁî®
 	if (m_gameStatus != NO_SHOW)
 	{
 		this->ShowGameStatus(hdc);
@@ -332,7 +332,7 @@ void CTwoGameScene::OnKeyDown(WPARAM nKey)
 {
 	switch (nKey)
 	{
-		// πÿ±’“Ù–ß
+		// ÂÖ≥Èó≠Èü≥Êïà
 	case VK_F7:
 		if (playSound.isKeyToStop)
 		{
@@ -345,9 +345,9 @@ void CTwoGameScene::OnKeyDown(WPARAM nKey)
 			KillTimer(m_twoGameWnd, STOPSOUND_TIMER_ID);
 		}
 		break;
-		// ÕÊº““ª∑≈÷√≈›≈›
+		// Áé©ÂÆ∂‰∏ÄÊîæÁΩÆÊ≥°Ê≥°
 	case  VK_SPACE:
-		// ±È¿˙¡¥±Ì ø¥ÕÊº““ª“—∑≈÷√µƒ≈›≈›
+		// ÈÅçÂéÜÈìæË°® ÁúãÁé©ÂÆ∂‰∏ÄÂ∑≤ÊîæÁΩÆÁöÑÊ≥°Ê≥°
 	{
 		auto ite = m_lstBubble.begin();
 		int tempNum = 0;
@@ -365,10 +365,10 @@ void CTwoGameScene::OnKeyDown(WPARAM nKey)
 		}
 	}
 	break;
-	// ÕÊº“∂˛∑≈÷√≈›≈›
+	// Áé©ÂÆ∂‰∫åÊîæÁΩÆÊ≥°Ê≥°
 	case VK_SHIFT:
 	{
-		// ±È¿˙¡¥±Ì ø¥ÕÊº“∂˛“—∑≈÷√µƒ≈›≈›
+		// ÈÅçÂéÜÈìæË°® ÁúãÁé©ÂÆ∂‰∫åÂ∑≤ÊîæÁΩÆÁöÑÊ≥°Ê≥°
 		auto ite = m_lstBubble.begin();
 		int tempNum = 0;
 		while (ite != m_lstBubble.end())
@@ -385,25 +385,25 @@ void CTwoGameScene::OnKeyDown(WPARAM nKey)
 		}
 	}
 	break;
-	// »ÀŒÔ“ª“∆∂Ø
+	// ‰∫∫Áâ©‰∏ÄÁßªÂä®
 
 	case 'W':
 	case 'A':
 	case 'S':
 	case 'D':
 	{
-		// Ω´“∆∂Ø±Íº«÷√Œ™true
+		// Â∞ÜÁßªÂä®Ê†áËÆ∞ÁΩÆ‰∏∫true
 		playerOne.m_bMoveFlag = true;
 
 	}
 	break;
-	// »ÀŒÔ∂˛“∆∂Ø
+	// ‰∫∫Áâ©‰∫åÁßªÂä®
 	case VK_LEFT:
 	case VK_RIGHT:
 	case VK_UP:
 	case VK_DOWN:
 	{
-		// Ω´“∆∂Ø±Íº«÷√Œ™true
+		// Â∞ÜÁßªÂä®Ê†áËÆ∞ÁΩÆ‰∏∫true
 		playerTwo.m_bMoveFlag = true;
 
 	}
@@ -428,7 +428,7 @@ void CTwoGameScene::OnKeyUp(WPARAM nKey)
 
 void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 {
-	// Õ£÷π“Ù–ß
+	// ÂÅúÊ≠¢Èü≥Êïà
 	if (nTimerID == STOPSOUND_TIMER_ID)
 	{
 		if (playSound.isPlay && (playSound.GetPos() >= playSound.GetFileLen()))
@@ -437,7 +437,7 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 		}
 	}
 
-	// ≈›≈›Ã¯∂Ø∂Øª≠∂® ±∆˜
+	// Ê≥°Ê≥°Ë∑≥Âä®Âä®ÁîªÂÆöÊó∂Âô®
 	if (nTimerID == BUBBLE_CHANGE_TIMER_ID)
 	{
 
@@ -451,19 +451,19 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 
 	}
 
-	// ∏ƒ±‰µπº∆ ±º∆ ˝∆˜--
+	// ÊîπÂèòÂÄíËÆ°Êó∂ËÆ°Êï∞Âô®--
 	if (nTimerID == GAME_TIME_TIMER_ID)
 	{
 		if (m_gameTime == 0)
 		{
-			// µØ≥ˆ∆Ωæ÷Œƒ◊÷
+			// ÂºπÂá∫Âπ≥Â±ÄÊñáÂ≠ó
 			m_gameStatus = DRAW;
 			m_statusInfo_y = 60;
 
-			// ≤•∑≈∆Ωæ÷“Ù–ß
+			// Êí≠ÊîæÂπ≥Â±ÄÈü≥Êïà
 			playSound.Play(DRAW_GAME_SOUND);
 
-			// πÿ±’À˘”–∂® ±∆˜
+			// ÂÖ≥Èó≠ÊâÄÊúâÂÆöÊó∂Âô®
 			for (int i = TIMER_BEGIN; i <= TIMER_END; i++)
 			{
 				KillTimer(m_twoGameWnd, i);
@@ -475,13 +475,13 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 		}
 	}
 
-	// ∏ƒ±‰Œƒ◊÷Œª÷√
+	// ÊîπÂèòÊñáÂ≠ó‰ΩçÁΩÆ
 	if (nTimerID == STATUS_INFO_TIMER_ID)
 	{
 		if (m_statusInfo_y <= -80)
 		{
-			KillTimer(m_twoGameWnd, STATUS_INFO_TIMER_ID); // Õ£÷πº∆ ±∆˜
-			m_gameStatus = NO_SHOW;                       // Ω´”Œœ∑Œƒ◊÷◊¥Ã¨±Íº«÷√Œ™ƒ¨»œ
+			KillTimer(m_twoGameWnd, STATUS_INFO_TIMER_ID); // ÂÅúÊ≠¢ËÆ°Êó∂Âô®
+			m_gameStatus = NO_SHOW;                       // Â∞ÜÊ∏∏ÊàèÊñáÂ≠óÁä∂ÊÄÅÊ†áËÆ∞ÁΩÆ‰∏∫ÈªòËÆ§
 		}
 		else
 		{
@@ -489,23 +489,23 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 		}
 	}
 
-	// ÕÊº“≥ˆ≥°∂Øª≠∂® ±∆˜
+	// Áé©ÂÆ∂Âá∫Âú∫Âä®ÁîªÂÆöÊó∂Âô®
 	if (nTimerID == PLAYERSTART_TIMER_ID)
 	{
 		this->ChangePlayerStartShowID();
 	}
 
-	// ∑Á≥µ◊™∂® ±∆˜
+	// È£éËΩ¶ËΩ¨ÂÆöÊó∂Âô®
 	if (nTimerID == WIND_TIMER_ID)
 	{
 		if (gameMap.m_nShowID == 1) gameMap.m_nShowID = 0;
 		else gameMap.m_nShowID = 1;
 	}
 
-	// »ÀŒÔ“∆∂Ø∂® ±∆˜
+	// ‰∫∫Áâ©ÁßªÂä®ÂÆöÊó∂Âô®
 	if (nTimerID == PLAYER_MOVE_TIMER_ID)
 	{
-		// Õ®π˝∏ƒ±‰º‡≤‚∞¥º¸ ±º‰ ∏ƒ±‰“∆∂ØÀŸ∂»
+		// ÈÄöËøáÊîπÂèòÁõëÊµãÊåâÈîÆÊó∂Èó¥ ÊîπÂèòÁßªÂä®ÈÄüÂ∫¶
 		static int one_flag = 10;
 		static int two_flag = 10;
 		if (one_flag < playerOne.m_speed_timer)
@@ -560,9 +560,127 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 			two_flag = 10;
 		}
 	}
-	// »ÀŒÔ“∆∂Ø∂Øª≠∂® ±∆˜
-	if (nTimerID == PLAYER_MOVE_SHOW_TIMER_ID)
+	// ‰∫∫Áâ©ÁßªÂä®Âä®ÁîªÂÆöÊó∂Âô®
+	_asm
 	{
+		//if (nTimerID == PLAYER_MOVE_SHOW_TIMER_ID)
+		cmp         dword ptr[nTimerID], 8
+		jne         P1
+
+		//if (playerOne.m_bMoveFlag == true)
+		mov         eax, dword ptr[this]
+		movzx       ecx, byte ptr[eax + 3B4h]
+		cmp         ecx, 1
+		jne         P11
+
+		//if (playerOne.m_Move_ShowId >= 5) playerOne.m_Move_ShowId = 0
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3B0h], 5
+		jl          P111
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 3B0h], 0
+		jmp         P11
+
+		P111:
+		//else playerOne.m_Move_ShowId++
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 3B0h]
+		add         ecx, 1
+		mov         edx, dword ptr[this]
+		mov         dword ptr[edx + 3B0h], ecx
+
+		P11:
+		//if (playerTwo.m_bMoveFlag == true)
+		mov         eax, dword ptr[this]
+		movzx       ecx, byte ptr[eax + 3F4h]
+		cmp         ecx, 1
+		jne         P1
+
+		//if (playerTwo.m_Move_ShowId >= 5) playerTwo.m_Move_ShowId = 0
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3F0h], 5
+		jl          P112
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 3F0h], 0
+		jmp         P1
+		
+		P112:
+		//else playerTwo.m_Move_ShowId++
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 3F0h]
+		add         ecx, 1
+		mov         edx, dword ptr[this]
+		mov         dword ptr[edx + 3F0h], ecx
+
+		P1:
+		// ÈÅìÂÖ∑ÂèòÂåñÂÆöÊó∂Âô®
+		//if(nTimerID == PROPERTY_CHANGR_TIMER_ID)
+		cmp         dword ptr [nTimerID],9
+		jne         P2
+		
+		//this->ChangePropShowID();
+		mov         ecx,dword ptr [this]
+		call        CTwoGameScene::ChangePropShowID
+		
+		// Áé©ÂÆ∂Ê≠ª‰∫°
+		//if(nTimerID == PLAYERSTART_DIE_ID)
+		P2:
+		cmp         dword ptr [nTimerID],0Bh
+		jne         end0
+	
+		//if(playerOne.m_player_status == DIE)
+		mov         eax,dword ptr [this]
+		cmp         dword ptr [eax+3C8h],2
+		jne         P21
+		
+		//if(playerOne.m_DieShowID == 1)
+		mov         eax,dword ptr [this]
+		cmp         dword ptr [eax+3B8h],1
+		jne         P22
+			
+		//GameOver();
+		mov         ecx,dword ptr [this]
+		call        CTwoGameScene::GameOver 
+		//else
+		jmp         P21
+			
+		//playerOne.m_DieShowID--;
+		P22:
+		mov         eax,dword ptr [this]
+		mov         ecx,dword ptr [eax+3B8h]
+		sub         ecx,1
+		mov         edx,dword ptr [this]
+		mov         dword ptr [edx+3B8h],ecx
+			
+		
+		//if(playerTwo.m_player_status == DIE)
+		P21:
+		mov         eax,dword ptr [this]
+		cmp         dword ptr [eax+408h],2
+		jne         end0
+		
+		//if(playerTwo.m_DieShowID == 1)
+		mov         eax,dword ptr [this]
+		cmp         dword ptr [eax+3F8h],1
+		jne         P23
+			
+		//GameOver();
+		mov         ecx,dword ptr [this]
+		call        CTwoGameScene::GameOver 
+		//else
+		jmp         end0
+		//playerTwo.m_DieShowID--;
+		P23:
+		mov         eax,dword ptr [this]
+		mov         ecx,dword ptr [eax+3F8h]
+		sub         ecx,1
+		mov         edx,dword ptr [this]
+		mov         dword ptr [edx+3F8h],ecx
+
+		end0:
+		}
+	/*if (nTimerID == PLAYER_MOVE_SHOW_TIMER_ID)
+	{		
 		if (playerOne.m_bMoveFlag == true)
 		{
 			if (playerOne.m_Move_ShowId >= 5) playerOne.m_Move_ShowId = 0;
@@ -574,92 +692,90 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 			else playerTwo.m_Move_ShowId++;
 		}
 	}
-	// µ¿æﬂ±‰ªØ∂® ±∆˜
-	if (nTimerID == PROPERTY_CHANGR_TIMER_ID)
+	// ÈÅìÂÖ∑ÂèòÂåñÂÆöÊó∂Âô®
+	if(nTimerID == PROPERTY_CHANGR_TIMER_ID)
 	{
 		this->ChangePropShowID();
 	}
-	// ÕÊº“À¿Õˆ
-	if (nTimerID == PLAYERSTART_DIE_ID)
+	// Áé©ÂÆ∂Ê≠ª‰∫°
+	if(nTimerID == PLAYERSTART_DIE_ID)
 	{
-		if (playerOne.m_player_status == DIE)
+		if(playerOne.m_player_status == DIE)
 		{
-			if (playerOne.m_DieShowID == 1)
+			if(playerOne.m_DieShowID == 1)
 			{
 				GameOver();
-			}
-			else
+			}else
 			{
 				playerOne.m_DieShowID--;
 			}
 		}
-		if (playerTwo.m_player_status == DIE)
+		if(playerTwo.m_player_status == DIE)
 		{
-			if (playerTwo.m_DieShowID == 1)
+			if(playerTwo.m_DieShowID == 1)
 			{
 				GameOver();
-			}
-			else
+			}else
 			{
 				playerTwo.m_DieShowID--;
 			}
 		}
-	}
+	}*/
 }
 
-void CTwoGameScene::OnLButtonDown(HINSTANCE hIns, POINT point)
+void CTwoGameScene::OnLButtonDown(HINSTANCE hIns,POINT point)
 {
-	// ∞¥º¸∞¥œ¬≥ˆ≈›≈›£¨ Û±Í¥´»Î∂‘”¶µƒµ„x,y
+	// ÊåâÈîÆÊåâ‰∏ãÂá∫Ê≥°Ê≥°ÔºåÈº†Ê†á‰º†ÂÖ•ÂØπÂ∫îÁöÑÁÇπx,y
 	//	this->CreateBubble(hIns, point.x, point.y);
 }
 
 void CTwoGameScene::ChangeBubbleShowID()
 {
 	list<CBubble*>::iterator ite_Bubble = m_lstBubble.begin();
-	while (ite_Bubble != m_lstBubble.end())
+	while(ite_Bubble != m_lstBubble.end())
 	{
-		// ≈–∂œÃ¯∂ØµΩµ⁄º∏¥Œ£¨ŒÂ¥Œ∫Ûœ˚ ß
-		if ((*ite_Bubble)->m_nBubbleBj == 0)
+		// Âà§Êñ≠Ë∑≥Âä®Âà∞Á¨¨Âá†Ê¨°Ôºå‰∫îÊ¨°ÂêéÊ∂àÂ§±
+		if((*ite_Bubble)->m_nBubbleBj == 0)
 		{
-			// Ω´◊¯±Í◊™ªª≥…∂‘”¶ ˝◊Èœ¬±Í
+			// Â∞ÜÂùêÊ†áËΩ¨Êç¢ÊàêÂØπÂ∫îÊï∞ÁªÑ‰∏ãÊ†á
 			int i = ((*ite_Bubble)->m_nBubble_y - 40) / 40;
 			int j = ((*ite_Bubble)->m_nBubble_x - 20) / 40;
-			// œ˚≥˝µÿÕº’œ∞≠ŒÔ
-			gameMap.MapBlast(i, j, (*ite_Bubble)->m_nBubble_power, (*ite_Bubble)->m_arrfx);
+			// Ê∂àÈô§Âú∞ÂõæÈöúÁ¢çÁâ©
+			gameMap.MapBlast(i,j,(*ite_Bubble)->m_nBubble_power,(*ite_Bubble)->m_arrfx);
 			//----------------------------------------------------------------
-			this->SetFx(ite_Bubble, i, j);
+			this->SetFx(ite_Bubble,i,j);
 
-			if (IsKillPlayerOne(ite_Bubble, i, j))
+			if(IsKillPlayerOne(ite_Bubble,i,j))  
 			{
 				playerOne.m_player_status = DIE;
 
 			}
-			if (IsKillPlayerTwo(ite_Bubble, i, j))
+			if(IsKillPlayerTwo(ite_Bubble,i,j))    
 			{
 				playerTwo.m_player_status = DIE;
 			}
 			list<CBubble*>::iterator ite_JBubble = m_lstBubble.begin();
 			{
-				while (ite_JBubble != m_lstBubble.end())
+				while(ite_JBubble != m_lstBubble.end())
 				{
-					if (ite_JBubble == ite_Bubble)
+					if(ite_JBubble == ite_Bubble)
 					{
 						++ite_JBubble;
 						continue;
 					}
-					if (IsButtleBoom(ite_JBubble, ite_Bubble))
+					if(IsButtleBoom(ite_JBubble,ite_Bubble))
 					{
 						int x = ((*ite_JBubble)->m_nBubble_y - 40) / 40;
 						int y = ((*ite_JBubble)->m_nBubble_x - 20) / 40;
-						gameMap.MapBlast(x, y, (*ite_JBubble)->m_nBubble_power, (*ite_JBubble)->m_arrfx);
-						this->SetFx(ite_JBubble, x, y);
+						gameMap.MapBlast(x,y,(*ite_JBubble)->m_nBubble_power,(*ite_JBubble)->m_arrfx);
+						this->SetFx(ite_JBubble,x,y);
 						gameMap.map_type[x][y] = No;
-						if (IsKillPlayerOne(ite_JBubble, x, y))
+						if(IsKillPlayerOne(ite_JBubble,x,y))  
 						{
 							playerOne.m_player_status = DIE;
 
 						}
-						if (IsKillPlayerTwo(ite_JBubble, x, y))
+						if(IsKillPlayerTwo(ite_JBubble,x,y))    
 						{
 							playerTwo.m_player_status = DIE;
 						}
@@ -671,18 +787,18 @@ void CTwoGameScene::ChangeBubbleShowID()
 				}
 			}
 			//-------------------------------------------------------------------
-			// Ω´µÿÕº∏√Œª÷√÷√Œ™ø’ º¥ No
+			// Â∞ÜÂú∞ÂõæËØ•‰ΩçÁΩÆÁΩÆ‰∏∫Á©∫ Âç≥ No
 			gameMap.map_type[i][j] = No;
-			// …æ≥˝∏√≈›≈›
+			// Âà†Èô§ËØ•Ê≥°Ê≥°
 			m_lstBoom.push_back(*ite_Bubble);
 			ite_Bubble = m_lstBubble.erase(ite_Bubble);
 
-			playSound.Play(BLAST_SOUND); // ±¨’®“Ù–ß
+			playSound.Play(BLAST_SOUND); // ÁàÜÁÇ∏Èü≥Êïà
 		}
 		else
 		{
-			//∏ƒ±‰≈›≈›µƒshowid µœ÷À¸µƒÃ¯∂Ø±‰ªª
-			if ((*ite_Bubble)->m_nShowID == 0)
+			//ÊîπÂèòÊ≥°Ê≥°ÁöÑshowidÂÆûÁé∞ÂÆÉÁöÑË∑≥Âä®ÂèòÊç¢
+			if((*ite_Bubble)->m_nShowID == 0)
 			{
 				(*ite_Bubble)->m_nShowID = 2;
 
@@ -697,80 +813,80 @@ void CTwoGameScene::ChangeBubbleShowID()
 		}
 	}
 }
-bool CTwoGameScene::IsButtleBoom(list<CBubble*>::iterator& ite_JBubble, list<CBubble*>::iterator& ite_Bubble)
+bool CTwoGameScene::IsButtleBoom(list<CBubble*>::iterator &ite_JBubble, list<CBubble*>::iterator &ite_Bubble)
 {
-	if ((*ite_JBubble)->m_nBubble_x + 20 > (*ite_Bubble)->m_nBubble_x
-		&& (*ite_JBubble)->m_nBubble_x + 20 < (*ite_Bubble)->m_nBubble_x + 40
-		&& (*ite_JBubble)->m_nBubble_y + 20 > (*ite_Bubble)->m_nBubble_y - ((*ite_Bubble)->m_arrfx[0]) * 40
-		&& (*ite_JBubble)->m_nBubble_y + 20 < (*ite_Bubble)->m_nBubble_y + ((*ite_Bubble)->m_arrfx[1]) * 40
-		|| ((*ite_JBubble)->m_nBubble_x + 20 > (*ite_Bubble)->m_nBubble_x - (*ite_Bubble)->m_arrfx[2] * 40
-			&& (*ite_JBubble)->m_nBubble_x + 20 < (*ite_Bubble)->m_nBubble_x + (*ite_Bubble)->m_arrfx[3] * 40 + 40
-			&& (*ite_JBubble)->m_nBubble_y + 20 > (*ite_Bubble)->m_nBubble_y
-			&& (*ite_JBubble)->m_nBubble_y + 20 < (*ite_Bubble)->m_nBubble_y + 40))
+	if ((*ite_JBubble)->m_nBubble_x + 20 > (*ite_Bubble)->m_nBubble_x 
+		&& (*ite_JBubble)->m_nBubble_x + 20 < (*ite_Bubble)->m_nBubble_x  + 40
+		&& (*ite_JBubble)->m_nBubble_y + 20  > (*ite_Bubble)->m_nBubble_y  - ((*ite_Bubble)->m_arrfx[0])*40
+		&& (*ite_JBubble)->m_nBubble_y + 20  < (*ite_Bubble)->m_nBubble_y  + ((*ite_Bubble)->m_arrfx[1])*40
+		|| ((*ite_JBubble)->m_nBubble_x + 20  > (*ite_Bubble)->m_nBubble_x - (*ite_Bubble)->m_arrfx[2]*40 
+		&& (*ite_JBubble)->m_nBubble_x + 20  < (*ite_Bubble)->m_nBubble_x + (*ite_Bubble)->m_arrfx[3]*40 + 40
+		&& (*ite_JBubble)->m_nBubble_y + 20  > (*ite_Bubble)->m_nBubble_y
+		&& (*ite_JBubble)->m_nBubble_y + 20  < (*ite_Bubble)->m_nBubble_y + 40))
 		return true;
 	return false;
 }
 
-bool CTwoGameScene::IsKillPlayerOne(list<CBubble*>::iterator& ite_Bubble, int i, int j)
+bool CTwoGameScene::IsKillPlayerOne(list<CBubble*>::iterator &ite_Bubble, int i, int j)
 {
-	if ((playerOne.m_player_x + 20 - 20 > (j) * 40
-		&& playerOne.m_player_x + 20 - 20 < (j) * 40 + 40
-		&& playerOne.m_player_y + 20 - 20 > ((i - (*ite_Bubble)->m_arrfx[0])) * 40
-		&& playerOne.m_player_y + 20 - 20 < ((i + (*ite_Bubble)->m_arrfx[1])) * 40 + 40)
-		|| (playerOne.m_player_x + 20 - 20 > (j - (*ite_Bubble)->m_arrfx[2]) * 40
-			&& playerOne.m_player_x + 20 - 20 < (j + (*ite_Bubble)->m_arrfx[3]) * 40 + 40
-			&& playerOne.m_player_y + 20 - 20 > (i) * 40
-			&& playerOne.m_player_y + 20 - 20 < (i) * 40 + 40))
+	if((playerOne.m_player_x + 20 - 20 > (j)*40 
+		&& playerOne.m_player_x + 20 - 20 < (j)*40 + 40
+		&& playerOne.m_player_y	+ 20 - 20 > ((i - (*ite_Bubble)->m_arrfx[0]))*40
+		&& playerOne.m_player_y + 20 - 20 < ((i + (*ite_Bubble)->m_arrfx[1]))*40 + 40)
+		|| (playerOne.m_player_x + 20 - 20 > (j - (*ite_Bubble)->m_arrfx[2])*40 
+		&& playerOne.m_player_x + 20 - 20 < (j + (*ite_Bubble)->m_arrfx[3])*40 + 40
+		&& playerOne.m_player_y + 20 - 20 > (i)*40
+		&& playerOne.m_player_y + 20 - 20 < (i)*40 + 40))
 		return true;
 	return false;
 }
-bool CTwoGameScene::IsKillPlayerTwo(list<CBubble*>::iterator& ite_Bubble, int i, int j)
+bool CTwoGameScene::IsKillPlayerTwo(list<CBubble*>::iterator &ite_Bubble, int i, int j)
 {
-	if ((playerTwo.m_player_x + 20 - 20 > (j) * 40
-		&& playerTwo.m_player_x + 20 - 20 < (j) * 40 + 40
-		&& playerTwo.m_player_y + 20 - 20 > ((i - (*ite_Bubble)->m_arrfx[0])) * 40
-		&& playerTwo.m_player_y + 20 - 20 < ((i + (*ite_Bubble)->m_arrfx[1])) * 40 + 40)
-		|| (playerTwo.m_player_x + 20 - 20 > (j - (*ite_Bubble)->m_arrfx[2]) * 40
-			&& playerTwo.m_player_x + 20 - 20 < (j + (*ite_Bubble)->m_arrfx[3]) * 40 + 40
-			&& playerTwo.m_player_y + 20 - 20 > (i) * 40
-			&& playerTwo.m_player_y + 20 - 20 < (i) * 40 + 40))
+	if((playerTwo.m_player_x + 20 - 20 > (j)*40 
+		&& playerTwo.m_player_x + 20 - 20 < (j)*40 + 40
+		&& playerTwo.m_player_y	+ 20 - 20 > ((i - (*ite_Bubble)->m_arrfx[0]))*40
+		&& playerTwo.m_player_y + 20 - 20 < ((i + (*ite_Bubble)->m_arrfx[1]))*40 + 40)
+		|| (playerTwo.m_player_x + 20 - 20 > (j - (*ite_Bubble)->m_arrfx[2])*40 
+		&& playerTwo.m_player_x + 20 - 20 < (j + (*ite_Bubble)->m_arrfx[3])*40 + 40
+		&& playerTwo.m_player_y + 20 - 20 > (i)*40
+		&& playerTwo.m_player_y + 20 - 20 < (i)*40 + 40))
 		return true;
 	return false;
 }
 
-void CTwoGameScene::SetFx(list<CBubble*>::iterator& ite_Bubble, int i, int j) //…Ë÷√Àƒ∏ˆ∑ΩœÚ ˝÷µ
+void CTwoGameScene::SetFx(list<CBubble*>::iterator &ite_Bubble, int i, int j) //ËÆæÁΩÆÂõõ‰∏™ÊñπÂêëÊï∞ÂÄº
 {
-	for (int m = 0; m < 4; m++)
+	for(int m = 0;m < 4;m++)
 		(*ite_Bubble)->m_arrfx[m] = (*ite_Bubble)->m_nBubble_power;
-	for (int n = 1; n < (*ite_Bubble)->m_nBubble_power + 1; n++)
+	for(int n = 1;n <(*ite_Bubble)->m_nBubble_power + 1;n++)
 	{
-		if ((gameMap.map_type[i - n][j] >= R_H_ && gameMap.map_type[i - n][j] <= WIND) || i - n < 0)
+		if((gameMap.map_type[i - n][j] >= R_H_ && gameMap.map_type[i - n][j] <= WIND) || i - n < 0)
 		{
-			(*ite_Bubble)->m_arrfx[0] = n - 1;
+			(*ite_Bubble)->m_arrfx[0] = n-1;
 			break;
 		}
 	}
-	for (int n = 1; n < (*ite_Bubble)->m_nBubble_power + 1; n++)
+	for(int n = 1;n <(*ite_Bubble)->m_nBubble_power + 1;n++)
 	{
-		if ((gameMap.map_type[i + n][j] >= R_H_ && gameMap.map_type[i + n][j] <= WIND) || i + n > MAP_HEIGHT - 1)
+		if((gameMap.map_type[i + n][j] >= R_H_ && gameMap.map_type[i + n][j] <= WIND) || i + n > MAP_HEIGHT - 1)
 		{
-			(*ite_Bubble)->m_arrfx[1] = n - 1;
+			(*ite_Bubble)->m_arrfx[1] = n-1;
 			break;
 		}
 	}
-	for (int n = 1; n < (*ite_Bubble)->m_nBubble_power + 1; n++)
+	for(int n = 1;n <(*ite_Bubble)->m_nBubble_power + 1;n++)
 	{
-		if ((gameMap.map_type[i][j - n] >= R_H_ && gameMap.map_type[i][j - n] <= WIND) || j - n < 0)
+		if((gameMap.map_type[i][j - n] >= R_H_ && gameMap.map_type[i][j - n] <= WIND) || j - n < 0)
 		{
-			(*ite_Bubble)->m_arrfx[2] = n - 1;
+			(*ite_Bubble)->m_arrfx[2] = n-1;
 			break;
 		}
 	}
-	for (int n = 1; n < (*ite_Bubble)->m_nBubble_power + 1; n++)
+	for(int n = 1;n <(*ite_Bubble)->m_nBubble_power + 1;n++)
 	{
-		if ((gameMap.map_type[i][j + n] >= R_H_ && gameMap.map_type[i][j + n] <= WIND) || j + n > MAP_WIDTH - 1)
+		if((gameMap.map_type[i][j + n] >= R_H_ && gameMap.map_type[i][j + n] <= WIND) || j + n > MAP_WIDTH - 1)
 		{
-			(*ite_Bubble)->m_arrfx[3] = n - 1;
+			(*ite_Bubble)->m_arrfx[3] = n-1;
 			break;
 		}
 	}
@@ -779,14 +895,13 @@ void CTwoGameScene::SetFx(list<CBubble*>::iterator& ite_Bubble, int i, int j) //
 void CTwoGameScene::ChangeBoomShowID()
 {
 	list<CBubble*>::iterator ite_boom = m_lstBoom.begin();
-	while (ite_boom != m_lstBoom.end())
+	while(ite_boom != m_lstBoom.end())
 	{
-		if ((*ite_boom)->m_nBoomShowID == 0)
+		if((*ite_boom)->m_nBoomShowID == 0)
 		{
 			delete (*ite_boom);
 			ite_boom = m_lstBoom.erase(ite_boom);
-		}
-		else
+		}else
 		{
 			(*ite_boom)->m_nBoomShowID--;
 			++ite_boom;
@@ -797,7 +912,48 @@ void CTwoGameScene::ChangeBoomShowID()
 void CTwoGameScene::AllBubbleShow(HDC hdc)
 {
 	list<CBubble*>::iterator ite_Bubble = m_lstBubble.begin();
-	while (ite_Bubble != m_lstBubble.end())
+	/*_asm
+	{
+		lea         eax, [ite_Bubble]
+		push        eax
+		mov         ecx, dword ptr[this]
+		add         ecx, 7ACh
+		//call        std::list<CBubble*, std::allocator<CBubble*> >::begin(0DF126Ch)
+		mov         dword ptr[ebp - 4], 0
+
+		Whl:
+		lea         eax, [ebp - 108h]
+		push        eax
+		mov         ecx, dword ptr[this]
+		add         ecx, 7ACh
+		//call        std::list<CBubble*, std::allocator<CBubble*> >::end(0DF1384h)
+		mov         dword ptr[ebp - 110h], eax
+		mov         ecx, dword ptr[ebp - 110h]
+		push        ecx
+		lea         ecx, [ite_Bubble]
+		//call        std::_List_const_iterator<std::_List_val<std::_List_simple_types<CBubble*> > >::operator!= (0DF123Fh)
+		mov         byte ptr[ebp - 0F1h], al
+		lea         ecx, [ebp - 108h]
+		//call        std::_List_iterator<std::_List_val<std::_List_simple_types<CBubble*> > >::~_List_iterator<std::_List_val<std::_List_simple_types<CBubble*> > >(0DF194Ch)
+		movzx       edx, byte ptr[ebp - 0F1h]
+		test        edx, edx
+		je          end0
+
+		mov         eax, dword ptr[hdc]
+		push        eax
+		lea         ecx, [ite_Bubble]
+		//call        std::_List_iterator<std::_List_val<std::_List_simple_types<CBubble*> > >::operator* (0DF11EFh)
+		mov         ecx, dword ptr[eax]
+		call        CBubble::BubbleShow
+
+		lea         ecx, [ite_Bubble]
+		//call        std::_List_iterator<std::_List_val<std::_List_simple_types<CBubble*> > >::operator++ (0DF18E3h)
+
+		jmp         Whl
+		end0:
+	}*/
+	
+	while(ite_Bubble != m_lstBubble.end())
 	{
 		(*ite_Bubble)->BubbleShow(hdc);
 		++ite_Bubble;
@@ -806,7 +962,7 @@ void CTwoGameScene::AllBubbleShow(HDC hdc)
 void CTwoGameScene::AllBoomShow(HDC hdc)
 {
 	list<CBubble*>::iterator ite_Boom = m_lstBoom.begin();
-	while (ite_Boom != m_lstBoom.end())
+	while(ite_Boom != m_lstBoom.end())
 	{
 		(*ite_Boom)->BoomShow(hdc);
 		++ite_Boom;
@@ -814,63 +970,363 @@ void CTwoGameScene::AllBoomShow(HDC hdc)
 }
 void CTwoGameScene::ShowTime(HDC hdc)
 {
-	//  ±º‰∏Ò Ω00:00
-	int time_one = 0;
-	int time_two = m_gameTime / 60;
-	int time_three = (m_gameTime - time_two * 60) / 10;
-	int time_four = (m_gameTime - time_two * 60) % 10;
-
+	// Êó∂Èó¥Ê†ºÂºè00:00
+	int time_one; 
+	int time_two;
+	int time_three;
+	int time_four;
 	HDC hdcMem = CreateCompatibleDC(hdc);
-	SelectObject(hdcMem, m_bitmap_timeNum);
-	TransparentBlt(hdc, 708, 43, 12, 10, hdcMem, 12 * time_one, 0, 12, 10, RGB(255, 0, 255));
-	TransparentBlt(hdc, 722, 43, 12, 10, hdcMem, 12 * time_two, 0, 12, 10, RGB(255, 0, 255));
-	TransparentBlt(hdc, 741, 43, 12, 10, hdcMem, 12 * time_three, 0, 12, 10, RGB(255, 0, 255));
-	TransparentBlt(hdc, 756, 43, 12, 10, hdcMem, 12 * time_four, 0, 12, 10, RGB(255, 0, 255));
-	DeleteObject(hdcMem);
+
+	_asm
+	{
+		
+		mov         dword ptr[time_one], 0
+
+		mov         eax, dword ptr[this]
+		mov         eax, dword ptr[eax + 7A4h]
+		cdq
+		mov         ecx, 3Ch
+		idiv        ecx
+		mov         dword ptr[time_two], eax
+		imul        eax, dword ptr[time_two], 3Ch
+
+		mov         ecx, dword ptr[this]
+		mov         edx, dword ptr[ecx + 7A4h]
+		sub         edx, eax
+		mov         eax, edx
+		cdq
+		mov         ecx, 0Ah
+		idiv        ecx
+		mov         dword ptr[time_three], eax
+
+		imul        eax,dword ptr [time_two],3Ch
+		mov         ecx,dword ptr [this]
+		mov         edx,dword ptr [ecx+7A4h]
+		sub         edx,eax
+		mov         eax,edx
+		cdq
+		mov         ecx,0Ah
+		idiv        ecx
+		mov         dword ptr [time_four],edx
+
+		//SelectObject(hdcMem,m_bitmap_timeNum)
+		mov         eax,dword ptr [this]
+		mov         ecx,dword ptr [eax+790h]
+		push        ecx
+		mov         edx,dword ptr [hdcMem]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc,708,43,12,10,hdcMem,12*time_one,0,12,10,RGB(255,0,255))
+		push        0FF00FFh
+		push        0Ah
+		push        0Ch
+		push        0
+		imul        eax,dword ptr [time_one],0Ch
+		push        eax
+		mov         ecx,dword ptr [hdcMem]
+		push        ecx
+		push        0Ah
+		push        0Ch
+		push        2Bh
+		push        2C4h
+		mov         edx,dword ptr [hdc]
+		push        edx
+		call        TransparentBlt
+
+		//TransparentBlt(hdc,722,43,12,10,hdcMem,12*time_two,0,12,10,RGB(255,0,255))
+		push        0FF00FFh
+		push        0Ah
+		push        0Ch
+		push        0
+		imul        eax,dword ptr [time_two],0Ch
+		push        eax
+		mov         ecx,dword ptr [hdcMem]
+		push        ecx
+		push        0Ah
+		push        0Ch
+		push        2Bh
+		push        2D2h
+		mov         edx,dword ptr [hdc]
+		push        edx
+		call        TransparentBlt
+
+		//TransparentBlt(hdc,741,43,12,10,hdcMem,12*time_three,0,12,10,RGB(255,0,255))
+
+		push        0FF00FFh
+		push        0Ah
+		push        0Ch
+		push        0
+		imul        eax,dword ptr [time_three],0Ch
+		push        eax
+		mov         ecx,dword ptr [hdcMem]
+		push        ecx
+		push        0Ah
+		push        0Ch
+		push        2Bh
+		push        2E5h
+		mov         edx,dword ptr [hdc]
+		push        edx
+		call        TransparentBlt
+
+		//TransparentBlt(hdc,756,43,12,10,hdcMem,12*time_four,0,12,10,RGB(255,0,255))
+		push        0FF00FFh
+		push        0Ah
+		push        0Ch
+		push        0
+		imul        eax,dword ptr [time_four],0Ch
+		push        eax
+		mov         ecx,dword ptr [hdcMem]
+		push        ecx
+		push        0Ah
+		push        0Ch
+		push        2Bh
+		push        2F4h
+		mov         edx,dword ptr [hdc]
+		push        edx
+		call        TransparentBlt
+
+		//DeleteObject(hdcMem)
+		mov         esi,esp
+		mov         eax,dword ptr [hdcMem]
+		push        eax
+		call        DeleteObject
+	}
+	/*
+	time_one = 0;
+	time_two = m_gameTime / 60;
+	time_three = (m_gameTime - time_two * 60) / 10;
+	time_four = (m_gameTime - time_two * 60) % 10;
+	SelectObject(hdcMem,m_bitmap_timeNum);
+	TransparentBlt(hdc,708,43,12,10,hdcMem,12*time_one,0,12,10,RGB(255,0,255));
+	TransparentBlt(hdc,722,43,12,10,hdcMem,12*time_two,0,12,10,RGB(255,0,255));
+	TransparentBlt(hdc,741,43,12,10,hdcMem,12*time_three,0,12,10,RGB(255,0,255));
+	TransparentBlt(hdc,756,43,12,10,hdcMem,12*time_four,0,12,10,RGB(255,0,255));
+	DeleteObject(hdcMem);*/
 }
 
 void CTwoGameScene::ShowGameStatus(HDC hdc)
 {
 	HDC hdcMem = CreateCompatibleDC(hdc);
-
 	static int word_y = 0;
-	// ∆Ωæ÷!!!
-	if (m_gameStatus == DRAW) word_y = 160;
-	// µ⁄“ªÕÊº“  §¿˚£°£°
-	else if (m_gameStatus == PLAYER_ONE_WIN)
+
+	_asm{
+		//if (m_gameStatus == DRAW) word_y = 160;
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 7C4h], 4
+		jne         L1
+
+		mov         dword ptr[word_y], 0A0h
+		jmp         end0
+
+		L1:
+		//else if (m_gameStatus == PLAYER_ONE_WIN)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 7C4h], 2
+		jne         L2
+
+		mov         dword ptr[word_y], 50h
+
+		//SelectObject(hdcMem,m_bitmap_win_word)
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 798h]
+		push        ecx
+		mov         edx, dword ptr[hdcMem]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc,260,40,110,25,hdcMem,0,0,110,25,RGB(255,0,255))
+		push        0FF00FFh
+		push        19h
+		push        6Eh
+		push        0
+		push        0
+		mov         eax, dword ptr[hdcMem]
+		push        eax
+		push        19h
+		push        6Eh
+		push        28h
+		push        104h
+		mov         ecx, dword ptr[hdc]
+		push        ecx
+		call        TransparentBlt
+
+		jmp         end0
+
+		L2:
+		//else if (m_gameStatus == PLAYER_TWO_WIN)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 7C4h], 3
+		jne         L3
+
+		mov         dword ptr[word_y], 50h
+
+		//SelectObject(hdcMem,m_bitmap_win_word)
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 798h]
+		push        ecx
+		mov         edx, dword ptr[hdcMem]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc,260,40,110,25,hdcMem,0,25,110,25,RGB(255,0,255))
+		push        0FF00FFh
+		push        19h
+		push        6Eh
+		push        19h
+		push        0
+		mov         eax, dword ptr[hdcMem]
+		push        eax
+		push        19h
+		push        6Eh
+		push        28h
+		push        104h
+		mov         ecx, dword ptr[hdc]
+		push        ecx
+		call        TransparentBlt
+
+		jmp         end0
+
+		L3:
+		mov         dword ptr[word_y], 0
+
+		end0:
+		//SelectObject(hdcMem,m_bitmap_statusInfo)
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 794h]
+		push        ecx
+		mov         edx, dword ptr[hdcMem]
+		push        edx
+		call        SelectObject
+
+		//TransparentBlt(hdc,200,m_statusInfo_y,240,80,hdcMem,0,word_y,240,80,RGB(255,0,255))
+		push        0FF00FFh
+		push        50h
+		push        0F0h
+		mov         eax, dword ptr[word_y]
+		push        eax
+		push        0
+		mov         ecx, dword ptr[hdcMem]
+		push        ecx
+		push        50h
+		push        0F0h
+		mov         edx, dword ptr[this]
+		mov         eax, dword ptr[edx + 7A8h]
+		push        eax
+		push        0C8h
+		mov         ecx, dword ptr[hdc]
+		push        ecx
+		call        TransparentBlt
+
+		//DeleteObject(hdcMem)
+		mov         eax, dword ptr[hdcMem]
+		push        eax
+		call        DeleteObject
+	}
+	/*
+	// Âπ≥Â±Ä!!!
+	if (m_gameStatus == DRAW) word_y = 160; 
+	// Á¨¨‰∏ÄÁé©ÂÆ∂ ËÉúÂà©ÔºÅÔºÅ
+	else if (m_gameStatus == PLAYER_ONE_WIN) 
 	{
 		word_y = 80;
-		SelectObject(hdcMem, m_bitmap_win_word);
-		TransparentBlt(hdc, 260, 40, 110, 25, hdcMem, 0, 0, 110, 25, RGB(255, 0, 255));
+		SelectObject(hdcMem,m_bitmap_win_word);
+		TransparentBlt(hdc,260,40,110,25,hdcMem,0,0,110,25,RGB(255,0,255));
 	}
-	// µ⁄∂˛ÕÊº“  §¿˚£°£°
+	// Á¨¨‰∫åÁé©ÂÆ∂ ËÉúÂà©ÔºÅÔºÅ
 	else if (m_gameStatus == PLAYER_TWO_WIN)
 	{
 		word_y = 80;
-		SelectObject(hdcMem, m_bitmap_win_word);
-		TransparentBlt(hdc, 260, 40, 110, 25, hdcMem, 0, 25, 110, 25, RGB(255, 0, 255));
+		SelectObject(hdcMem,m_bitmap_win_word);
+		TransparentBlt(hdc,260,40,110,25,hdcMem,0,25,110,25,RGB(255,0,255));
 	}
-	// ŒﬁŒƒ◊÷Ã· æ
+	// Êó†ÊñáÂ≠óÊèêÁ§∫
 	else word_y = 0;
 
-	// —°‘ÒŒƒ◊÷–≈œ¢
-	SelectObject(hdcMem, m_bitmap_statusInfo);
-	TransparentBlt(hdc, 200, m_statusInfo_y, 240, 80, hdcMem, 0, word_y, 240, 80, RGB(255, 0, 255));
-	DeleteObject(hdcMem);
+	// ÈÄâÊã©ÊñáÂ≠ó‰ø°ÊÅØ
+	SelectObject(hdcMem,m_bitmap_statusInfo);
+	TransparentBlt(hdc,200,m_statusInfo_y,240,80,hdcMem,0,word_y,240,80,RGB(255,0,255));
+	DeleteObject(hdcMem);*/
 }
 
 void CTwoGameScene::ChangePlayerStartShowID()
 {
-	static int bflag = 0; // »ÀŒÔø™≥°…¡À∏øÿ÷∆Œª
+	static int bflag = 0; // ‰∫∫Áâ©ÂºÄÂú∫Èó™ÁÉÅÊéßÂà∂‰Ωç
+	_asm
+	{
+		//if (playerOne.m_Start_nShowID == 9 && playerTwo.m_Start_nShowID == 9)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3A4h], 9
+		jne         L1
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 3E4h], 9
+		jne         L1
+
+		//playerOne.m_Start_nShowID = 8
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 3A4h], 8
+
+		//playerTwo.m_Start_nShowID = 8
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 3E4h], 8
+
+		//if (bflag == 4)
+		cmp         dword ptr[bflag], 4
+		jne         L11
+
+		//KillTimer(m_twoGameWnd,PLAYERSTART_TIMER_ID)
+		push        5
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 79Ch]
+		push        ecx
+		call        KillTimer
+
+		//bflag = 0
+		mov         dword ptr [bflag],0
+
+		//playerOne.m_player_status = MOVE
+		mov         eax,dword ptr [this]
+		mov         dword ptr [eax+3C8h],1
+
+		//playerTwo.m_player_status = MOVE
+		mov         eax,dword ptr [this]
+		mov         dword ptr [eax+408h],1
+
+		L11:
+		//bflag++
+		mov         eax,dword ptr [bflag]
+		add         eax,1
+		mov         dword ptr [bflag],eax
+
+		jmp         end0
+
+		L1:
+		//playerOne.m_Start_nShowID++
+		mov         eax,dword ptr [this]
+		mov         ecx,dword ptr [eax+3A4h]
+		add         ecx,1
+		mov         edx,dword ptr [this]
+		mov         dword ptr [edx+3A4h],ecx
+
+		//playerTwo.m_Start_nShowID++
+		mov         eax,dword ptr [this]
+		mov         ecx,dword ptr [eax+3E4h]
+		add         ecx,1
+		mov         edx,dword ptr [this]
+		mov         dword ptr [edx+3E4h],ecx
+
+		end0:
+	}
+	/*
 	if (playerOne.m_Start_nShowID == 9 && playerTwo.m_Start_nShowID == 9)
 	{
 
-		playerOne.m_Start_nShowID = 8; //ÕÊº“1
-		playerTwo.m_Start_nShowID = 8; //ÕÊº“2
+		playerOne.m_Start_nShowID = 8; //Áé©ÂÆ∂1
+		playerTwo.m_Start_nShowID = 8; //Áé©ÂÆ∂2
 
 		if (bflag == 4)
 		{
-			KillTimer(m_twoGameWnd, PLAYERSTART_TIMER_ID);
+			KillTimer(m_twoGameWnd,PLAYERSTART_TIMER_ID);
 			bflag = 0;
 			playerOne.m_player_status = MOVE;
 			playerTwo.m_player_status = MOVE;
@@ -881,45 +1337,69 @@ void CTwoGameScene::ChangePlayerStartShowID()
 	{
 		playerOne.m_Start_nShowID++;
 		playerTwo.m_Start_nShowID++;
-	}
+	}*/
 }
 
-//∏ƒ±‰µ¿æﬂµƒShowID
+//ÊîπÂèòÈÅìÂÖ∑ÁöÑShowID
 void CTwoGameScene::ChangePropShowID()
 {
-	if (prop.m_nShowID == 0)
+	_asm
 	{
-		prop.m_nShowID = 2;
+		//if(prop.m_nShowID==0)
+		mov         eax, dword ptr[this]
+		cmp         dword ptr[eax + 424h], 0
+		jne		  L1
+
+		//prop.m_nShowID=2
+		mov         eax, dword ptr[this]
+		mov         dword ptr[eax + 424h], 2
+
+		jmp         end0
+
+		L1:
+		//prop.m_nShowID--
+		mov         eax, dword ptr[this]
+		mov         ecx, dword ptr[eax + 424h]
+		sub         ecx, 1
+		mov         edx, dword ptr[this]
+		mov         dword ptr[edx + 424h], ecx
+		end0:
+	}
+	/*
+	if(prop.m_nShowID==0)
+	{
+		prop.m_nShowID=2;
 	}
 	else
 	{
 		prop.m_nShowID--;
-	}
+	}*/
 }
 void CTwoGameScene::GameOver()
 {
-	// ÕÊº““ª §¿˚
+
+	// Áé©ÂÆ∂‰∏ÄËÉúÂà©
 	if (playerOne.m_player_status == DIE)
 	{
 		m_gameStatus = PLAYER_TWO_WIN;
 		playSound.Play(WIN_GAME_SOUND);
 	}
-	// ÕÊº“∂˛ §¿˚
+	// Áé©ÂÆ∂‰∫åËÉúÂà©
 	else if (playerTwo.m_player_status == DIE)
 	{
 		m_gameStatus = PLAYER_ONE_WIN;
 		playSound.Play(WIN_GAME_SOUND);
 	}
-	// ∆Ωæ÷
-	else if (playerOne.m_player_status == DIE && playerTwo.m_player_status == DIE)
+	// Âπ≥Â±Ä
+	else if(playerOne.m_player_status == DIE && playerTwo.m_player_status == DIE)
 	{
 		m_gameStatus = DRAW;
 		playSound.Play(DRAW_GAME_SOUND);
 	}
 
 	m_statusInfo_y = 60;
-	for (int i = TIMER_BEGIN; i <= TIMER_END; i++)
+	for(int i = TIMER_BEGIN;i <= TIMER_END;i++)
 	{
-		KillTimer(m_twoGameWnd, i);
+		KillTimer(m_twoGameWnd ,i);
 	}
 }
