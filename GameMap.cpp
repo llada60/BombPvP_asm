@@ -1,6 +1,5 @@
 #include "GameMap.h"
 
-
 CGameMap::CGameMap()
 {
 	m_bitmap_redBrick = NULL;
@@ -14,15 +13,6 @@ CGameMap::CGameMap()
 	m_bitmap_windDown = NULL;
 	m_bitmap_ShadowBlock = NULL;
 	m_nShowID = 1;
-
-	//for (int i = 0; i < MAP_HEIGHT; i++)
-	//{
-	//	for (int j = 0; j < MAP_WIDTH; j++)
-	//	{
-	//		map_type[i][j] = 0;
-	//	}
-	//}
-
 	int ptr1 = (int)map_type;
 	__asm {
 		//esi为map_type的首地址
@@ -106,179 +96,297 @@ void CGameMap::MapInit(HINSTANCE hIns)
 }
 void CGameMap::MapUpShow(HDC hdc)
 {
-	HDC hdcMem = CreateCompatibleDC(hdc);
-
-	int x = 0;
-	int y = 0;
-	for (int i = 0; i < MAP_HEIGHT; i++)
-	{
-		for (int j = MAP_WIDTH-1; j >= 0; j--)
-		{
-			x = j * 40 + 20;
-			y = i * 40 + 41;
-
-			if (map_type[i][j] == B_H_)
-			{
-				SelectObject(hdcMem,m_bitmap_blueHouse);
-				TransparentBlt(hdc,x,y-17,40,17,hdcMem,0,0,40,17,RGB(255,0,255));
-			}
-			if (map_type[i][j] == R_H_)
-			{
-				SelectObject(hdcMem,m_bitmap_redHouse);
-				TransparentBlt(hdc,x,y-17,40,17,hdcMem,0,0,40,17,RGB(255,0,255));
-			}
-			if (map_type[i][j] == Y_H_)
-			{
-				SelectObject(hdcMem,m_bitmap_yellowHouse);
-				TransparentBlt(hdc,x,y-17,40,17,hdcMem,0,0,40,17,RGB(255,0,255));
-			}
-
-			if (map_type[i][j] == Tree)
-			{
-				SelectObject(hdcMem,m_bitmap_Tree);
-				TransparentBlt(hdc,x,y-27,40,27,hdcMem,0,0,40,27,RGB(255,0,255));
-			}
-
-			if (map_type[i][j] == WIND)
-			{
-				SelectObject(hdcMem,m_bitmap_windUp);
-				TransparentBlt(hdc,260,161,120,118,hdcMem,(1-m_nShowID)*120,0,120,118,RGB(255,0,255));
-			}
-			
-		}
+	HDC hdcMem;
+	int x1;
+	int x, y;
+	__asm {
+	  mov dword ptr[x1], esp
+		mov  eax, dword ptr[hdc]
+		push eax
+		call CreateCompatibleDC
+	    mov esp, dword ptr[x1]
+		mov  dword ptr[hdcMem], eax
+		mov  dword ptr[x], 0
+		mov  dword ptr[y], 0
+		// for (int i = 0; i < MAP_HEIGHT; i++)
+		mov  ebx, -1
+		mov  esi, 0
+	Loopoutside:
+		add  ebx, 1
+		cmp  ebx, MAP_HEIGHT  // ebx为i
+		jnl  Endup
+		mov  esi, MAP_WIDTH - 1 // esi为j
+	Loopinside:
+		cmp  esi, 0
+		jl   Loopoutside
+		// x = j * 40 + 20
+		imul eax, esi, 28h
+		add  eax, 14h
+		mov  dword ptr[x], eax
+		// y = i * 40 + 41;
+		imul eax, ebx, 28h
+		add  eax, 29h
+		mov  dword ptr[y], eax
+		// 先计算 map_type[i][j]的值，再做判断 3Ch= 4*15个字节
+		imul eax, ebx, 3Ch
+		add  eax, dword ptr[this]
+		// if map_type[i][j] == B_H_
+	  
+		cmp  dword ptr[eax + esi * 4], 4
+		je   R_H_Label
+		cmp  dword ptr[eax + esi * 4], 5
+		je   Y_H_Label
+		cmp  dword ptr[eax + esi * 4], 6
+		je   B_H_Label
+		cmp  dword ptr[eax + esi * 4], 7
+		je   TreeLabel
+		cmp  dword ptr[eax + esi * 4], 8
+		je   WindLabel
+		sub  esi, 1
+		jmp  Loopinside
+	R_H_Label:
+		// 调用SelectObject(hdcMem,m_bitmap_redHouse)，参数入栈的顺序从右往左
+		mov  eax, dword ptr[this]
+		mov  ecx, dword ptr[eax + 314h]
+		push ecx
+		mov  edx, dword ptr[hdcMem]
+		push edx
+		call SelectObject
+		// 调用TransparentBlt(hdc,x,y-17,40,17,hdcMem,0,0,40,17,RGB(255,0,255))，同样传参的顺序从右往左
+		push 0FF00FFh
+		push 11h
+		push 28h
+		push 0
+		push 0
+		mov  eax, dword ptr[hdcMem]
+		push eax
+		push 11h
+		push 28h
+		mov  ecx, dword ptr[y]
+		sub  ecx, 11h
+		push ecx
+		mov  edx, dword ptr[x]
+		push edx
+		mov  eax, dword ptr[hdc]
+		push eax
+		call TransparentBlt
+		sub  esi, 1
+	    mov esp, dword ptr[x1]
+		jmp  Loopinside
+	Y_H_Label:
+		// 调用SelectObject(hdcMem,m_bitmap_yellowHouse)，参数入栈的顺序从右往左
+		mov  eax, dword ptr[this]
+		mov  ecx, dword ptr[eax + 31Ch]
+		push ecx
+		mov  edx, dword ptr[hdcMem]
+		push edx
+		call SelectObject
+		// 调用TransparentBlt(hdc,x,y-17,40,17,hdcMem,0,0,40,17,RGB(255,0,255))，同样传参的顺序从右往左
+		push 0FF00FFh
+		push 11h
+		push 28h
+		push 0
+		push 0
+		mov  eax, dword ptr[hdcMem]
+		push eax
+		push 11h
+		push 28h
+		mov  ecx, dword ptr[y]
+		sub  ecx, 11h
+		push ecx
+		mov  edx, dword ptr[x]
+		push edx
+		mov  eax, dword ptr[hdc]
+		push eax
+		call TransparentBlt
+		sub  esi, 1
+	    mov esp, dword ptr[x1]
+		jmp  Loopinside
+	B_H_Label:
+		// 调用SelectObject(hdcMem,m_bitmap_blueHouse)，参数入栈的顺序从右往左
+		mov  eax, dword ptr[this]
+		mov  ecx, dword ptr[eax + 328h]
+		push ecx
+		mov  edx, dword ptr[hdcMem]
+		push edx
+		call SelectObject
+		// 调用TransparentBlt(hdc,x,y-17,40,17,hdcMem,0,0,40,17,RGB(255,0,255))，同样传参的顺序从右往左
+		push 0FF00FFh
+		push 11h
+		push 28h
+		push 0
+		push 0
+		mov  eax, dword ptr[hdcMem]
+		push eax
+		push 11h
+		push 28h
+		mov  ecx, dword ptr[y]
+		sub  ecx, 11h
+		push ecx
+		mov  edx, dword ptr[x]
+		push edx
+		mov  eax, dword ptr[hdc]
+		push eax
+		call TransparentBlt
+		sub  esi, 1
+	    mov esp, dword ptr[x1]
+		jmp  Loopinside
+	TreeLabel:
+		// 调用SelectObject(hdcMem,m_bitmap_Tree)，参数入栈的顺序从右往左
+		mov  eax, dword ptr[this]
+		mov  ecx, dword ptr[eax + 320h]
+		push ecx
+		mov  edx, dword ptr[hdcMem]
+		push edx
+		call SelectObject
+		// 调用TransparentBlt(hdc,x,y-27,40,27,hdcMem,0,0,40,27,RGB(255,0,255))，同样传参的顺序从右往左
+		push 0FF00FFh
+		push 1Bh
+		push 28h
+		push 0
+		push 0
+		mov  eax, dword ptr[hdcMem]
+		push eax
+		push 1Bh
+		push 28h
+		mov  ecx, dword ptr[y]
+		sub  ecx, 1Bh
+		push ecx
+		mov  edx, dword ptr[x]
+		push edx
+		mov  eax, dword ptr[hdc]
+		push eax
+		call TransparentBlt
+		sub  esi, 1
+	    mov esp, dword ptr[x1]
+		jmp  Loopinside
+	WindLabel:
+		// 调用SelectObject(hdcMem,m_bitmap_windUp)，参数入栈的顺序从右往左
+		mov  eax, dword ptr[this]
+		mov  ecx, dword ptr[eax + 32Ch]
+		push ecx
+		mov  edx, dword ptr[hdcMem]
+		push edx
+		call SelectObject
+		// 调用TransparentBlt(hdc,260,161,120,118,hdcMem,(1-m_nShowID)*120,0,120,118,RGB(255,0,255))，同样传参的顺序从右往左
+		push 0FF00FFh
+		push 76h
+		push 78h
+		push 0
+		mov  eax, dword ptr[this]
+		mov  ecx, 1
+		sub  ecx, dword ptr[eax + 30Ch]
+		// ecx * 78h 结果保存在edx中
+		imul edx, ecx, 78h
+		push edx
+		mov  eax, dword ptr[hdcMem]
+		push eax
+		push 76h
+		push 78h
+		push 0A1h
+		push 104h
+		mov  ecx, dword ptr[hdc]
+		push ecx
+		call TransparentBlt
+		sub  esi, 1
+	    mov esp, dword ptr[x1]
+		jmp  Loopinside
+	Endup:
+		// DeleteDC(hdcMem);
+		mov  eax, dword ptr[hdcMem]
+		push eax
+		call DeleteDC
+	    mov esp, dword ptr[x1]
 	}
-	
-	DeleteDC(hdcMem);
 }
-void CGameMap::MapShow(HDC hdc)
+
+
+void CGameMap::MapBlast(int i, int j, int power)
 {
-	HDC hdcMem = CreateCompatibleDC(hdc);
-
-	int x = 0;
-	int y = 0;
-	for (int i = 0; i < MAP_HEIGHT; i++)
-	{
-		for (int j = MAP_WIDTH-1; j >= 0; j--)
-		{
-			x = j * 40 + 20;
-			y = i * 40 + 41;
-
-			if (map_type[i][j] == B_H_)
-			{
-				SelectObject(hdcMem,m_bitmap_ShadowBlock);
-				TransparentBlt(hdc,x-3,y-1,45,45,hdcMem,0,0,45,45,RGB(255,0,255));
-				SelectObject(hdcMem,m_bitmap_blueHouse);
-				TransparentBlt(hdc,x,y,40,40,hdcMem,0,17,40,40,RGB(255,0,255));
-			}
-			if (map_type[i][j] == R_H_)
-			{
-				SelectObject(hdcMem,m_bitmap_ShadowBlock);
-				TransparentBlt(hdc,x-3,y-1,45,45,hdcMem,0,0,45,45,RGB(255,0,255));
-				SelectObject(hdcMem,m_bitmap_redHouse);
-				TransparentBlt(hdc,x,y,40,40,hdcMem,0,17,40,40,RGB(255,0,255));
-			}
-			if (map_type[i][j] == Y_H_)
-			{
-				SelectObject(hdcMem,m_bitmap_ShadowBlock);
-				TransparentBlt(hdc,x-3,y-1,45,45,hdcMem,0,0,45,45,RGB(255,0,255));
-				SelectObject(hdcMem,m_bitmap_yellowHouse);
-				TransparentBlt(hdc,x,y,40,40,hdcMem,0,17,40,40,RGB(255,0,255));
-			}
-			if (map_type[i][j] == R_B_)
-			{
-				SelectObject(hdcMem,m_bitmap_ShadowBlock);
-				TransparentBlt(hdc,x-3,y-1,45,45,hdcMem,0,0,45,45,RGB(255,0,255));
-				SelectObject(hdcMem,m_bitmap_redBrick);
-				BitBlt(hdc,x,y,40,40,hdcMem,0,0,SRCCOPY);
-			}
-			if (map_type[i][j] == Y_B_)
-			{
-				SelectObject(hdcMem,m_bitmap_ShadowBlock);
-				TransparentBlt(hdc,x-3,y-1,45,45,hdcMem,0,0,45,45,RGB(255,0,255));
-				SelectObject(hdcMem,m_bitmap_yellowBrick);
-				BitBlt(hdc,x,y,40,40,hdcMem,0,0,SRCCOPY);
-			}
-			if (map_type[i][j] == Tree)
-			{
-				SelectObject(hdcMem,m_bitmap_Tree);
-				TransparentBlt(hdc,x,y,40,40,hdcMem,0,27,40,40,RGB(255,0,255));
-			}
-			if (map_type[i][j] == Box)
-			{
-				SelectObject(hdcMem,m_bitmap_ShadowBlock);
-				TransparentBlt(hdc,x-3,y-1,45,45,hdcMem,0,0,45,45,RGB(255,0,255));
-				SelectObject(hdcMem,m_bitmap_Box);
-				BitBlt(hdc,x,y,40,40,hdcMem,0,0,SRCCOPY);
-			}
-			if (map_type[i][j] == WIND)
-			{
-			/*	SelectObject(hdcMem,m_bitmap_windUp);
-				TransparentBlt(hdc,260,161,120,118,hdcMem,(1-m_nShowID)*120,0,120,118,RGB(255,0,255));*/
-				SelectObject(hdcMem,m_bitmap_windDown);
-				TransparentBlt(hdc,260,279,120,42,hdcMem,0,0,120,42,RGB(255,0,255));
-			}
-			
-		}
+	__asm {
+		mov  ebx, dword ptr[power]
+		cmp  ebx, 1
+		je   C1
+		cmp  ebx, 2
+		je   C2
+		cmp  ebx, 3
+		je   C3
+		cmp  ebx, 4
+		je   C4
+		jmp  C1
+	C1:
+		mov  eax, dword ptr[j]
+		push eax
+		mov  ecx, dword ptr[i]
+		push ecx
+		mov  ecx, dword ptr[this]
+		call CGameMap::BlastBlock_One
+		jmp  End
+	C2:
+		mov  eax, dword ptr[j]
+		push eax
+		mov  ecx, dword ptr[i]
+		push ecx
+		mov  ecx, dword ptr[this]
+		call CGameMap::BlastBlock_One
+		mov  eax, dword ptr[j]
+		push eax
+		mov  ecx, dword ptr[i]
+		push ecx
+		mov  ecx, dword ptr[this]
+		call CGameMap::BlastBlock_Two
+		jmp  End
+	C3:
+		mov  eax, dword ptr[j]
+		push eax
+		mov  ecx, dword ptr[i]
+		push ecx
+		mov  ecx, dword ptr[this]
+		call CGameMap::BlastBlock_One
+		mov  eax, dword ptr[j]
+		push eax
+		mov  ecx, dword ptr[i]
+		push ecx
+		mov  ecx, dword ptr[this]
+		call CGameMap::BlastBlock_Two
+		mov  eax, dword ptr[j]
+		push eax
+		mov  ecx, dword ptr[i]
+		push ecx
+		mov  ecx, dword ptr[this]
+		call CGameMap::BlastBlock_Three
+		jmp  End
+	C4:
+		mov  eax, dword ptr[j]
+		push eax
+		mov  ecx, dword ptr[i]
+		push ecx
+		mov  ecx, dword ptr[this]
+		call CGameMap::BlastBlock_One
+		mov  eax, dword ptr[j]
+		push eax
+		mov  ecx, dword ptr[i]
+		push ecx
+		mov  ecx, dword ptr[this]
+		call CGameMap::BlastBlock_Two
+		mov  eax, dword ptr[j]
+		push eax
+		mov  ecx, dword ptr[i]
+		push ecx
+		mov  ecx, dword ptr[this]
+		call CGameMap::BlastBlock_Three
+		mov  eax, dword ptr[j]
+		push eax
+		mov  ecx, dword ptr[i]
+		push ecx
+		mov  ecx, dword ptr[this]
+		call CGameMap::BlastBlock_Four
+	End:
 	}
-	
-	DeleteDC(hdcMem);
 }
 
-void CGameMap::MapBlast(int i, int j, int power ,int *arr)
+void CGameMap::BlastBlock_One(int i, int j)
 {
-	switch (power)
-	{
-	case 1:
-		// 泡泡威力为1格
-		BlastBlock_One(i,j,arr);
-		break;
-	case 2:
-		// 泡泡威力为2格
-		BlastBlock_One(i,j,arr);
-		BlastBlock_Two(i,j,arr);
-		break;
-	case 3:
-		// 泡泡威力为3格
-		BlastBlock_One(i,j,arr);
-		BlastBlock_Two(i,j,arr);
-		BlastBlock_Three(i,j,arr);
-		break;
-	case 4:
-		// 泡泡威力为4格
-		BlastBlock_One(i,j,arr);
-		BlastBlock_Two(i,j,arr);
-		BlastBlock_Three(i,j,arr);
-		BlastBlock_Four(i,j,arr);
-		break;
-	default:
-		BlastBlock_One(i,j,arr);
-		break;
-	}
-
-}
-
-void CGameMap::BlastBlock_One(int i, int j, int *arr)
-{
-	// //泡泡 →
-	//if ( i < MAP_HEIGHT - 1 && map_type[i+1][j] <= Box && map_type[i+1][j] != No)
-	//{
-	//	map_type[i+1][j] = No;
-	//}	
-	//// 泡泡 ←
-	//if ( i > 0 && map_type[i-1][j] <= Box && map_type[i-1][j] != No)
-	//{
-	//	map_type[i-1][j] = No;
-	//}	
-	// //泡泡 ↓
-	//if ( j < MAP_WIDTH - 1 && map_type[i][j+1] <= Box && map_type[i][j+1] != No)
-	//{
-	//	map_type[i][j+1] = No;
-	//}	
-	// //泡泡 ↑
-	//if ( j > 0 && map_type[i][j-1] <= Box && map_type[i][j-1] != No)
-	//{
-	//	map_type[i][j-1] = No;
-	//}
 	int ptr1 = (int)map_type;
 	_asm{
 		//push edx
@@ -400,24 +508,8 @@ void CGameMap::BlastBlock_One(int i, int j, int *arr)
 
 }
 
-void CGameMap::BlastBlock_Two(int i, int j, int *arr)
+void CGameMap::BlastBlock_Two(int i, int j)
 {
-	/*if ( i < MAP_HEIGHT - 2 && map_type[i+1][j] <= Box && map_type[i+2][j] <= Box && map_type[i+2][j] != No)
-	{
-		map_type[i+2][j] = No;
-	}
-	if ( i > 1 && map_type[i-1][j] <= Box && map_type[i-2][j] <= Box && map_type[i-2][j] != No)
-	{
-		map_type[i-2][j] = No;
-	}
-	if ( j < MAP_WIDTH - 2 && map_type[i][j+1] <= Box && map_type[i][j+2] <= Box && map_type[i][j+2] != No)
-	{
-		map_type[i][j+2] = No;
-	}
-	if ( j > 1 && map_type[i][j-1] <= Box && map_type[i][j-2] <= Box && map_type[i][j-2] != No)
-	{
-		map_type[i][j-2] = No;
-	}*/
 	int ptr1 = (int)map_type;
 	_asm {
 		
@@ -636,24 +728,8 @@ void CGameMap::BlastBlock_Two(int i, int j, int *arr)
 	}
 }
 
-void CGameMap::BlastBlock_Three(int i, int j, int *arr)
+void CGameMap::BlastBlock_Three(int i, int j)
 {
-	//if ( i < MAP_HEIGHT - 3 && map_type[i+1][j] <= Box && map_type[i+2][j] <= Box &&  map_type[i+3][j] <= Box && map_type[i+3][j] != No)
-	//{
-	//	map_type[i+3][j] = No;
-	//}
-	//if ( i > 2 && map_type[i-1][j] <= Box && map_type[i-2][j] <= Box && map_type[i-3][j] <= Box && map_type[i-3][j] != No)
-	//{
-	//	map_type[i-3][j] = No;
-	//}
-	//if ( j < MAP_WIDTH - 3 && map_type[i][j+1] <= Box && map_type[i][j+2] <= Box && map_type[i][j+3] <= Box && map_type[i][j+3] != No)
-	//{
-	//	map_type[i][j+3] = No;
-	//}
-	//if ( j > 2 && map_type[i][j-1] <= Box && map_type[i][j-2] <= Box && map_type[i][j-3] <= Box && map_type[i][j-3] != No)
-	//{
-	//	map_type[i][j-3] = No;
-	//}
 	int ptr1 = (int)map_type;
 	_asm {
 
@@ -982,24 +1058,8 @@ void CGameMap::BlastBlock_Three(int i, int j, int *arr)
 	}
 }
 
-void CGameMap::BlastBlock_Four(int i, int j, int *arr)
+void CGameMap::BlastBlock_Four(int i, int j)
 {
-	//if ( i < MAP_HEIGHT - 4 && map_type[i+1][j] <= Box && map_type[i+2][j] <= Box &&  map_type[i+3][j] <= Box &&  map_type[i+4][j] <= Box && map_type[i+4][j] != No)
-	//{
-	//	map_type[i+4][j] = No;
-	//}
-	//if ( i > 3 && map_type[i-1][j] <= Box && map_type[i-2][j] <= Box && map_type[i-3][j] <= Box && map_type[i-4][j] <= Box && map_type[i-4][j] != No)
-	//{
-	//	map_type[i-4][j] = No;
-	//}
-	//if ( j < MAP_WIDTH - 4 && map_type[i][j+1] <= Box && map_type[i][j+2] <= Box && map_type[i][j+3] <= Box && map_type[i][j+4] <= Box && map_type[i][j+4] != No)
-	//{
-	//	map_type[i][j+4] = No;
-	//}
-	//if ( j > 3 && map_type[i][j-1] <= Box && map_type[i][j-2] <= Box && map_type[i][j-3] <= Box && map_type[i][j-4] <= Box && map_type[i][j-4] != No)
-	//{
-	//	map_type[i][j-4] = No;
-	//}
 	int ptr1 = (int)map_type;
 	_asm {
 
@@ -1386,4 +1446,78 @@ void CGameMap::BlastBlock_Four(int i, int j, int *arr)
 		//pop edx
 		//pop esp
 	}
+}
+
+void CGameMap::MapShow(HDC hdc)
+{
+	HDC hdcMem = CreateCompatibleDC(hdc);
+
+	int x = 0;
+	int y = 0;
+	for (int i = 0; i < MAP_HEIGHT; i++)
+	{
+		for (int j = MAP_WIDTH - 1; j >= 0; j--)
+		{
+			x = j * 40 + 20;
+			y = i * 40 + 41;
+
+			if (map_type[i][j] == B_H_)
+			{
+				SelectObject(hdcMem, m_bitmap_ShadowBlock);
+				TransparentBlt(hdc, x - 3, y - 1, 45, 45, hdcMem, 0, 0, 45, 45, RGB(255, 0, 255));
+				SelectObject(hdcMem, m_bitmap_blueHouse);
+				TransparentBlt(hdc, x, y, 40, 40, hdcMem, 0, 17, 40, 40, RGB(255, 0, 255));
+			}
+			if (map_type[i][j] == R_H_)
+			{
+				SelectObject(hdcMem, m_bitmap_ShadowBlock);
+				TransparentBlt(hdc, x - 3, y - 1, 45, 45, hdcMem, 0, 0, 45, 45, RGB(255, 0, 255));
+				SelectObject(hdcMem, m_bitmap_redHouse);
+				TransparentBlt(hdc, x, y, 40, 40, hdcMem, 0, 17, 40, 40, RGB(255, 0, 255));
+			}
+			if (map_type[i][j] == Y_H_)
+			{
+				SelectObject(hdcMem, m_bitmap_ShadowBlock);
+				TransparentBlt(hdc, x - 3, y - 1, 45, 45, hdcMem, 0, 0, 45, 45, RGB(255, 0, 255));
+				SelectObject(hdcMem, m_bitmap_yellowHouse);
+				TransparentBlt(hdc, x, y, 40, 40, hdcMem, 0, 17, 40, 40, RGB(255, 0, 255));
+			}
+			if (map_type[i][j] == R_B_)
+			{
+				SelectObject(hdcMem, m_bitmap_ShadowBlock);
+				TransparentBlt(hdc, x - 3, y - 1, 45, 45, hdcMem, 0, 0, 45, 45, RGB(255, 0, 255));
+				SelectObject(hdcMem, m_bitmap_redBrick);
+				BitBlt(hdc, x, y, 40, 40, hdcMem, 0, 0, SRCCOPY);
+			}
+			if (map_type[i][j] == Y_B_)
+			{
+				SelectObject(hdcMem, m_bitmap_ShadowBlock);
+				TransparentBlt(hdc, x - 3, y - 1, 45, 45, hdcMem, 0, 0, 45, 45, RGB(255, 0, 255));
+				SelectObject(hdcMem, m_bitmap_yellowBrick);
+				BitBlt(hdc, x, y, 40, 40, hdcMem, 0, 0, SRCCOPY);
+			}
+			if (map_type[i][j] == Tree)
+			{
+				SelectObject(hdcMem, m_bitmap_Tree);
+				TransparentBlt(hdc, x, y, 40, 40, hdcMem, 0, 27, 40, 40, RGB(255, 0, 255));
+			}
+			if (map_type[i][j] == Box)
+			{
+				SelectObject(hdcMem, m_bitmap_ShadowBlock);
+				TransparentBlt(hdc, x - 3, y - 1, 45, 45, hdcMem, 0, 0, 45, 45, RGB(255, 0, 255));
+				SelectObject(hdcMem, m_bitmap_Box);
+				BitBlt(hdc, x, y, 40, 40, hdcMem, 0, 0, SRCCOPY);
+			}
+			if (map_type[i][j] == WIND)
+			{
+				/*	SelectObject(hdcMem,m_bitmap_windUp);
+					TransparentBlt(hdc,260,161,120,118,hdcMem,(1-m_nShowID)*120,0,120,118,RGB(255,0,255));*/
+				SelectObject(hdcMem, m_bitmap_windDown);
+				TransparentBlt(hdc, 260, 279, 120, 42, hdcMem, 0, 0, 120, 42, RGB(255, 0, 255));
+			}
+
+		}
+	}
+
+	DeleteDC(hdcMem);
 }
