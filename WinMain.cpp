@@ -21,7 +21,7 @@ int CALLBACK WinMain(
 	static TCHAR szGameName[] = TEXT("BNB");
 	static TCHAR szProgramError[] = TEXT("应用程序错误");
 	static TCHAR szWindowError[] = TEXT("窗口类注册失败!");
-	static TCHAR szWindowName[] = TEXT("泡泡堂");
+	static TCHAR szWindowName[] = TEXT("BombPvP");
 	HBRUSH hBrush;
 	WNDCLASSEX wndClassEx;
 	HWND hWnd;
@@ -135,7 +135,7 @@ L1:
 	}
 
 	//3.创建窗口
-	hWnd = CreateWindow(szGameName, "泡泡堂", WS_OVERLAPPEDWINDOW, (CX-BG_WIDTH)/2, (CY-BG_HIGHT)/2, BG_WIDTH,BG_HIGHT, NULL, NULL, hInstance, NULL);
+	hWnd = CreateWindow(szGameName, "BombPvP", WS_OVERLAPPEDWINDOW, (CX-BG_WIDTH)/2, (CY-BG_HIGHT)/2, BG_WIDTH,BG_HIGHT, NULL, NULL, hInstance, NULL);
 
 	_asm {
 		//if (NULL == hWnd)
