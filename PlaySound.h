@@ -1,20 +1,3 @@
-/******************************************************************* 
- *  Copyright: Turing Team
- *  All rights reserved. 
- *
- *  ÎÄ¼şÃû³Æ: CPlaySound.h
- *  ¼òÒªÃèÊö: ÓÎÏ·ÒôĞ§Àà ¿ÉÒÔÍ¨¹ıF7¼ü¹Ø±Õ
- *          µ÷ÓÃ Play(char* lpstrSoundName)£»
- *
- *  ×÷Õß: ÁõĞÂ³É
- *  ´´½¨ÈÕÆÚ: 2017Äê6ÔÂ5ÈÕ
- *  ËµÃ÷: ÒôĞ§ÎÄ¼ş ºê¶¨ÒåÔÚ Sys.h ÖĞ
- *
- *  ĞŞ¸ÄÈÕÆÚ:
- *  ×÷Õß:
- *  ËµÃ÷:
- *  µ±Ç°°æ±¾: 1.0
- ******************************************************************/ 
 #ifndef CPLAYSOUND_H_
 #define CPLAYSOUND_H_
 
@@ -29,22 +12,22 @@ public:
 	CPlaySound();
 	~CPlaySound();
 public:
-	void Play(char* lpstrSoundName);  // ´ò¿ª²¢²¥·ÅÒôĞ§ÎÄ¼ş
-	void Stop();                      // ¹Ø±Õ²¢Í£Ö¹²¥·ÅÒôĞ§ÎÄ¼ş
-	unsigned long GetFileLen();       // »ñÈ¡ÎÄ¼ş³¤¶È
-	unsigned long GetPos();           // »ñÈ¡µ±Ç°ÎÄ¼ş²¥·ÅÎ»ÖÃ
-	void setVolume(DWORD vol);        // ÉèÖÃÒôÁ¿
+	void Play(char* lpstrSoundName);  // æ‰“å¼€å¹¶æ’­æ”¾éŸ³æ•ˆæ–‡ä»¶
+	void Stop();                      // å…³é—­å¹¶åœæ­¢æ’­æ”¾éŸ³æ•ˆæ–‡ä»¶
+	unsigned long GetFileLen();       // è·å–æ–‡ä»¶é•¿åº¦
+	unsigned long GetPos();           // è·å–å½“å‰æ–‡ä»¶æ’­æ”¾ä½ç½®
+	void setVolume(DWORD vol);        // è®¾ç½®éŸ³é‡
 
-	bool isPlay;         // ÊÇ·ñ²¥·Å±ê¼ÇÎ»£¬ÓÃÓÚ²¥·ÅÍêÒ»¸öÒôĞ§¹Ø±ÕÉè±¸£¬ÒÔ±¸ÏÂ´Î²¥·Å
-	bool isKeyToStop;    // ÊÇ·ñF7¹Ø±ÕÒôĞ§±êÖ¾Î» Èç¹Ø±ÕÎª true
+	bool isPlay;         // æ˜¯å¦æ’­æ”¾æ ‡è®°ä½ï¼Œç”¨äºæ’­æ”¾å®Œä¸€ä¸ªéŸ³æ•ˆå…³é—­è®¾å¤‡ï¼Œä»¥å¤‡ä¸‹æ¬¡æ’­æ”¾
+	bool isKeyToStop;    // æ˜¯å¦F7å…³é—­éŸ³æ•ˆæ ‡å¿—ä½ å¦‚å…³é—­ä¸º true
 private:
-	MCI_OPEN_PARMS m_mciOpen;              // ´ò¿ª²ÎÊı
-	MCIERROR m_mciError;                   // ²¥·ÅÖ¸Áî
-	MCI_PLAY_PARMS m_mciPlayParms;         // ²¥·Å²ÎÊı
+	MCI_OPEN_PARMS m_mciOpen;              // æ‰“å¼€å‚æ•°
+	MCIERROR m_mciError;                   // æ’­æ”¾æŒ‡ä»¤
+	MCI_PLAY_PARMS m_mciPlayParms;         // æ’­æ”¾å‚æ•°
 	MCI_STATUS_PARMS m_mciStatusParms;
-	MCI_GENERIC_PARMS m_mciclose;          // ¹Ø±ÕÉè±¸
-	MCI_DGV_SETAUDIO_PARMS m_mciSetvolume; // ÉèÖÃÒôÁ¿µÄ²ÎÊı
-	int DeviceID;                          // ¼ÇÂ¼´ò¿ªÉè±¸ID
+	MCI_GENERIC_PARMS m_mciclose;          // å…³é—­è®¾å¤‡
+	MCI_DGV_SETAUDIO_PARMS m_mciSetvolume; // è®¾ç½®éŸ³é‡çš„å‚æ•°
+	int DeviceID;                          // è®°å½•æ‰“å¼€è®¾å¤‡ID
 };
 
 #endif // !CPLAYSOUND_H_
