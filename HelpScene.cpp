@@ -34,41 +34,41 @@ void CHelpScene::HelpSceneShow(HDC hdc)
 		test  ecx, ecx
 		je    L2
 		mov  eax, dword ptr[this]
-		mov  ecx, dword ptr[eax+0Ch]
+		mov  ecx, dword ptr[eax + 0Ch]
 		push ecx
 		mov  edx, dword ptr[hdcMem]
 		push edx
 		call SelectObject
 		mov  esp, dword ptr[x]
 		jmp  Counti
-	L2:
+		L2 :
 		mov eax, dword ptr[this]
-		mov ecx, dword ptr[eax+8]
-		push ecx
-		mov edx, dword ptr[hdcMem]
-		push edx
-		call SelectObject
-		mov  esp, dword ptr[x]
-		jmp Counti
-	Counti:
+			mov ecx, dword ptr[eax + 8]
+			push ecx
+			mov edx, dword ptr[hdcMem]
+			push edx
+			call SelectObject
+			mov  esp, dword ptr[x]
+			jmp Counti
+			Counti :
 		push 0CC0020h
-		push 0
-		push 0
-		mov  eax, dword ptr[hdcMem]
-		push eax
-		push 26h
-		push 50h
-		push 232h
-		push 0
-		mov  ecx, dword ptr[hdc]
-		push ecx
-		call BitBlt
-		mov  esp, dword ptr[x]
+			push 0
+			push 0
+			mov  eax, dword ptr[hdcMem]
+			push eax
+			push 26h
+			push 50h
+			push 232h
+			push 0
+			mov  ecx, dword ptr[hdc]
+			push ecx
+			call BitBlt
+			mov  esp, dword ptr[x]
 
-		mov  eax, dword ptr[hdcMem]
-		push eax
-		call DeleteDC
-		mov  esp, dword ptr[x]
+			mov  eax, dword ptr[hdcMem]
+			push eax
+			call DeleteDC
+			mov  esp, dword ptr[x]
 	}
 }
 
@@ -80,7 +80,7 @@ void CHelpScene::MouseMove(POINT point)
 		jle F1
 		cmp eax, 50h
 		jge F1
-		mov eax, dword ptr[ebp+0Ch]
+		mov eax, dword ptr[ebp + 0Ch]
 		cmp eax, 232h
 		jle F1
 		cmp eax, 258h
@@ -88,10 +88,10 @@ void CHelpScene::MouseMove(POINT point)
 		mov eax, dword ptr[this]
 		mov byte ptr[eax], 1
 		jmp End1
-	F1:
+		F1 :
 		mov eax, dword ptr[this]
-		mov byte ptr[eax], 0
-	End1:
+			mov byte ptr[eax], 0
+			End1 :
 	}
 }
 CHelpScene::CHelpScene()

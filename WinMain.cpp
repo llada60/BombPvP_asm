@@ -49,8 +49,8 @@ int CALLBACK WinMain(
 		//mov		dword ptr[CY], eax
 	}
 	//得到屏幕分辨率
-	int CX = GetSystemMetrics(SM_CXSCREEN );
-	int CY = GetSystemMetrics(SM_CYSCREEN );
+	int CX = GetSystemMetrics(SM_CXSCREEN);
+	int CY = GetSystemMetrics(SM_CYSCREEN);
 	_asm {
 		//hBrush = ::CreateSolidBrush(RGB(0, 0, 0));
 		push		0
@@ -59,7 +59,7 @@ int CALLBACK WinMain(
 		// 1.设计窗口
 		// wndClassEx.style = CS_HREDRAW | CS_VREDRAW;
 		mov			eax, CS_HREDRAW
-		or			eax, CS_VREDRAW
+		or eax, CS_VREDRAW
 		mov         dword ptr[wndClassEx.style], eax
 		// wndClassEx.cbSize = sizeof(wndClassEx);
 		mov         dword ptr[wndClassEx.cbSize], 30h
@@ -100,15 +100,15 @@ int CALLBACK WinMain(
 		test		eax, eax
 		jne			L1
 		mov			ecx, MB_OK
-		or			ecx, MB_ICONERROR
+		or ecx, MB_ICONERROR
 		push		ecx
 		push        offset szProgramError
 		push        offset szProgramError
 		push		0
 		call		MessageBox
-		xor			eax, eax
+		xor eax, eax
 		jmp			Done
-L1:
+		L1 :
 		//3.创建窗口
 		//hWnd = CreateWindow(szGameName, "泡泡堂", WS_OVERLAPPEDWINDOW, (CX - BG_WIDTH) / 2, (CY - BG_HIGHT) / 2, BG_WIDTH, BG_HIGHT, NULL, NULL, hInstance, NULL);
 		/*push		0
@@ -135,7 +135,7 @@ L1:
 	}
 
 	//3.创建窗口
-	hWnd = CreateWindow(szGameName, "BombPvP", WS_OVERLAPPEDWINDOW, (CX-BG_WIDTH)/2, (CY-BG_HIGHT)/2, BG_WIDTH,BG_HIGHT, NULL, NULL, hInstance, NULL);
+	hWnd = CreateWindow(szGameName, "BombPvP", WS_OVERLAPPEDWINDOW, (CX - BG_WIDTH) / 2, (CY - BG_HIGHT) / 2, BG_WIDTH, BG_HIGHT, NULL, NULL, hInstance, NULL);
 
 	_asm {
 		//if (NULL == hWnd)
@@ -146,47 +146,47 @@ L1:
 		cmp			dword ptr[hWnd], 0
 		jne			L2
 		mov			ecx, MB_OK
-		or			ecx, MB_ICONERROR
+		or ecx, MB_ICONERROR
 		push		ecx
 		push        offset szProgramError
 		push        offset szProgramError
 		push		0
 		call		MessageBox
-		xor			eax, eax
+		xor eax, eax
 		jmp			Done
-L2:
+		L2 :
 		// ShowWindow(hWnd,nShowCmd);
 		mov         eax, dword ptr[nShowCmd]
-		push        eax
-		mov         ecx, dword ptr[hWnd]
-		push        ecx
-		call        ShowWindow
-L3:
+			push        eax
+			mov         ecx, dword ptr[hWnd]
+			push        ecx
+			call        ShowWindow
+			L3 :
 		// 5.消息
 		// while(GetMessage(&msg, 0, 0, 0))
 		push		0
-		push		0
-		push		0
-		lea			eax, [msg]
-		push		eax
-		call		GetMessage
-		test		eax, eax
-		je			L4
-		// ::TranslateMessage(&msg);
-		lea         eax, [msg]
-		push        eax
-		call		TranslateMessage
-		// ::DispatchMessage(&msg);
-		lea         eax, [msg]
-		push        eax
-		call		DispatchMessage
-		jmp			L3
-L4 :
+			push		0
+			push		0
+			lea			eax, [msg]
+			push		eax
+			call		GetMessage
+			test		eax, eax
+			je			L4
+			// ::TranslateMessage(&msg);
+			lea         eax, [msg]
+			push        eax
+			call		TranslateMessage
+			// ::DispatchMessage(&msg);
+			lea         eax, [msg]
+			push        eax
+			call		DispatchMessage
+			jmp			L3
+			L4 :
 		lea         eax, [hBrush]
-		push        eax
-		call		DeleteObject
-		xor			eax, eax
-Done :
+			push        eax
+			call		DeleteObject
+			xor eax, eax
+			Done :
 	}
 }
 
@@ -197,7 +197,7 @@ LRESULT CALLBACK MyWinProc(HWND hWnd, UINT Msg, WPARAM wparam, LPARAM lparam)
 	static TCHAR szGameError[] = TEXT("游戏创建失败");
 	static TCHAR szHint[] = TEXT("提示");
 	POINT point;
-		_asm {
+	_asm {
 		mov         eax, dword ptr[Msg]
 		cmp			eax, WM_CREATE
 		je			WmCreate
@@ -211,7 +211,7 @@ LRESULT CALLBACK MyWinProc(HWND hWnd, UINT Msg, WPARAM wparam, LPARAM lparam)
 		je			WmLbuttondown
 		cmp			eax, WM_LBUTTONUP
 		je			WmLbuttonup
-		
+
 		cmp			eax, WM_MOUSEMOVE
 		je			WmMousemove
 		cmp			eax, WM_TIMER
@@ -221,222 +221,222 @@ LRESULT CALLBACK MyWinProc(HWND hWnd, UINT Msg, WPARAM wparam, LPARAM lparam)
 		cmp			eax, WM_DESTROY
 		je			WmDestroy
 		jmp			Done
-WmCreate:
+		WmCreate :
 		// if (CGameCtrl::pfun_create_object == NULL)
 		cmp         dword ptr[CGameCtrl::pfun_create_object], 0
-		jne			CreateNeq
-		// MessageBox(NULL, TEXT("游戏创建失败"), TEXT("提示"),MB_OK | MB_ICONERROR);
-		mov			eax, MB_OK
-		or			eax, MB_ICONERROR
-		push		eax
-		push		offset szHint
-		push		offset szGameError
-		push		0
-		call		MessageBox
-		// DestroyWindow(hWnd);
-		mov			eax, dword ptr[hWnd]
-		push		eax
-		call		DestroyWindow
-		// PostQuitMessage(0);
-		push		0
-		call		PostQuitMessage
-		xor			eax, eax
-		ret
-CreateNeq:
+			jne			CreateNeq
+			// MessageBox(NULL, TEXT("游戏创建失败"), TEXT("提示"),MB_OK | MB_ICONERROR);
+			mov			eax, MB_OK
+			or eax, MB_ICONERROR
+			push		eax
+			push		offset szHint
+			push		offset szGameError
+			push		0
+			call		MessageBox
+			// DestroyWindow(hWnd);
+			mov			eax, dword ptr[hWnd]
+			push		eax
+			call		DestroyWindow
+			// PostQuitMessage(0);
+			push		0
+			call		PostQuitMessage
+			xor eax, eax
+			ret
+			CreateNeq :
 		// pCtrl = (*CGameCtrl::pfun_create_object)();
 		call        CGameCtrl::pfun_create_object
-		mov         dword ptr[pCtrl], eax
-		// pCtrl->SetHandel(hWnd, hIns);
-		mov			eax, dword ptr[hIns]
-		push		eax
-		mov         eax, dword ptr[hWnd]
-		push		eax
-		mov			ecx, dword ptr[pCtrl]
-		call		CGameCtrl::SetHandel
-		// pCtrl->OnCreateGame();
-		mov			eax, dword ptr[pCtrl]
-		mov			edx, dword ptr[eax]
-		mov         ecx, dword ptr[pCtrl]
-		mov			eax, dword ptr[edx+4]
-		call		eax
-		jmp			Done // break
-WmPaint:
+			mov         dword ptr[pCtrl], eax
+			// pCtrl->SetHandel(hWnd, hIns);
+			mov			eax, dword ptr[hIns]
+			push		eax
+			mov         eax, dword ptr[hWnd]
+			push		eax
+			mov			ecx, dword ptr[pCtrl]
+			call		CGameCtrl::SetHandel
+			// pCtrl->OnCreateGame();
+			mov			eax, dword ptr[pCtrl]
+			mov			edx, dword ptr[eax]
+			mov         ecx, dword ptr[pCtrl]
+			mov			eax, dword ptr[edx + 4]
+			call		eax
+			jmp			Done // break
+			WmPaint :
 		cmp         dword ptr[pCtrl], 0
-		je          WmPaintEq
-		// pCtrl->OnGameDraw();
-		mov         eax, dword ptr[pCtrl]
-		mov         edx, dword ptr[eax]
-		mov         ecx, dword ptr[pCtrl]
-		mov         eax, dword ptr[edx + 8]
-		call        eax
-WmPaintEq:
+			je          WmPaintEq
+			// pCtrl->OnGameDraw();
+			mov         eax, dword ptr[pCtrl]
+			mov         edx, dword ptr[eax]
+			mov         ecx, dword ptr[pCtrl]
+			mov         eax, dword ptr[edx + 8]
+			call        eax
+			WmPaintEq :
 		jmp			Done
-WmKeydown:
+			WmKeydown :
 		// if (pCtrl != NULL)
 		cmp         dword ptr[pCtrl], 0
-		je          WmKeydownEq
-		// pCtrl->OnKeyDown(wparam);
-		mov         eax, dword ptr[wparam]
-		push        eax
-		mov         ecx, dword ptr[pCtrl]
-		mov         edx, dword ptr[ecx]
-		mov         ecx, dword ptr[pCtrl]
-		mov         eax, dword ptr[edx + 10h]
-		call        eax
-WmKeydownEq:
+			je          WmKeydownEq
+			// pCtrl->OnKeyDown(wparam);
+			mov         eax, dword ptr[wparam]
+			push        eax
+			mov         ecx, dword ptr[pCtrl]
+			mov         edx, dword ptr[ecx]
+			mov         ecx, dword ptr[pCtrl]
+			mov         eax, dword ptr[edx + 10h]
+			call        eax
+			WmKeydownEq :
 		jmp			Done
-WmKeyup:
+			WmKeyup :
 		// if (pCtrl != NULL)
 		cmp         dword ptr[pCtrl], 0
-		je          WmKeyupEq
-		// pCtrl->OnKeyUp(wparam);
-		mov         eax, dword ptr[wparam]
-		push        eax
-		mov         ecx, dword ptr[pCtrl]
-		mov         edx, dword ptr[ecx]
-		mov         ecx, dword ptr[pCtrl]
-		mov         eax, dword ptr[edx + 14h]
-		call        eax
-WmKeyupEq :
+			je          WmKeyupEq
+			// pCtrl->OnKeyUp(wparam);
+			mov         eax, dword ptr[wparam]
+			push        eax
+			mov         ecx, dword ptr[pCtrl]
+			mov         edx, dword ptr[ecx]
+			mov         ecx, dword ptr[pCtrl]
+			mov         eax, dword ptr[edx + 14h]
+			call        eax
+			WmKeyupEq :
 		jmp			Done
-WmLbuttondown:
+			WmLbuttondown :
 		// if (pCtrl != NULL)
 		cmp         dword ptr[pCtrl], 0
-		je          WmLbuttondownEq
-		// point.x = LOWORD(lparam);
-		mov         eax, dword ptr[lparam]
-		and			eax, 0FFFFh
-		movzx       ecx, ax
-		mov         dword ptr[point], ecx
-		// point.y = HIWORD(lparam);
-		mov         eax, dword ptr[lparam]
-		shr         eax, 10h
-		and			eax, 0FFFFh
-		movzx       ecx, ax
-		mov         dword ptr[ebp-8], ecx // 改！！
-		// pCtrl->OnLButtonDown(point);
-		mov         eax, dword ptr[ebp - 8] // point.y
-		push        eax
-		mov         ecx, dword ptr[point]
-		push        ecx
-		mov         edx, dword ptr[pCtrl]
-		mov         eax, dword ptr[edx]
-		mov         ecx, dword ptr[pCtrl]
-		mov         edx, dword ptr[eax + 18h]
-		call        edx
-WmLbuttondownEq:
+			je          WmLbuttondownEq
+			// point.x = LOWORD(lparam);
+			mov         eax, dword ptr[lparam]
+			and eax, 0FFFFh
+			movzx       ecx, ax
+			mov         dword ptr[point], ecx
+			// point.y = HIWORD(lparam);
+			mov         eax, dword ptr[lparam]
+			shr         eax, 10h
+			and eax, 0FFFFh
+			movzx       ecx, ax
+			mov         dword ptr[ebp - 8], ecx // 改！！
+			// pCtrl->OnLButtonDown(point);
+			mov         eax, dword ptr[ebp - 8] // point.y
+			push        eax
+			mov         ecx, dword ptr[point]
+			push        ecx
+			mov         edx, dword ptr[pCtrl]
+			mov         eax, dword ptr[edx]
+			mov         ecx, dword ptr[pCtrl]
+			mov         edx, dword ptr[eax + 18h]
+			call        edx
+			WmLbuttondownEq :
 		jmp			Done
-WmLbuttonup:
+			WmLbuttonup :
 		// if (pCtrl != NULL)
 		cmp         dword ptr[pCtrl], 0
-		je          WmLbuttonupEq
-		// point.x = LOWORD(lparam);
-		mov         eax, dword ptr[lparam]
-		and eax, 0FFFFh
-		movzx       ecx, ax
-		mov         dword ptr[point], ecx
-		// point.y = HIWORD(lparam);
-		mov         eax, dword ptr[lparam]
-		shr         eax, 10h
-		and eax, 0FFFFh
-		movzx       ecx, ax
-		mov         dword ptr[ebp - 8], ecx // 改！！
-		// pCtrl->OnLButtonUp(point);
-		mov         eax, dword ptr[ebp - 8] // point.y
-		push        eax
-		mov         ecx, dword ptr[point]
-		push        ecx
-		mov         edx, dword ptr[pCtrl]
-		mov         eax, dword ptr[edx]
-		mov         ecx, dword ptr[pCtrl]
-		mov         edx, dword ptr[eax + 1Ch]
-		call        edx
-WmLbuttonupEq :
+			je          WmLbuttonupEq
+			// point.x = LOWORD(lparam);
+			mov         eax, dword ptr[lparam]
+			and eax, 0FFFFh
+			movzx       ecx, ax
+			mov         dword ptr[point], ecx
+			// point.y = HIWORD(lparam);
+			mov         eax, dword ptr[lparam]
+			shr         eax, 10h
+			and eax, 0FFFFh
+			movzx       ecx, ax
+			mov         dword ptr[ebp - 8], ecx // 改！！
+			// pCtrl->OnLButtonUp(point);
+			mov         eax, dword ptr[ebp - 8] // point.y
+			push        eax
+			mov         ecx, dword ptr[point]
+			push        ecx
+			mov         edx, dword ptr[pCtrl]
+			mov         eax, dword ptr[edx]
+			mov         ecx, dword ptr[pCtrl]
+			mov         edx, dword ptr[eax + 1Ch]
+			call        edx
+			WmLbuttonupEq :
 		jmp			Done
 
-WmMousemove:
+			WmMousemove :
 		// if (pCtrl != NULL)
 		cmp         dword ptr[pCtrl], 0
-		je          WmMousemoveEq
-		// point.x = LOWORD(lparam);
-		mov         eax, dword ptr[lparam]
-		and eax, 0FFFFh
-		movzx       ecx, ax
-		mov         dword ptr[point], ecx
-		// point.y = HIWORD(lparam);
-		mov         eax, dword ptr[lparam]
-		shr         eax, 10h
-		and eax, 0FFFFh
-		movzx       ecx, ax
-		mov         dword ptr[ebp - 8], ecx // 改！！
-		// pCtrl->OnMouseMove(point);
-		mov         eax, dword ptr[ebp - 8] // point.y
-		push        eax
-		mov         ecx, dword ptr[point]
-		push        ecx
-		mov         edx, dword ptr[pCtrl]
-		mov         eax, dword ptr[edx]
-		mov         ecx, dword ptr[pCtrl]
-		mov         edx, dword ptr[eax + 20h]
-		call        edx
-WmMousemoveEq :
+			je          WmMousemoveEq
+			// point.x = LOWORD(lparam);
+			mov         eax, dword ptr[lparam]
+			and eax, 0FFFFh
+			movzx       ecx, ax
+			mov         dword ptr[point], ecx
+			// point.y = HIWORD(lparam);
+			mov         eax, dword ptr[lparam]
+			shr         eax, 10h
+			and eax, 0FFFFh
+			movzx       ecx, ax
+			mov         dword ptr[ebp - 8], ecx // 改！！
+			// pCtrl->OnMouseMove(point);
+			mov         eax, dword ptr[ebp - 8] // point.y
+			push        eax
+			mov         ecx, dword ptr[point]
+			push        ecx
+			mov         edx, dword ptr[pCtrl]
+			mov         eax, dword ptr[edx]
+			mov         ecx, dword ptr[pCtrl]
+			mov         edx, dword ptr[eax + 20h]
+			call        edx
+			WmMousemoveEq :
 		jmp			Done
-			
-WmTimer:		
+
+			WmTimer :
 		// if (pCtrl != NULL)
 		cmp         dword ptr[pCtrl], 0
-		je          WmTimerEq
-		// pCtrl->OnKeyDown(wparam);
-		mov         eax, dword ptr[wparam]
-		push        eax
-		mov         ecx, dword ptr[pCtrl]
-		mov         edx, dword ptr[ecx]
-		mov         ecx, dword ptr[pCtrl]
-		mov         eax, dword ptr[edx + 0Ch]
-		call        eax
-WmTimerEq :
+			je          WmTimerEq
+			// pCtrl->OnKeyDown(wparam);
+			mov         eax, dword ptr[wparam]
+			push        eax
+			mov         ecx, dword ptr[pCtrl]
+			mov         edx, dword ptr[ecx]
+			mov         ecx, dword ptr[pCtrl]
+			mov         eax, dword ptr[edx + 0Ch]
+			call        eax
+			WmTimerEq :
 		jmp			Done
-			
-WmClose:
+
+			WmClose :
 		// DestroyWindow(hWnd);
 		mov         eax, dword ptr[hWnd]
-		push        eax
-		call        DestroyWindow
-		jmp			Done
-			
-WmDestroy:
+			push        eax
+			call        DestroyWindow
+			jmp			Done
+
+			WmDestroy :
 		// delete pCtrl;
 		mov         eax, dword ptr[pCtrl]
-		mov         dword ptr[ebp - 0D8h], eax
-		cmp         dword ptr[ebp - 0D8h], 0
-		je          JDestroy
-		push        1
-		mov         ecx, dword ptr[ebp - 0D8h]
-		mov         edx, dword ptr[ecx]
-		mov         ecx, dword ptr[ebp - 0D8h]
-		mov         eax, dword ptr[edx]
-		call        eax
-		mov         dword ptr[ebp - 0E0h], eax
-		jmp         JDestroy1
-JDestroy:
+			mov         dword ptr[ebp - 0D8h], eax
+			cmp         dword ptr[ebp - 0D8h], 0
+			je          JDestroy
+			push        1
+			mov         ecx, dword ptr[ebp - 0D8h]
+			mov         edx, dword ptr[ecx]
+			mov         ecx, dword ptr[ebp - 0D8h]
+			mov         eax, dword ptr[edx]
+			call        eax
+			mov         dword ptr[ebp - 0E0h], eax
+			jmp         JDestroy1
+			JDestroy :
 		mov         dword ptr[ebp - 0E0h], 0
-JDestroy1:
-		// pCtrl = NULL;
-		mov         dword ptr[pCtrl], 0
-		// PostQuitMessage(0);
-		push		0
-		call		PostQuitMessage 
-	  
-Done:
+			JDestroy1 :
+			// pCtrl = NULL;
+			mov         dword ptr[pCtrl], 0
+			// PostQuitMessage(0);
+			push		0
+			call		PostQuitMessage
+
+			Done :
 		// return DefWindowProc(hWnd, Msg, wparam, lparam);
 		mov         eax, dword ptr[lparam]
-		push        eax
-		mov         ecx, dword ptr[wparam]
-		push        ecx
-		mov         edx, dword ptr[Msg]
-		push        edx
-		mov         eax, dword ptr[hWnd]
-		push        eax
-		call        DefWindowProc
+			push        eax
+			mov         ecx, dword ptr[wparam]
+			push        ecx
+			mov         edx, dword ptr[Msg]
+			push        edx
+			mov         eax, dword ptr[hWnd]
+			push        eax
+			call        DefWindowProc
 	}
 }

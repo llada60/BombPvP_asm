@@ -164,104 +164,104 @@ void CMainScene::MainSceneShow(HDC hdc)
 		push        edx
 		call        SelectObject
 		jmp			Trans
-TwoGameNeq :
+		TwoGameNeq :
 		//else
 		//	SelectObject(hdcMem, m_bitmap_twoGame);
 		mov         ecx, dword ptr[eax + 8] // m_bitmap_twoGam
-		push        ecx
-		mov         edx, dword ptr[hdcMem]
-		push        edx
-		call        SelectObject
-Trans :
+			push        ecx
+			mov         edx, dword ptr[hdcMem]
+			push        edx
+			call        SelectObject
+			Trans :
 		// TransparentBlt(hdc, 250, 200, 197, 61, hdcMem, 0, 0, 197, 61, RGB(128, 128, 128));
 		push        808080h
-		push        61
-		push        197
-		push        0
-		push        0
-		mov         eax, dword ptr[hdcMem]
-		push        eax
-		push        61
-		push        197
-		push        200
-		push        250
-		mov         ecx, dword ptr[hdc]
-		push        ecx
-		call        TransparentBlt
-		// if (m_seclectNum == HELP_GAME)
-		// SelectObject(hdcMem,m_bitmap_gameHelp_in);
-		mov         eax, dword ptr[this]
-		cmp         dword ptr[eax], HELP_GAME
-		jne			HelpGameNeq
-		mov         ecx, dword ptr[eax + 18h] // m_bitmap_gameHelp_in
-		push        ecx
-		mov         edx, dword ptr[hdcMem]
-		push        edx
-		call        SelectObject
-		jmp			Trans2
-HelpGameNeq :
+			push        61
+			push        197
+			push        0
+			push        0
+			mov         eax, dword ptr[hdcMem]
+			push        eax
+			push        61
+			push        197
+			push        200
+			push        250
+			mov         ecx, dword ptr[hdc]
+			push        ecx
+			call        TransparentBlt
+			// if (m_seclectNum == HELP_GAME)
+			// SelectObject(hdcMem,m_bitmap_gameHelp_in);
+			mov         eax, dword ptr[this]
+			cmp         dword ptr[eax], HELP_GAME
+			jne			HelpGameNeq
+			mov         ecx, dword ptr[eax + 18h] // m_bitmap_gameHelp_in
+			push        ecx
+			mov         edx, dword ptr[hdcMem]
+			push        edx
+			call        SelectObject
+			jmp			Trans2
+			HelpGameNeq :
 		//else
 		//	SelectObject(hdcMem, m_bitmap_gameHelp);
 		mov         ecx, dword ptr[eax + 0Ch] // m_bitmap_gameHelp
-		push        ecx
-		mov         edx, dword ptr[hdcMem]
-		push        edx
-		call        SelectObject
-Trans2 :
+			push        ecx
+			mov         edx, dword ptr[hdcMem]
+			push        edx
+			call        SelectObject
+			Trans2 :
 		// TransparentBlt(hdc,350,300,197,61,hdcMem,0,0,197,61,RGB(128,128,128));
 		push        808080h
-		push        61
-		push        197
-		push        0
-		push        0
-		mov         eax, dword ptr[hdcMem]
-		push        eax
-		push        61
-		push        197
-		push        300
-		push        350
-		mov         ecx, dword ptr[hdc]
-		push        ecx
-		call        TransparentBlt
-		// if (m_seclectNum == QUIT_GAME)
-		//	 SelectObject(hdcMem, m_bitmap_quitGame_in);
-		mov         eax, dword ptr[this]
-		cmp         dword ptr[eax], QUIT_GAME
-		jne			QuitGameNeq
-		mov         ecx, dword ptr[eax + 1Ch] // m_bitmap_quitGame_in
-		push        ecx
-		mov         edx, dword ptr[hdcMem]
-		push        edx
-		call        SelectObject
-		jmp			Trans3
-QuitGameNeq :
+			push        61
+			push        197
+			push        0
+			push        0
+			mov         eax, dword ptr[hdcMem]
+			push        eax
+			push        61
+			push        197
+			push        300
+			push        350
+			mov         ecx, dword ptr[hdc]
+			push        ecx
+			call        TransparentBlt
+			// if (m_seclectNum == QUIT_GAME)
+			//	 SelectObject(hdcMem, m_bitmap_quitGame_in);
+			mov         eax, dword ptr[this]
+			cmp         dword ptr[eax], QUIT_GAME
+			jne			QuitGameNeq
+			mov         ecx, dword ptr[eax + 1Ch] // m_bitmap_quitGame_in
+			push        ecx
+			mov         edx, dword ptr[hdcMem]
+			push        edx
+			call        SelectObject
+			jmp			Trans3
+			QuitGameNeq :
 		//else
 		//	SelectObject(hdcMem, m_bitmap_quitGame);
 		mov         ecx, dword ptr[eax + 10h] // m_bitmap_quitGame
-		push        ecx
-		mov         edx, dword ptr[hdcMem]
-		push        edx
-		call        SelectObject
-Trans3 :
+			push        ecx
+			mov         edx, dword ptr[hdcMem]
+			push        edx
+			call        SelectObject
+			Trans3 :
 		//TransparentBlt(hdc,450,400,197,61,hdcMem,0,0,197,61,RGB(128,128,128));
 		push        808080h
-		push        61
-		push        197
-		push        0
-		push        0
-		mov         eax, dword ptr[hdcMem]
-		push        eax
-		push        61
-		push        197
-		push        400
-		push        450
-		mov         ecx, dword ptr[hdc]
-		push        ecx
-		call        TransparentBlt
-		// DeleteDC(hdcMem);
-		mov         eax, dword ptr[hdcMem]
-		push        eax
-		call        DeleteDC
+			push        61
+			push        197
+			push        0
+			push        0
+			mov         eax, dword ptr[hdcMem]
+			push        eax
+			push        61
+			push        197
+			push        400
+			push        450
+			mov         ecx, dword ptr[hdc]
+			push        ecx
+			call        TransparentBlt
+			// DeleteDC(hdcMem);
+			mov         eax, dword ptr[hdcMem]
+			push        eax
+			call        DeleteDC
 	}
 }
 
@@ -281,34 +281,34 @@ void CMainScene::MouseMove(POINT point)
 		mov         eax, dword ptr[this]
 		mov         dword ptr[eax], TWO_GAME
 		jmp			Done
-If2:
+		If2 :
 		cmp         dword ptr[point.x], 350
-		jle         If3
-		cmp         dword ptr[point.x], 547
-		jge         If3
-		cmp         dword ptr[point.y], 300
-		jle         If3
-		cmp         dword ptr[point.y], 361
-		jge         If3
-		mov         eax, dword ptr[this]
-		mov         dword ptr[eax], HELP_GAME
-		jmp			Done
-If3:
+			jle         If3
+			cmp         dword ptr[point.x], 547
+			jge         If3
+			cmp         dword ptr[point.y], 300
+			jle         If3
+			cmp         dword ptr[point.y], 361
+			jge         If3
+			mov         eax, dword ptr[this]
+			mov         dword ptr[eax], HELP_GAME
+			jmp			Done
+			If3 :
 		cmp         dword ptr[point.x], 450
-		jle         If4
-		cmp         dword ptr[point.x], 647
-		jge         If4
-		cmp         dword ptr[point.y], 400
-		jle         If4
-		cmp         dword ptr[point.y], 461
-		jge         If4
+			jle         If4
+			cmp         dword ptr[point.x], 647
+			jge         If4
+			cmp         dword ptr[point.y], 400
+			jle         If4
+			cmp         dword ptr[point.y], 461
+			jge         If4
+			mov         eax, dword ptr[this]
+			mov         dword ptr[eax], QUIT_GAME
+			jmp			Done
+			If4 :
 		mov         eax, dword ptr[this]
-		mov         dword ptr[eax], QUIT_GAME
-		jmp			Done
-If4:
-		mov         eax, dword ptr[this]
-		mov         dword ptr[eax], NO
-Done:
+			mov         dword ptr[eax], NO
+			Done :
 	}
 
 }
