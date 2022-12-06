@@ -1,19 +1,3 @@
-/******************************************************************* 
- *  Copyright: Turing Team
- *  All rights reserved. 
- *
- *  ÎÄ¼þÃû³Æ: CHelpScene.h
- *  ¼òÒªÃèÊö: °ïÖú³¡¾°Àà,ÏÔÊ¾ÓÎÏ·ËµÃ÷ÐÅÏ¢
- *
- *  ×÷Õß: ÁõÐÂ³É
- *  ´´½¨ÈÕÆÚ: 2017Äê6ÔÂ3ÈÕ
- *  ËµÃ÷:
- *
- *  ÐÞ¸ÄÈÕÆÚ:
- *  ×÷Õß:
- *  ËµÃ÷:
- *  µ±Ç°°æ±¾: 1.0
- ******************************************************************/ 
 #ifndef CHELPSCENE_H_
 #define CHELPSCENE_H_
 
@@ -28,12 +12,12 @@ public:
 	void HelpSceneInit(HINSTANCE hIns);
 	void HelpSceneShow(HDC hdc);
 
-	// ¸ù¾ÝÊó±êÎ»ÖÃ ÐÞ¸Ä m_isSelect ±ê¼ÇÊÇ·ñÊó±êÐü¸¡·µ»Ø¿ò
+	// æ ¹æ®é¼ æ ‡ä½ç½® ä¿®æ”¹ m_isSelect æ ‡è®°æ˜¯å¦é¼ æ ‡æ‚¬æµ®è¿”å›žæ¡†
 	void MouseMove(POINT point);
 
-	/* ±ê¼ÇÊó±êÊÇ·ñÐü¸¡ÓÚ·µ»ØÑ¡Ôñ¿ò
-	** true: Êó±êÔÚ·µ»Ø¿òÉÏ
-	** false: Êó±êÎ´ÔÚ·µ»Ø¿òÉÏ
+	/* æ ‡è®°é¼ æ ‡æ˜¯å¦æ‚¬æµ®äºŽè¿”å›žé€‰æ‹©æ¡†
+	** true: é¼ æ ‡åœ¨è¿”å›žæ¡†ä¸Š
+	** false: é¼ æ ‡æœªåœ¨è¿”å›žæ¡†ä¸Š
 	*/
 	bool m_isSelect;
 private:
