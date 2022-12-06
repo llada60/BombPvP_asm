@@ -1,19 +1,3 @@
-/******************************************************************* 
- *  Copyright: Turing Team
- *  All rights reserved. 
- *
- *  ÎÄ¼þÃû³Æ: CBnbApp.h
- *  ¼òÒªÃèÊö: ¼Ì³Ð CGameCtrl Àà£¬ÓÎÏ·µÄÖ÷¿ØÖÆÀà£¬¸ºÔð³¡¾°ÇÐ»»
- *
- *  ×÷Õß: ÁõÐÂ³É
- *  ´´½¨ÈÕÆÚ: 2017Äê6ÔÂ3ÈÕ
- *  ËµÃ÷:
- *
- *  ÐÞ¸ÄÈÕÆÚ:
- *  ×÷Õß:
- *  ËµÃ÷:
- *  µ±Ç°°æ±¾: 1.0
- ******************************************************************/ 
 #ifndef CBNBAPP_H_
 #define CBNBAPP_H_
 
@@ -25,7 +9,7 @@
 #include "PlayMusic.h"
 
 /*
-** ³¡¾°±êÖ¾£ºÖ÷³¡¾°¡¢µ¥ÈËÓÎÏ·³¡¾°¡¢Ë«ÈËÓÎÏ·³¡¾°¡¢°ïÖú³¡¾°
+** åœºæ™¯æ ‡å¿—ï¼šä¸»åœºæ™¯ã€å•äººæ¸¸æˆåœºæ™¯ã€åŒäººæ¸¸æˆåœºæ™¯ã€å¸®åŠ©åœºæ™¯
 */
 enum SeclectScene { MAIN_SCENE,  TWO_GAME_SCENE, HELP_GAME_SCENE };
 
@@ -37,13 +21,13 @@ public:
 public:
 	DECLARE()
 
-	// ¼ÓÔØ Èý¸ö³¡¾°Àà£º Ö÷³¡¾°¡¢ Ë«ÈËÓÎÏ·³¡¾°¡¢ °ïÖú³¡¾°
+	// åŠ è½½ ä¸‰ä¸ªåœºæ™¯ç±»ï¼š ä¸»åœºæ™¯ã€ åŒäººæ¸¸æˆåœºæ™¯ã€ å¸®åŠ©åœºæ™¯
 	CMainScene* mainScene;
 	CTwoGameScene* twoGameScene;
 	CHelpScene* helpScene;
 	CPlayMusic* playMusic;
 public:
-	// ÖØÐ´¸¸Ààº¯Êý
+	// é‡å†™çˆ¶ç±»å‡½æ•°
 	virtual void OnCreateGame();
 	virtual void OnGameDraw();
 	virtual void OnGameRun(WPARAM nTimerID);
@@ -54,20 +38,20 @@ public:
 	virtual void OnMouseMove(POINT point);
 public:
 	/*
-	** ¸ù¾ÝÊó±êµã»÷Ö÷³¡¾°µÄ²»Í¬Ñ¡Ïî£¬ÇÐ»»ÏàÓ¦³¡¾°£¨BnbAppÀàÖÐÏìÓ¦Êó±ê×ó¼üÌ§Æðº¯Êý OnLButtonUp µ÷ÓÃ£©
+	** æ ¹æ®é¼ æ ‡ç‚¹å‡»ä¸»åœºæ™¯çš„ä¸åŒé€‰é¡¹ï¼Œåˆ‡æ¢ç›¸åº”åœºæ™¯ï¼ˆBnbAppç±»ä¸­å“åº”é¼ æ ‡å·¦é”®æŠ¬èµ·å‡½æ•° OnLButtonUp è°ƒç”¨ï¼‰
 	*/
 	void ChangeScene();
 
 	/*
-	** ²¥·ÅÓëÔÝÍ£±³¾°ÒôÀÖº¯Êý£º°´¼üF8¼°ÇÐ»»²»Í¬³¡¾°µ÷ÓÃ
+	** æ’­æ”¾ä¸Žæš‚åœèƒŒæ™¯éŸ³ä¹å‡½æ•°ï¼šæŒ‰é”®F8åŠåˆ‡æ¢ä¸åŒåœºæ™¯è°ƒç”¨
 	*/
 	void PlayBackMusic();
 
 private:
-	// ³¡¾°±ê¼Ç: ÅÐ¶Ïµ±Ç°´¦ÓÚÄÄ¸ö³¡¾°£¬²»Í¬³¡¾°²»Í¬²Ù×÷ Ä¬ÈÏÖ÷³¡¾°£¨CMainScene mainScene£©
+	// åœºæ™¯æ ‡è®°: åˆ¤æ–­å½“å‰å¤„äºŽå“ªä¸ªåœºæ™¯ï¼Œä¸åŒåœºæ™¯ä¸åŒæ“ä½œ é»˜è®¤ä¸»åœºæ™¯ï¼ˆCMainScene mainSceneï¼‰
 	SeclectScene m_seclectScene;
 
-	// ±ê¼ÇÎ»£º µ±F8Í£Ö¹ÒôÀÖÊ±£¬ÇÐ»»³¡¾°ºóÒ²²»»á²¥·ÅÒôÀÖ£¬Ö±ÖÁF8´ò¿ªÒôÀÖ
+	// æ ‡è®°ä½ï¼š å½“F8åœæ­¢éŸ³ä¹æ—¶ï¼Œåˆ‡æ¢åœºæ™¯åŽä¹Ÿä¸ä¼šæ’­æ”¾éŸ³ä¹ï¼Œç›´è‡³F8æ‰“å¼€éŸ³ä¹
 	bool isKey_stopMusic;
 };
 
