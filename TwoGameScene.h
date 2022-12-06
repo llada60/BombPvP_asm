@@ -1,19 +1,3 @@
-/******************************************************************* 
- *  Copyright: Turing Team
- *  All rights reserved. 
- *
- *  ÎÄ¼şÃû³Æ: CTwoGameScene.h
- *  ¼òÒªÃèÊö: Ë«ÈËÓÎÏ·³¡¾°Àà Ë«ÈËÓÎÏ·²Ù×÷½»»¥ÓÉ¸ÃÀà¿ØÖÆ
- *
- *  ×÷Õß: ÁõĞÂ³É
- *  ´´½¨ÈÕÆÚ: 2017Äê6ÔÂ3ÈÕ
- *  ËµÃ÷:
- *
- *  ĞŞ¸ÄÈÕÆÚ:
- *  ×÷Õß:
- *  ËµÃ÷:
- *  µ±Ç°°æ±¾: 1.0
- ******************************************************************/ 
 #ifndef CTWOGAMESCENE_H_
 #define CTWOGAMESCENE_H_
 
@@ -33,14 +17,14 @@ public:
 	CTwoGameScene();
 	~CTwoGameScene();
 
-	// µØÍ¼
+	// åœ°å›¾
 	CGameMap gameMap;
-	// ÒôĞ§
+	// éŸ³æ•ˆ
 	CPlaySound playSound;
-	// Íæ¼Ò
+	// ç©å®¶
 	CPlayerOne playerOne;
 	CPlayerTwo playerTwo;
-	//µÀ¾ß
+	//é“å…·
 	CGameProps prop;
 public:
 	void TwoGameSceneInit(HINSTANCE hIns, HWND hWnd);
@@ -56,42 +40,42 @@ public:
 	void AllBubbleShow(HDC hdc);
 	void AllBoomShow(HDC hdc);
 
-	void ShowTime(HDC hdc);         // µ¹¼ÆÊ±ÏÔÊ¾
-	void ShowGameStatus(HDC hdc);   // ÓÎÏ·×´Ì¬ÎÄ×ÖÌáÊ¾
+	void ShowTime(HDC hdc);         // å€’è®¡æ—¶æ˜¾ç¤º
+	void ShowGameStatus(HDC hdc);   // æ¸¸æˆçŠ¶æ€æ–‡å­—æç¤º
 
 	void ChangePlayerStartShowID();
 	void ChangePropShowID();
 
-	void SetFx(list<CBubble*>::iterator &ite_Bubble, int i, int j); //ÉèÖÃËÄ¸ö·½ÏòÊıÖµ
+	void SetFx(list<CBubble*>::iterator &ite_Bubble, int i, int j); //è®¾ç½®å››ä¸ªæ–¹å‘æ•°å€¼
 	bool IsKillPlayerOne(list<CBubble*>::iterator &ite_Bubble, int i, int j);
 	bool IsKillPlayerTwo(list<CBubble*>::iterator &ite_Bubble, int i, int j);
 	bool IsButtleBoom(list<CBubble*>::iterator &ite_JBubble, list<CBubble*>::iterator &ite_Bubble);
 
 	void GameOver();
 public: 
-	/* ±ê¼ÇÊó±êÊÇ·ñĞü¸¡ÓÚÍË³öÑ¡Ôñ¿ò
-	** true: Êó±êÔÚÍË³ö¿òÉÏ
-	** false: Êó±êÎ´ÔÚÍË³ö¿òÉÏ
+	/* æ ‡è®°é¼ æ ‡æ˜¯å¦æ‚¬æµ®äºé€€å‡ºé€‰æ‹©æ¡†
+	** true: é¼ æ ‡åœ¨é€€å‡ºæ¡†ä¸Š
+	** false: é¼ æ ‡æœªåœ¨é€€å‡ºæ¡†ä¸Š
 	*/
 	bool m_isSelect;
 private:
-	HBITMAP m_bitmap_gameBack;      // ÓÎÏ·±³¾°Î»Í¼
-	HBITMAP m_bitmap_road;          // ÓÎÏ·±³¾°ÂíÂ·
-	HBITMAP m_bitmap_quit;          // ÍË³öÑ¡ÏîÎ»Í¼
-	HBITMAP m_bitmap_quit_select;   // ÍË³öÑ¡ÏîÑ¡ÖĞÎ»Í¼
-	HBITMAP m_bitmap_timeNum;       // Ê±¼äÊı×ÖÎ»Í¼
-	HBITMAP m_bitmap_statusInfo;    // ÓÎÏ·×´Ì¬ĞÅÏ¢ÌáÊ¾Î»Í¼£º¿ªÊ¼£¬Ê¤Àû£¬Æ½¾Ö£¬Ê§°Ü
-	HBITMAP m_bitmap_win_word;      // ÌáÊ¾µÚ¼¸Íæ¼ÒÊ¤ÀûÎÄ×ÖÎ»Í¼
+	HBITMAP m_bitmap_gameBack;      // æ¸¸æˆèƒŒæ™¯ä½å›¾
+	HBITMAP m_bitmap_road;          // æ¸¸æˆèƒŒæ™¯é©¬è·¯
+	HBITMAP m_bitmap_quit;          // é€€å‡ºé€‰é¡¹ä½å›¾
+	HBITMAP m_bitmap_quit_select;   // é€€å‡ºé€‰é¡¹é€‰ä¸­ä½å›¾
+	HBITMAP m_bitmap_timeNum;       // æ—¶é—´æ•°å­—ä½å›¾
+	HBITMAP m_bitmap_statusInfo;    // æ¸¸æˆçŠ¶æ€ä¿¡æ¯æç¤ºä½å›¾ï¼šå¼€å§‹ï¼Œèƒœåˆ©ï¼Œå¹³å±€ï¼Œå¤±è´¥
+	HBITMAP m_bitmap_win_word;      // æç¤ºç¬¬å‡ ç©å®¶èƒœåˆ©æ–‡å­—ä½å›¾
 
-	HWND m_twoGameWnd;              // ´°¿Ú¾ä±ú
+	HWND m_twoGameWnd;              // çª—å£å¥æŸ„
 	HINSTANCE m_twoGameHIns;
-	int m_gameTime;                 // µ¹¼ÆÊ±Ê±¼ä Ä¬ÈÏÎå·ÖÖÓ£¨300s£©
-	int m_statusInfo_y;             // ÓÎÏ·×´Ì¬ÎÄ×ÖÎ»ÖÃ
+	int m_gameTime;                 // å€’è®¡æ—¶æ—¶é—´ é»˜è®¤äº”åˆ†é’Ÿï¼ˆ300sï¼‰
+	int m_statusInfo_y;             // æ¸¸æˆçŠ¶æ€æ–‡å­—ä½ç½®
 
-	list<CBubble*> m_lstBubble;     // ÅİÅİÁ´±í
-	list<CBubble*> m_lstBoom;		// ±¬Õ¨ÅİÅİÁ´±í
+	list<CBubble*> m_lstBubble;     // æ³¡æ³¡é“¾è¡¨
+	list<CBubble*> m_lstBoom;		// çˆ†ç‚¸æ³¡æ³¡é“¾è¡¨
 
-	GameStatus m_gameStatus;        // Ã¶¾ÙÀàĞÍ£º¼ÇÂ¼ÏÔÊ¾ÓÎÏ·×´Ì¬ÎÄ×Ö ¿ªÊ¼ Ê¤Àû Æ½¾Ö Ê§°Ü
+	GameStatus m_gameStatus;        // æšä¸¾ç±»å‹ï¼šè®°å½•æ˜¾ç¤ºæ¸¸æˆçŠ¶æ€æ–‡å­— å¼€å§‹ èƒœåˆ© å¹³å±€ å¤±è´¥
 };
 
 #endif // !CTWOGAMESCENE_H_
