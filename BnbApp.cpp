@@ -231,7 +231,7 @@ void CBnbApp::OnKeyDown(WPARAM nKey)
 	{
 	// F3键： 当在双人游戏界面按下F3可返回主场景 MAIN_SCENE
 	case VK_F3:
-		if (this->m_seclectScene == TWO_GAME_SCENE || this->m_seclectScene == ONE_GAME_SCENE)
+		if (this->m_seclectScene == TWO_GAME_SCENE )
 		{
 			// 如果鼠标停留退出选项 返回主场景 需将标记位置为 false
 			if (twoGameScene->m_isSelect)
@@ -480,13 +480,13 @@ void CBnbApp::OnLButtonUp(POINT point)
 
 
 	// 如果当前场景为主场景并且鼠标在可选范围内，鼠标左键才允许选择不同场景
-	if (m_seclectScene == MAIN_SCENE && (mainScene->m_seclectNum == ONE_GAME || mainScene->m_seclectNum == TWO_GAME || mainScene->m_seclectNum == HLEP_GAME || mainScene->m_seclectNum == QUIT_GAME))
+	if (m_seclectScene == MAIN_SCENE && (mainScene->m_seclectNum == TWO_GAME || mainScene->m_seclectNum == HELP_GAME || mainScene->m_seclectNum == QUIT_GAME))
 	{
 		this->ChangeScene();
 	}
 
 	// 如果当前场景为帮助场景并且鼠标在返回框内，鼠标左键才允许返回主场景
-	if (m_seclectScene == HLEP_GAME_SCENE && helpScene->m_isSelect)
+	if (m_seclectScene == HELP_GAME_SCENE && helpScene->m_isSelect)
 	{
 		if (mainScene == NULL)
 		{
@@ -505,7 +505,7 @@ void CBnbApp::OnLButtonUp(POINT point)
 		}
 	}
 
-	if ((m_seclectScene == TWO_GAME_SCENE || m_seclectScene == ONE_GAME_SCENE) && twoGameScene->m_isSelect)
+	if (m_seclectScene == TWO_GAME_SCENE && twoGameScene->m_isSelect)
 	{
 		if ( MessageBox( NULL, TEXT("大人： 游戏正在进行, 确认退出么?"), \
 			TEXT("退出"), MB_OKCANCEL | MB_ICONQUESTION ) == IDOK )
@@ -572,24 +572,7 @@ void CBnbApp::OnMouseMove(POINT point)
 void CBnbApp::ChangeScene()
 {
 	// 鼠标点击后 根据鼠标悬浮的标记 判断应切换到哪个场景
-	if (mainScene->m_seclectNum == ONE_GAME)
-	{
-		if (twoGameScene == NULL)
-		{
-			twoGameScene = new CTwoGameScene;
-			twoGameScene->TwoGameSceneInit(m_hIns,m_hMainWnd);
-		}
-		
-		this->m_seclectScene = ONE_GAME_SCENE;
-
-		// 释放主场景对象
-		if (mainScene)
-		{
-			delete mainScene;
-			mainScene = NULL;
-		}
-	}
-	else if (mainScene->m_seclectNum == TWO_GAME)
+	if (mainScene->m_seclectNum == TWO_GAME)
 	{
 		// 创建游戏场景对象并初始化
 		if (twoGameScene == NULL)
@@ -607,7 +590,7 @@ void CBnbApp::ChangeScene()
 			mainScene = NULL;
 		}
 	}
-	else if (mainScene->m_seclectNum == HLEP_GAME)
+	else if (mainScene->m_seclectNum == HELP_GAME)
 	{
 		// 创建帮助场景对象并初始化
 		if (helpScene == NULL)
@@ -616,7 +599,7 @@ void CBnbApp::ChangeScene()
 			helpScene->HelpSceneInit(m_hIns);
 		}
 		
-		this->m_seclectScene = HLEP_GAME_SCENE;
+		this->m_seclectScene = HELP_GAME_SCENE;
 
 		// 释放主场景对象
 		if (mainScene)
@@ -639,7 +622,7 @@ void CBnbApp::ChangeScene()
 	}
 
 	// 主场景进去帮助场景，背景音乐不变
-	if (this->m_seclectScene != HLEP_GAME_SCENE && (!this->isKey_stopMusic))
+	if (this->m_seclectScene != HELP_GAME_SCENE && (!this->isKey_stopMusic))
 	{
 		this->PlayBackMusic();
 	}
