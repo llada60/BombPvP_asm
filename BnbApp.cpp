@@ -495,7 +495,7 @@ void CBnbApp::PlayBackMusic()
 		F8键按下 播放或停止背景音乐
 	*/ 
 	
-	static TCHAR szSound[] = TEXT("sounds/back_mydream.wav");
+	static TCHAR szSound[] = TEXT("sounds/bula.wav");
 	static TCHAR szSound1[] = TEXT("sounds/back_cool.wav");
 	static TCHAR szSound2[] = TEXT("sounds/main_back.wav");
 
