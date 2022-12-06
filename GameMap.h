@@ -42,12 +42,12 @@ public:
 	/* 泡泡爆炸 消除地图障碍物 
 	** i , j 对应数组下标 power 泡泡威力 可在单一方向消除几块障碍物
 	*/
-	void MapBlast(int i, int j, int power ,int *arr);
+	void MapBlast(int i, int j, int power);
 	
-	void BlastBlock_One(int i, int j, int *arr);   // 炸第一格障碍物
-	void BlastBlock_Two(int i, int j, int *arr);   // 炸第二格障碍物
-	void BlastBlock_Three(int i, int j, int *arr); // 炸第三格障碍物
-	void BlastBlock_Four(int i, int j, int *arr);  // 炸第四格障碍物
+	void BlastBlock_One(int i, int j);   // 炸第一格障碍物
+	void BlastBlock_Two(int i, int j);   // 炸第二格障碍物
+	void BlastBlock_Three(int i, int j); // 炸第三格障碍物
+	void BlastBlock_Four(int i, int j);  // 炸第四格障碍物
 public:
 	int map_type[MAP_HEIGHT][MAP_WIDTH];
 	int m_nShowID;                       // 风车转动切换图片记录ID

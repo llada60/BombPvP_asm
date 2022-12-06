@@ -741,7 +741,7 @@ void CTwoGameScene::ChangeBubbleShowID()
 			int i = ((*ite_Bubble)->m_nBubble_y - 40) / 40;
 			int j = ((*ite_Bubble)->m_nBubble_x - 20) / 40;
 			// 消除地图障碍物
-			gameMap.MapBlast(i,j,(*ite_Bubble)->m_nBubble_power,(*ite_Bubble)->m_arrfx);
+			gameMap.MapBlast(i,j,(*ite_Bubble)->m_nBubble_power);
 			//----------------------------------------------------------------
 			this->SetFx(ite_Bubble,i,j);
 
@@ -767,7 +767,7 @@ void CTwoGameScene::ChangeBubbleShowID()
 					{
 						int x = ((*ite_JBubble)->m_nBubble_y - 40) / 40;
 						int y = ((*ite_JBubble)->m_nBubble_x - 20) / 40;
-						gameMap.MapBlast(x,y,(*ite_JBubble)->m_nBubble_power,(*ite_JBubble)->m_arrfx);
+						gameMap.MapBlast(x,y,(*ite_JBubble)->m_nBubble_power);
 						this->SetFx(ite_JBubble,x,y);
 						gameMap.map_type[x][y] = No;
 						if(IsKillPlayerOne(ite_JBubble,x,y))  
