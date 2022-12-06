@@ -1,20 +1,3 @@
-/*******************************************************************
- *  Copyright: Turing Team
- *  All rights reserved.
- *
- *  ÎÄ¼şÃû³Æ: CGameMap.h
- *  ¼òÒªÃèÊö: ÓÎÏ·µØÍ¼Àà
- *
- *  ×÷Õß:
- *  ´´½¨ÈÕÆÚ: 2017Äê6ÔÂ4ÈÕ
- *  ËµÃ÷:
- *
- *  ĞŞ¸ÄÈÕÆÚ:
- *  ×÷Õß:
- *  ËµÃ÷:
- *  µ±Ç°°æ±¾: 1.0
- ******************************************************************/
-
 #ifndef CGMAEMAP_H_
 #define CGMAEMAP_H_
 
@@ -23,7 +6,7 @@
 #define MAP_WIDTH  15
 #define MAP_HEIGHT 13
 
- // µØÍ¼ÉÏÕÏ°­ÎïÀàĞÍ ÓëmapDataÖĞÊı¾İÒ»Ò»¶ÔÓ¦
+ // åœ°å›¾ä¸Šéšœç¢ç‰©ç±»å‹ ä¸mapDataä¸­æ•°æ®ä¸€ä¸€å¯¹åº”
 enum MapType
 {
 	No, R_B_, Y_B_, Box, R_H_, Y_H_, B_H_, Tree, WIND, Popo,
@@ -39,18 +22,18 @@ public:
 	void MapShow(HDC hdc);
 	void MapUpShow(HDC hdc);
 
-	/* ÅİÅİ±¬Õ¨ Ïû³ıµØÍ¼ÕÏ°­Îï
-	** i , j ¶ÔÓ¦Êı×éÏÂ±ê power ÅİÅİÍşÁ¦ ¿ÉÔÚµ¥Ò»·½ÏòÏû³ı¼¸¿éÕÏ°­Îï
+	/* æ³¡æ³¡çˆ†ç‚¸ æ¶ˆé™¤åœ°å›¾éšœç¢ç‰©
+	** i , j å¯¹åº”æ•°ç»„ä¸‹æ ‡ power æ³¡æ³¡å¨åŠ› å¯åœ¨å•ä¸€æ–¹å‘æ¶ˆé™¤å‡ å—éšœç¢ç‰©
 	*/
 	void MapBlast(int i, int j, int power);
 
-	void BlastBlock_One(int i, int j);   // Õ¨µÚÒ»¸ñÕÏ°­Îï
-	void BlastBlock_Two(int i, int j);   // Õ¨µÚ¶ş¸ñÕÏ°­Îï
-	void BlastBlock_Three(int i, int j); // Õ¨µÚÈı¸ñÕÏ°­Îï
-	void BlastBlock_Four(int i, int j);  // Õ¨µÚËÄ¸ñÕÏ°­Îï
+	void BlastBlock_One(int i, int j);   // ç‚¸ç¬¬ä¸€æ ¼éšœç¢ç‰©
+	void BlastBlock_Two(int i, int j);   // ç‚¸ç¬¬äºŒæ ¼éšœç¢ç‰©
+	void BlastBlock_Three(int i, int j); // ç‚¸ç¬¬ä¸‰æ ¼éšœç¢ç‰©
+	void BlastBlock_Four(int i, int j);  // ç‚¸ç¬¬å››æ ¼éšœç¢ç‰©
 public:
 	int map_type[MAP_HEIGHT][MAP_WIDTH];
-	int m_nShowID;                       // ·ç³µ×ª¶¯ÇĞ»»Í¼Æ¬¼ÇÂ¼ID
+	int m_nShowID;                       // é£è½¦è½¬åŠ¨åˆ‡æ¢å›¾ç‰‡è®°å½•ID
 private:
 	HBITMAP m_bitmap_redBrick;
 	HBITMAP m_bitmap_redHouse;
