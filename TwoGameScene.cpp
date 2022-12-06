@@ -17,22 +17,51 @@ CTwoGameScene::CTwoGameScene()
 		mov dword ptr[eax + 7e8h], 0
 		mov dword ptr[eax + 7dch], 0
 		mov dword ptr[eax + 7e0h], 0
-		mov dword ptr[eax + 804h], 0
+		mov dword ptr[eax + 804h], NO_SHOW
 	}
 }
 
 CTwoGameScene::~CTwoGameScene()
 {
-	DeleteObject(m_bitmap_gameBack);
-	DeleteObject(m_bitmap_road);
-	DeleteObject(m_bitmap_quit);
-	DeleteObject(m_bitmap_quit_select);
-	DeleteObject(m_bitmap_timeNum);
-	DeleteObject(m_bitmap_statusInfo);
-	DeleteObject(m_bitmap_win_word);
-
 	__asm
 	{
+		;deleteObject
+		mov esi,esp
+		mov eax,dword ptr[this]
+		mov ecx,dword ptr[eax+7c0h]
+		push ecx
+		call DeleteObject
+		mov esi, esp
+		mov eax, dword ptr[this]
+		mov ecx, dword ptr[eax + 7c4h]
+		push ecx
+		call DeleteObject
+		mov esi, esp
+		mov eax, dword ptr[this]
+		mov ecx, dword ptr[eax + 7c8h]
+		push ecx
+		call DeleteObject
+		mov esi, esp
+		mov eax, dword ptr[this]
+		mov ecx, dword ptr[eax + 7cch]
+		push ecx
+		call DeleteObject
+		mov esi, esp
+		mov eax, dword ptr[this]
+		mov ecx, dword ptr[eax + 7d0h]
+		push ecx
+		call DeleteObject
+		mov esi, esp
+		mov eax, dword ptr[this]
+		mov ecx, dword ptr[eax + 7d4h]
+		push ecx
+		call DeleteObject
+		mov esi, esp
+		mov eax, dword ptr[this]
+		mov ecx, dword ptr[eax + 7d8h]
+		push ecx
+		call DeleteObject
+
 		mov eax, dword ptr[this]
 		mov dword ptr[eax + 7c0h], 0
 		mov dword ptr[eax + 7c0h], 0
@@ -47,18 +76,75 @@ CTwoGameScene::~CTwoGameScene()
 
 void CTwoGameScene::TwoGameSceneInit(HINSTANCE hIns, HWND hWnd)
 {
-	m_twoGameHIns = hIns;
-	m_twoGameWnd = hWnd;
-	m_bitmap_gameBack = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_GAME_BACK));
-	m_bitmap_road = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_ROAD));
-	m_bitmap_quit = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_QUIT_GAME));
-	m_bitmap_quit_select = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_QUIT_GAME_SELECT));
-	m_bitmap_timeNum = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_TIME_NUMBER));
-	m_bitmap_statusInfo = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_GAMEOVER_WORD));
-	m_bitmap_win_word = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_PLAYER_NUM_WORD));
-
+	static TCHAR szGameStart[] = TEXT("sounds/start.wav");
 	__asm
 	{
+		; m_twoGameHIns = hIns;
+		mov eax, dword ptr[this]
+			mov ecx, dword ptr[hIns]
+			mov dword ptr[eax + 7e0h], ecx
+			; m_twoGameWnd = hWnd;
+		mov eax, dword ptr[this]
+			mov ecx, dword ptr[hWnd]
+			mov dword ptr[eax + 7dch], ecx
+			; m_bitmap_gameBack = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_GAME_BACK))
+			mov esi, esp
+			push 6eh
+			mov eax, dword ptr[hIns]
+			push eax
+			call LoadBitmap
+			mov ecx, dword ptr[this]
+			mov dword ptr[ecx + 7c0h], eax
+			; m_bitmap_road = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_ROAD));
+		mov esi, esp
+			push 74h
+			mov eax, dword ptr[hIns]
+			push eax
+			call LoadBitmap
+			mov ecx, dword ptr[this]
+			mov dword ptr[ecx + 7c4h], eax
+			; m_bitmap_quit = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_QUIT_GAME))
+			mov esi, esp
+			push 72h
+			mov eax, dword ptr[hIns]
+			push eax
+			call LoadBitmap
+			mov ecx, dword ptr[this]
+			mov dword ptr[ecx + 7c8h], eax
+			; m_bitmap_quit_select = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_QUIT_GAME_SELECT))
+			mov esi, esp
+			push 73h
+			mov eax, dword ptr[hIns]
+			push eax
+			call LoadBitmap
+			mov ecx, dword ptr[this]
+			mov dword ptr[ecx + 7cch], eax
+			; m_bitmap_timeNum = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_TIME_NUMBER))
+			mov esi, esp
+			push 9bh
+			mov eax, dword ptr[hIns]
+			push eax
+			call LoadBitmap
+			mov ecx, dword ptr[this]
+			mov dword ptr[ecx + 7d0h], eax
+			; m_bitmap_statusInfo = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_GAMEOVER_WORD))
+			mov esi, esp
+			push 99h
+			mov eax, dword ptr[hIns]
+			push eax
+			call LoadBitmap
+			mov ecx, dword ptr[this]
+			mov dword ptr[ecx + 7d4h], eax
+			; m_bitmap_win_word = LoadBitmap(hIns, MAKEINTRESOURCE(IDB_PLAYER_NUM_WORD))
+			mov esi, esp
+			push 8ch
+			mov eax, dword ptr[hIns]
+			push eax
+			call LoadBitmap
+			mov ecx, dword ptr[this]
+			mov dword ptr[ecx + 7d8h], eax
+		
+
 		mov eax, dword ptr[this]
 		mov dword ptr[eax + 7e4h], 12ch; m_gameTime倒计时计数器 300s
 		mov dword ptr[eax + 7e8h], 46h; m_statusInfo_y文字默认位置 y = 70
@@ -195,9 +281,14 @@ void CTwoGameScene::TwoGameSceneInit(HINSTANCE hIns, HWND hWnd)
 			mov ecx, dword ptr[eax + 7dch]
 			push ecx
 			call SetTimer
+			; 游戏开始音效
+			push offset szGameStart
+			mov ecx,dword ptr[this]
+			add ecx, 338h
+			call CPlaySound::Play
 	}
 	// 游戏开始音效
-	playSound.Play(START_GAME_SOUND);
+ 	playSound.Play(START_GAME_SOUND);
 }
 
 void CTwoGameScene::TwoGameSceneShow(HDC hdc)
@@ -344,14 +435,11 @@ void CTwoGameScene::TwoGameSceneShow(HDC hdc)
 			mov ecx, dword ptr[this]
 			call CGameMap::MapUpShow
 			mov eax, dword ptr[this]
-
-			; if (m_gameStatus != NO_SHOW)
-			cmp dword ptr[eax+804h], NO_SHOW
-			je finishStatus
-			push eax
-			mov ecx,dword ptr[this]
-			call CTwoGameScene::ShowGameStatus
-			finishStatus:
+	}
+	//// 正常游戏过程中不调用该函数，只要游戏开始结束时启动定时器不断调用
+	if (m_gameStatus != NO_SHOW)
+	{
+		this->ShowGameStatus(hdc);
 	}
 }
 
@@ -359,21 +447,21 @@ void CTwoGameScene::MouseMove(POINT point)
 {
 	__asm
 	{
-		cmp dword ptr[point],650
+		cmp dword ptr[point], 650
 		jle selectF
-		cmp dword ptr[point],780
+		cmp dword ptr[point], 780
 		jge selectF
-		cmp dword ptr[ebp + 0ch],556
+		cmp dword ptr[ebp + 0ch], 556
 		jle selectF
-		cmp dword ptr[ebp + 0ch],586
+		cmp dword ptr[ebp + 0ch], 586
 		jge selectF
-		mov eax,dword ptr[this]
-		mov byte ptr[eax+7bch],1
+		mov eax, dword ptr[this]
+		mov byte ptr[eax + 7bch], 1
 		jmp finishMM
-		selectF:
-		mov eax,dword ptr[this]
-			mov byte ptr[eax+7bch],0
-			finishMM:
+		selectF :
+		mov eax, dword ptr[this]
+			mov byte ptr[eax + 7bch], 0
+			finishMM :
 	}
 }
 
@@ -381,68 +469,82 @@ void CTwoGameScene::OnKeyDown(WPARAM nKey)
 {
 	switch (nKey)
 	{
-		case  VK_SPACE:
-			// 遍历链表 看玩家一已放置的泡泡
+		// 关闭音效
+	case VK_F7:
+		if (playSound.isKeyToStop)
 		{
-			auto ite = m_lstBubble.begin();
-			int tempNum = 0;
-			while (ite != m_lstBubble.end())
-			{
-				if ((*ite)->m_bubble_owner == OWNER_PLAYERONE)
-				{
-					tempNum++;
-				}
-				ite++;
-			}
-			if (tempNum < playerOne.m_bubbleNum)
-			{
-				playerOne.CreateBubble(m_twoGameHIns, gameMap, m_lstBubble, playSound, playerOne.m_player_x, playerOne.m_player_y);
-			}
+			playSound.isKeyToStop = false;
+			SetTimer(m_twoGameWnd, STOPSOUND_TIMER_ID, 10, NULL);
+		}
+		else
+		{
+			playSound.isKeyToStop = true;
+			KillTimer(m_twoGameWnd, STOPSOUND_TIMER_ID);
 		}
 		break;
-		// 玩家二放置泡泡
-		case VK_SHIFT:
+		// 玩家一放置泡泡
+	case  VK_SPACE:
+		// 遍历链表 看玩家一已放置的泡泡
+	{
+		auto ite = m_lstBubble.begin();
+		int tempNum = 0;
+		while (ite != m_lstBubble.end())
 		{
-			// 遍历链表 看玩家二已放置的泡泡
-			auto ite = m_lstBubble.begin();
-			int tempNum = 0;
-			while (ite != m_lstBubble.end())
+			if ((*ite)->m_bubble_owner == OWNER_PLAYERONE)
 			{
-				if ((*ite)->m_bubble_owner == OWNER_PLAYERTWO)
-				{
-					tempNum++;
-				}
-				ite++;
+				tempNum++;
 			}
-			if (tempNum < playerTwo.m_bubbleNum)
-			{
-				playerTwo.CreateBubble(m_twoGameHIns, gameMap, m_lstBubble, playSound, playerTwo.m_player_x, playerTwo.m_player_y);
-			}
+			ite++;
 		}
-		break;
-		// 人物一移动
+		if (tempNum < playerOne.m_bubbleNum)
+		{
+			playerOne.CreateBubble(m_twoGameHIns, gameMap, m_lstBubble, playSound, playerOne.m_player_x, playerOne.m_player_y);
+		}
+	}
+	break;
+	// 玩家二放置泡泡
+	case VK_SHIFT:
+	{
+		// 遍历链表 看玩家二已放置的泡泡
+		auto ite = m_lstBubble.begin();
+		int tempNum = 0;
+		while (ite != m_lstBubble.end())
+		{
+			if ((*ite)->m_bubble_owner == OWNER_PLAYERTWO)
+			{
+				tempNum++;
+			}
+			ite++;
+		}
+		if (tempNum < playerTwo.m_bubbleNum)
+		{
+			playerTwo.CreateBubble(m_twoGameHIns, gameMap, m_lstBubble, playSound, playerTwo.m_player_x, playerTwo.m_player_y);
+		}
+	}
+	break;
+	// 人物一移动
 
-		case 'W':
-		case 'A':
-		case 'S':
-		case 'D':
-		{
-			// 将移动标记置为true
-			playerOne.m_bMoveFlag = true;
+	case 'W':
+	case 'A':
+	case 'S':
+	case 'D':
+	{
+		// 将移动标记置为true
+		playerOne.m_bMoveFlag = true;
 
-		}
-		break;
-		// 人物二移动
-		case VK_LEFT:
-		case VK_RIGHT:
-		case VK_UP:
-		case VK_DOWN:
-		{
-			// 将移动标记置为true
-			playerTwo.m_bMoveFlag = true;
+	}
+	break;
+	// 人物二移动
+	case VK_LEFT:
+	case VK_RIGHT:
+	case VK_UP:
+	case VK_DOWN:
+	{
+		// 将移动标记置为true
+		playerTwo.m_bMoveFlag = true;
 
-		}
-		break;
+	}
+	break;
 	}
 }
 
@@ -503,8 +605,8 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 		movzx ecx, byte ptr[eax + 338h]
 		test ecx, ecx
 		je bubblejmp
-		mov ecx,dword ptr[this]
-		add ecx,338h
+		mov ecx, dword ptr[this]
+		add ecx, 338h
 		call CPlaySound::GetPos
 		mov esi, eax
 		mov ecx, dword ptr[this]
@@ -514,36 +616,36 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 		jl bubblejmp
 		; playSound.Stop();
 		call CPlaySound::Stop
-		; 泡泡跳动动画定时器
-		bubblejmp:
+			; 泡泡跳动动画定时器
+			bubblejmp :
 		cmp dword ptr[nTimerID], BUBBLE_CHANGE_TIMER_ID
-		jne boomshow
-		call CTwoGameScene::ChangeBubbleShowID
-		boomshow:
+			jne boomshow
+			call CTwoGameScene::ChangeBubbleShowID
+			boomshow :
 		; if (nTimerID == PROPERTY_BOOM_TIMER_ID)
-		cmp dword ptr[nTimerID], PROPERTY_BOOM_TIMER_ID
+			cmp dword ptr[nTimerID], PROPERTY_BOOM_TIMER_ID
 			jne changeCnt
 			call CTwoGameScene::ChangeBoomShowID
 
-		; 改变倒计时计数器--
-		; if (nTimerID == GAME_TIME_TIMER_ID)
+			; 改变倒计时计数器--
+			; if (nTimerID == GAME_TIME_TIMER_ID)
 			changeCnt:
 		cmp dword ptr[nTimerID], GAME_TIME_TIMER_ID
-		jne cge_chloc
-		; if (m_gameTime == 0)
-		mov eax, dword ptr[this]
-		cmp dword ptr[eax + 7e4h], 0
-		jne timesub
-		; 弹出平局文字
-		mov dword ptr[eax + 804h], DRAW; m_gameStatus = DRAW;
+			jne cge_chloc
+			; if (m_gameTime == 0)
+			mov eax, dword ptr[this]
+			cmp dword ptr[eax + 7e4h], 0
+			jne timesub
+			; 弹出平局文字
+			mov dword ptr[eax + 804h], DRAW; m_gameStatus = DRAW;
 		mov dword ptr[eax + 7e8h], 60; m_statusInfo_y = 60;
 		; 播放平局音效
-		push offset szDrawMusic
-		call CPlaySound::Play
-		; 关闭所有定时器
-		mov edx, TIMER_BEGIN
-		jmp closetimerCmp
-		loop_closetimer :
+			push offset szDrawMusic
+			call CPlaySound::Play
+			; 关闭所有定时器
+			mov edx, TIMER_BEGIN
+			jmp closetimerCmp
+			loop_closetimer :
 		push edx
 			mov eax, dword ptr[this]
 			mov ecx, dword ptr[eax + 7dch]
@@ -552,8 +654,8 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 			call KillTimer
 			pop edx
 			inc edx
-			closetimerCmp:
-			cmp edx, TIMER_END
+			closetimerCmp :
+		cmp edx, TIMER_END
 			jle loop_closetimer
 			timesub :
 		mov eax, dword ptr[this]
@@ -561,33 +663,33 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 			dec ecx
 			mov dword ptr[eax + 7e4h], ecx
 
-		; 改变文字位置
-		; if (nTimerID == STATUS_INFO_TIMER_ID)
-		cge_chloc:
+			; 改变文字位置
+			; if (nTimerID == STATUS_INFO_TIMER_ID)
+			cge_chloc:
 		cmp dword ptr[nTimerID], STATUS_INFO_TIMER_ID
-		jne playerPre
-		; if (m_statusInfo_y <= -80)
-		mov eax, dword ptr[this]
-		cmp dword ptr[eax + 7E8h], -80
-		jg negassign
-		; KillTimer(m_twoGameWnd, STATUS_INFO_TIMER_ID);// 停止计时器
+			jne playerPre
+			; if (m_statusInfo_y <= -80)
+			mov eax, dword ptr[this]
+			cmp dword ptr[eax + 7E8h], -80
+			jg negassign
+			; KillTimer(m_twoGameWnd, STATUS_INFO_TIMER_ID);// 停止计时器
 		push STATUS_INFO_TIMER_ID
 			mov ecx, dword ptr[eax + 7dch]
 			push ecx
 			call KillTimer
 			; m_gameStatus = NO_SHOW;// 将游戏文字状态标记置为默认
-		mov eax,dword ptr[this]
-		mov dword ptr[eax+804h], NO_SHOW
-		negassign:
+		mov eax, dword ptr[this]
+			mov dword ptr[eax + 804h], NO_SHOW
+			negassign :
 		; m_statusInfo_y -= 20;
-		mov eax,dword ptr[this]
-		mov ecx,dword ptr[eax+7e8h]
-			sub ecx,20
-			mov dword ptr[eax+7e8h],ecx
+		mov eax, dword ptr[this]
+			mov ecx, dword ptr[eax + 7e8h]
+			sub ecx, 20
+			mov dword ptr[eax + 7e8h], ecx
 
-		; 玩家出场动画定时器
-		; if (nTimerID == PLAYERSTART_TIMER_ID)
-		playerPre:
+			; 玩家出场动画定时器
+			; if (nTimerID == PLAYERSTART_TIMER_ID)
+			playerPre:
 		cmp dword ptr[nTimerID], 5
 			jne wintime
 			; this->ChangePlayerStartShowID();
@@ -611,6 +713,7 @@ void CTwoGameScene::OnTwoGameRun(WPARAM nTimerID)
 		mov dword ptr[eax + 30ch], 1
 			outwin :
 	}
+
 	// 人物移动定时器
 	if (nTimerID == PLAYER_MOVE_TIMER_ID)
 	{
