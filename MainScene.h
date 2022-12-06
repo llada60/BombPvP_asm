@@ -1,26 +1,10 @@
-/******************************************************************* 
- *  Copyright: Turing Team
- *  All rights reserved. 
- *
- *  ÎÄ¼þÃû³Æ: CMainScene.h
- *  ¼òÒªÃèÊö: Ö÷³¡¾°Àà£¬ÓÎÏ·Æô¶¯Ä¬ÈÏ³¡¾°
- *
- *  ×÷Õß: ÁõÐÂ³É
- *  ´´½¨ÈÕÆÚ: 2017Äê6ÔÂ3ÈÕ
- *  ËµÃ÷:
- *
- *  ÐÞ¸ÄÈÕÆÚ:
- *  ×÷Õß:
- *  ËµÃ÷:
- *  µ±Ç°°æ±¾: 1.0
- ******************************************************************/ 
 #ifndef CMAINSCENE_H_
 #define CMAINSCENE_H_
 
 #include "Sys.h"
 
 /*
-** Êó±êÐü¸¡ÓÚÖ÷Ò³Ñ¡Ïî£ºÎÞÑ¡ÖÐ¡¢Ðü¸¡ÓÚµ¥ÈËÓÎÏ·¡¢Ðü¸¡ÓÚË«ÈËÓÎÏ·¡¢Ðü¸¡ÓÚ°ïÖú¡¢Ðü¸¡ÓÚÍË³ö
+** é¼ æ ‡æ‚¬æµ®äºŽä¸»é¡µé€‰é¡¹ï¼šæ— é€‰ä¸­ã€æ‚¬æµ®äºŽå•äººæ¸¸æˆã€æ‚¬æµ®äºŽåŒäººæ¸¸æˆã€æ‚¬æµ®äºŽå¸®åŠ©ã€æ‚¬æµ®äºŽé€€å‡º
 */
 enum SeclectNum { NO, TWO_GAME, HELP_GAME, QUIT_GAME };
 
@@ -33,10 +17,10 @@ public:
 	void MainSceneInit(HINSTANCE hIns);
 	void MainSceneShow(HDC hdc);
 
-	// ¸ù¾ÝÊó±êÎ»ÖÃ ½« m_seclectNum ÐÞ¸Ä³ÉÏàÓ¦Öµ ±ê¼Ç´¦ÓÚÄÄ¸öÑ¡Ïî
+	// æ ¹æ®é¼ æ ‡ä½ç½® å°† m_seclectNum ä¿®æ”¹æˆç›¸åº”å€¼ æ ‡è®°å¤„äºŽå“ªä¸ªé€‰é¡¹
 	void MouseMove(POINT point);
 
-	// ±ê¼ÇÊó±êÐü¸¡ÓÚÄÄ¸öÑ¡Ïî
+	// æ ‡è®°é¼ æ ‡æ‚¬æµ®äºŽå“ªä¸ªé€‰é¡¹
 	SeclectNum m_seclectNum;
 private:
 	HBITMAP m_bitmap_mainBack;
