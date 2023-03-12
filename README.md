@@ -1,5 +1,5 @@
 # BombPvP_asm
-C++语言内嵌汇编开发泡泡堂pvp
+BombPvP based on C++ embedded assembly.
 
 **游戏模式**
 
